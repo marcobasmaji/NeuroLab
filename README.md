@@ -11,3 +11,8 @@ To those who want to help program the GUI:
 - i. e. " uic -i MainWindow.ui -o MyHeader.h " . I found it usefull, to see how Qt uses functoins to desing the main window. Ofcourse you need to type the full path of the files, or open Terminal in the same folder.
 
 Merry Christmas.
+
+
+Update (Movidius): 
+a great intro from openvino
+https://docs.openvinotoolkit.org/2018_R5/_docs_IE_DG_Integrate_with_customer_application_new_API.html
