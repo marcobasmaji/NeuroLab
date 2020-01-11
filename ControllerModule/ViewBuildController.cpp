@@ -1,8 +1,8 @@
 #include "ViewBuildController.h"
 #include <QApplication>
 
-ViewBuildController::ViewBuildController(QApplication& app)
+ViewBuildController::ViewBuildController()
 {
-    this->guiBuilder = new GUIBuilder(app);
+    this->guiBuilder = new GUIBuilder();
 
 }

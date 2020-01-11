@@ -1,15 +1,15 @@
 #include "GUIBuilder.h"
 #include <QApplication>
 
-GUIBuilder::GUIBuilder(QApplication& app)
+GUIBuilder::GUIBuilder()
 {
     // dummy arguments for QApplication
-    /*char amessage[] = "this is it";
+    char amessage[] = "this is it";
     char *pmessage = amessage;
     int argc = 0;
     char **argv = &pmessage;
 
-    QApplication s(argc,argv);*/
+    QApplication app(argc,argv);
 
     MainWindow w;
     w.setWindowTitle("NeuroLab");

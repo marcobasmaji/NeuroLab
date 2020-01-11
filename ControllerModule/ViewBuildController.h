@@ -6,7 +6,7 @@
 class ViewBuildController
 {
 public:
-    ViewBuildController(QApplication& app);
+    ViewBuildController();
 private:
     GUIBuilder* guiBuilder;
 };

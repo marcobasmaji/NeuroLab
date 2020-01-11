@@ -15,8 +15,8 @@ public:
 private:
 	InferencePlugin plugin;
 	CNNNetwork cnnnetwork;
-	InputsDataMap inputData;
-	OutputsDataMap outputData;
+	InputsDataMap inputInfo;
+	OutputsDataMap outputInfo;
 	string pathToIR;
 
 };

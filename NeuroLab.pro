@@ -23,6 +23,8 @@ SOURCES += \
     ControllerModule/ViewBuildController.cpp \
     ControllerModule/ViewRequestController.cpp \
     ViewModule/GUIBuilder.cpp \
+    ViewModule/GUIRequestHandler.cpp \
+    ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     main.cpp
 
@@ -34,6 +36,8 @@ HEADERS += \
     ControllerModule/ViewBuildController.h \
     ControllerModule/ViewRequestController.h \
     ViewModule/GUIBuilder.h \
+    ViewModule/GUIRequestHandler.h \
+    ViewModule/GUISettings.h \
     ViewModule/MainWindow.h
 
 FORMS += \

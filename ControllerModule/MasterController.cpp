@@ -2,10 +2,17 @@
 #include <QApplication>
 #include <QLabel>
 
-MasterController::MasterController(QApplication &app)
+MasterController::MasterController()
 {
-    ViewBuildController* viewObserver = new ViewBuildController(app);
+    initControllers();
 
+}
+
+void MasterController::initControllers() {
+    viewObserver = new ViewBuildController();
+    predictionObserver = new PredictionController();
+    nnObserver = new NNController();
+    imageParser = new ImagePareser();
 }
 
 

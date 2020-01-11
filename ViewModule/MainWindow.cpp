@@ -9,11 +9,16 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    // Update to Bonny: I cant get it to work. I just had the idea, to normally call the slots,
+    // and those will call functions in GUIRequest. Im Writing an example
 
-    // die connect functions werden in ui_mainwindow.h gebaut, wenn man das design tool nutzt.
+    // die connect functions werden in ui_mainwindow.h gebaut(README in git), wenn man das design tool nutzt.
     // aber ich habe hier bespiele geschrieben, damit jeder weiß wie das geht.
 
+    // connecting a signal to a slot from another class
+    // Here !!!!!
     connect(ui->LoadButton,SIGNAL(clicked(bool)), this,SLOT(on_LoadButton_clicked()));
+    //connect(ui->LoadButton,SIGNAL(clicked(bool)), this,SLOT(GUIRH->loadImages()));
     connect(ui->AlexNet,SIGNAL(clicked(bool)), this, SLOT(on_AlexNet_clicked()));
 }
 
@@ -24,6 +29,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_AlexNet_clicked() {
     // bespiel, um labels zu ändern
     ui->label_17->setText("safdsada");
+    // Something like this
+    guiSettings->setNerualNet("alexnet");
+
 }
 void MainWindow::on_LoadButton_clicked()
 {
@@ -44,7 +52,8 @@ void MainWindow::on_LoadButton_clicked()
            displayPreviews();
        }
     ui->ClassifyButton->setEnabled(true);
-
+    // Here !!!!!
+    guiRequestHandler->loadImages();
 }
 
 void MainWindow::on_DeleteButton_clicked()

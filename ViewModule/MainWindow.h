@@ -6,7 +6,8 @@
 #include<QLabel>
 #include<QGridLayout>
 #include<QCheckBox>
-
+#include<ViewModule/GUIRequestHandler.h>
+#include<ViewModule/GUISettings.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,5 +41,7 @@ private:
     QGridLayout *gridLayout;
 
     QList<QLabel> imagesPreviews;
+    GUIRequestHandler *guiRequestHandler;
+    GUISettings *guiSettings;
 };
 #endif // MAINWINDOW_H

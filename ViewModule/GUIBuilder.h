@@ -6,12 +6,12 @@
 class GUIBuilder
 {
 public:
-    GUIBuilder(QApplication& app);
+    GUIBuilder();
     void drawGUI();
     void displayResults();
     void updatePredictions();
 private:
-    MainWindow mainWindow;
+    //MainWindow mainWindow;
 };
 
 #endif // GUIBUILDER_H

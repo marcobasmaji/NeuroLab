@@ -16,17 +16,18 @@ class MasterController
 {
 
 public:
-    MasterController(QApplication &app);
+    MasterController();
 
 private:
     ViewBuildController* viewObserver;
-    PredictionController predictionObserver;
-    NNController nnObserver;
-    ImagePareser imageParser;
+    PredictionController* predictionObserver;
+    NNController* nnObserver;
+    ImagePareser* imageParser;
     string nnType;
     list<string> selectedHardware;
     string mode;
     list<string> imagePaths;
+    void initControllers();
 };
 
 #endif // MASTERCONTROLLER_H
