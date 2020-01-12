@@ -16,3 +16,8 @@ Merry Christmas.
 Update (Movidius): 
 a great intro from openvino
 https://docs.openvinotoolkit.org/2018_R5/_docs_IE_DG_Integrate_with_customer_application_new_API.html
+
+Update (Controllers loop):
+I had some problems connecting Master<->Viewcontroller<->GUI. I have been doing a loop of includes. Each class includes the other, which needs infinte memory.
+Solution: first answer:
+https://stackoverflow.com/questions/4964482/how-to-create-two-classes-in-c-which-use-each-other-as-data
