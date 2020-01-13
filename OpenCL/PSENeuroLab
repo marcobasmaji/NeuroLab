@@ -31,29 +31,11 @@ int calculateWeightID(int inputMaps, int height, int width, int outputMap, int i
     return (((outputMap)*inputMaps + inputMap) * height + y) * width + x;
 }
 
-char* loadFile(const char* path, size_t* sourceSize) {
-    FILE* fp;
-    char* content;
+string loadFile(const char *path) {
+	ifstream in(path);
+	string contents((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
 
-    errno_t err = fopen_s(&fp, path, "r");
-
-    if (!fp) {
-        cout << "Failed to load file." << endl;
-        return nullptr;
-    }
-
-    content = (char*)malloc(MAX_SOURCE_SIZE);
-    if (content) {
-        *sourceSize = fread(content, 1, MAX_SOURCE_SIZE, fp);
-    }
-
-    fclose(fp);
-
-    if (content) {
-        return content;
-    }
-
-    return nullptr;
+	return contents;
 }
 
 
@@ -84,7 +66,6 @@ void loadDataset() {
         int label = stof(character);
         trainingLabels[i] = label;
 
-        int index = 0;
         for (int y = 0; y < 28; y++) {
             for (int x = 0; x < 28; x++) {
                 in >> character;
@@ -312,7 +293,6 @@ void testWithMnist() {
 }
 
 float* createInputs(int batchSize, int inputMaps, int inputHeight, int inputWidth) {
-    int i = 0;
     float* inputs = (float*)malloc(sizeof(float)*batchSize*inputMaps*inputHeight*inputWidth);
 
     for (int batch = 0; batch < batchSize; batch++) {
@@ -704,14 +684,14 @@ void testPadLayer() {
 }
 
 int main() {
-    //testPadLayer();
-    //testReluLayer();
-    //testSoftmaxLayer();
-    //testMaxPoolLayer();
-    //testConvLayer();
-    //testDenseLayer();
+    testPadLayer();
+    testReluLayer();
+    testSoftmaxLayer();
+    testMaxPoolLayer();
+    testConvLayer();
+    testDenseLayer();
 
-    testWithMnist();
+    //testWithMnist();
 
     return 0;
 }
