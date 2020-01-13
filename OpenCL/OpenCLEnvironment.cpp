@@ -1,5 +1,3 @@
-//checked
-
 #include "OpenCLEnvironment.hpp"
 
 #include <iostream>
@@ -15,6 +13,7 @@ OpenCLEnvironment::~OpenCLEnvironment() {
 	delete releaseCLObjectsManager;
 }
 
+//setters
 void OpenCLEnvironment::setPlatformId(cl_platform_id platformId) { this->platformId = platformId; }
 void OpenCLEnvironment::setDeviceId(cl_device_id deviceId) {
 	if (this->deviceId) {
@@ -48,25 +47,25 @@ void OpenCLEnvironment::releaseResources() {
 	cl_int error = clFlush(commandQueue);
 
 	if (error == CL_INVALID_COMMAND_QUEUE) {
-		cout << "Fehler in releaseRessources (CL_INVALID_COMMAND_QUEUE)" << endl;
+		cerr << "Fehler in releaseRessources (CL_INVALID_COMMAND_QUEUE)" << endl;
 	}
 	else if (error == CL_OUT_OF_HOST_MEMORY) {
-		cout << "Error in releaseMemObject (CL_OUT_OF_HOST_MEMORY)." << endl;
+		cerr << "Error in releaseMemObject (CL_OUT_OF_HOST_MEMORY)." << endl;
 	}
 	else if(error!=CL_SUCCESS) {
-		cout << "Error in releaseMemObject. Error is not specified!" << endl;
+		cerr << "Error in releaseMemObject. Error is not specified!" << endl;
 	}
 
 	error = clFinish(commandQueue);
 
 	if (error == CL_INVALID_COMMAND_QUEUE) {
-		cout << "Fehler in releaseRessources (CL_INVALID_COMMAND_QUEUE )" << endl;
+		cerr << "Fehler in releaseRessources (CL_INVALID_COMMAND_QUEUE )" << endl;
 	}
 	else if (error == CL_OUT_OF_HOST_MEMORY) {
-		cout << "Error in releaseMemObject (CL_OUT_OF_HOST_MEMORY )." << endl;
+		cerr << "Error in releaseMemObject (CL_OUT_OF_HOST_MEMORY )." << endl;
 	}
 	else if (error != CL_SUCCESS) {
-		cout << "Error in releaseMemObject. Error is not specified!" << endl;
+		cerr << "Error in releaseMemObject. Error is not specified!" << endl;
 	}
 
 	releaseCLObjectsManager->releaseCommandQueue(commandQueue);
