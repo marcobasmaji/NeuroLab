@@ -9,7 +9,7 @@ MasterController::MasterController()
 }
 
 void MasterController::initControllers() {
-    viewObserver = new ViewBuildController();
+    viewObserver = new ViewController(this);
     predictionObserver = new PredictionController();
     nnObserver = new NNController();
     imageParser = new ImagePareser();

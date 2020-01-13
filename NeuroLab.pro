@@ -20,10 +20,9 @@ SOURCES += \
     ControllerModule/MasterController.cpp \
     ControllerModule/NNController.cpp \
     ControllerModule/PredictionController.cpp \
-    ControllerModule/ViewBuildController.cpp \
-    ControllerModule/ViewRequestController.cpp \
-    ViewModule/GUIBuilder.cpp \
-    ViewModule/GUIRequestHandler.cpp \
+    ControllerModule/ViewController.cpp \
+    HardwareModule/MovidiusEnvironment.cpp \
+    ViewModule/GUI.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     main.cpp
@@ -33,10 +32,9 @@ HEADERS += \
     ControllerModule/MasterController.h \
     ControllerModule/NNController.h \
     ControllerModule/PredictionController.h \
-    ControllerModule/ViewBuildController.h \
-    ControllerModule/ViewRequestController.h \
-    ViewModule/GUIBuilder.h \
-    ViewModule/GUIRequestHandler.h \
+    ControllerModule/ViewController.h \
+    HardwareModule/MovidiusEnvironment.h \
+    ViewModule/GUI.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h
 

@@ -1,8 +1,10 @@
-#include "GUIBuilder.h"
+#include "GUI.h"
 #include <QApplication>
+#include<ControllerModule/ViewController.h>
 
-GUIBuilder::GUIBuilder()
+GUI::GUI(ViewController* partner)
 {
+    this->viewController = partner;
     // dummy arguments for QApplication
     char amessage[] = "this is it";
     char *pmessage = amessage;
@@ -42,5 +44,9 @@ GUIBuilder::GUIBuilder()
     */
     app.exec();
 
+};
+
+void loadImages()
+{
 
 }

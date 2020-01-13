@@ -1,11 +1,11 @@
-#include <MovidiusEnvironment.h>
+/*#include <HardwareModule/MovidiusEnvironment.h>
 
 MovidiusEnvironment::MovidiusEnvironment() {
 	// do nothing
 }
 
 void MovidiusEnvironment::initMovidius() {
-	// steps are taken from the link provided in the git repo. Steps can be divided in private functions
+    // steps are taken from the link provided in the git repo. Steps can be divided in private functions
 	// first  load plugin
 	//TODO : what is eGPU ? what are the others called ? 
 	PluginPtr engine_ptr = PluginDispatcher(pluginDirs).getSuitablePlugin(TargetDevice::eGPU);
@@ -13,8 +13,8 @@ void MovidiusEnvironment::initMovidius() {
     this->plugin = tmp;
     // second : read model IR
     CNNNetReader network_reader;
-    network_reader.ReadNetwork("Model.xml"); //path needed
-    network_reader.ReadWeights("Model.bin"); //path needed
+    network_reader.ReadNetwork("~/AlexNetModel/alexnet.xml"); 
+    network_reader.ReadWeights("~/AlexNetModel/alexnet.bin");
     // third : conigure input and output
     // TODO : read configurations for supported devices. This is probably the place where CPU GPU etc. are controlled. 
     auto network = network_reader.getNetwork();
@@ -33,13 +33,13 @@ void MovidiusEnvironment::initMovidius() {
 
     // sixth: prepareInput
     // a set of images is needed
-    /** Iterating over all input blobs **/
+    // Iterating over all input blobs
     for (auto & item : inputInfo) {
         auto input_name = item->first;
-        /** Getting input blob **/
+        // Getting input blob
         auto input = infer_request.GetBlob(input_name);
-        /** Fill input tensor with planes. First b channel, then g and r channels **/
-    
+        // Fill input tensor with planes. First b channel, then g and r channels
+
     }
 
     // seventh : Infer
@@ -54,8 +54,7 @@ void MovidiusEnvironment::initMovidius() {
         auto const memLocker = output->cbuffer(); // use const memory locker
         // output_buffer is valid as long as the lifetime of memLocker
         const float *output_buffer = memLocker.as<const float *>();
-        /** output_buffer[] - accessing output blob data **/
-
+        // output_buffer[] - accessing output blob data
 
 
 }
@@ -68,3 +67,4 @@ void setNeuralNet(PretrainedNN pnn) {
 
 }
 
+*/

@@ -1,13 +1,15 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include<ViewModule/GUI.h>
 #include <QFileDialog>
 #include <QDebug>
 
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent, GUI *partner)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    this->gui = partner;
     ui->setupUi(this);
     // Update to Bonny: I cant get it to work. I just had the idea, to normally call the slots,
     // and those will call functions in GUIRequest. Im Writing an example
@@ -30,7 +32,7 @@ void MainWindow::on_AlexNet_clicked() {
     // bespiel, um labels zu ändern
     ui->label_17->setText("safdsada");
     // Something like this
-    guiSettings->setNerualNet("alexnet");
+    //guiSettings->setNerualNet("alexnet");
 
 }
 void MainWindow::on_LoadButton_clicked()
@@ -53,7 +55,7 @@ void MainWindow::on_LoadButton_clicked()
        }
     ui->ClassifyButton->setEnabled(true);
     // Here !!!!!
-    guiRequestHandler->loadImages();
+    //gui->loadImages();
 }
 
 void MainWindow::on_DeleteButton_clicked()

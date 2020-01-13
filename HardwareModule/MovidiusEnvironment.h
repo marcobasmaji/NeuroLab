@@ -6,17 +6,18 @@ public:
 	MovidiusEnvironment();
 	void initMovidius();
 	void classify();
-	void setNeuralNet(PretrainedNN pnn);
+    //void setNeuralNet(PretrainedNN pnn);
 
-	list<pair<DataElement,string>> getResults() {
-		return this->results;
-	};
+    //list<pair<DataElement,string>> getResults() {
+        //return this->results;
+    //};
 
 private:
-	InferencePlugin plugin;
-	CNNNetwork cnnnetwork;
-	InputsDataMap inputInfo;
-	OutputsDataMap outputInfo;
-	string pathToIR;
+    InferenceEngine::Core core;
+    InferenceEngine::InferencePlugin plugin;
+    //CNNNetwork cnnnetwork;
+    //InputsDataMap inputInfo;
+    //OutputsDataMap outputInfo;
+    //string pathToIR;
 
 };

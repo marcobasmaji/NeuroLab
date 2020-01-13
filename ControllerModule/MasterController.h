@@ -5,7 +5,7 @@
 #include <iostream>
 #include <list>
 #include <iterator>
-#include <ControllerModule/ViewBuildController.h>
+#include <ControllerModule/ViewController.h>
 #include <ControllerModule/PredictionController.h>
 #include <ControllerModule/NNController.h>
 #include <ControllerModule/ImagePareser.h>
@@ -19,7 +19,7 @@ public:
     MasterController();
 
 private:
-    ViewBuildController* viewObserver;
+    ViewController* viewObserver;
     PredictionController* predictionObserver;
     NNController* nnObserver;
     ImagePareser* imageParser;
