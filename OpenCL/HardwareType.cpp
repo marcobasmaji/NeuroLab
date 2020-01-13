@@ -9,3 +9,4 @@ enum class HardwareType {
     GPU,   //This value stands for the GPU.
     FPGA   //This value stands for the FPGA.
 };
+ 
