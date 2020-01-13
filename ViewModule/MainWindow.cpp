@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent, GUI *partner)
     this->gui = partner;
     ui->setupUi(this);
     // Update to Bonny: I cant get it to work. I just had the idea, to normally call the slots,
-    // and those will call functions in GUIRequest. Im Writing an example
+    // and those will call functions in GUIRequest. Im Writing an example. Search for (Here !!)
 
     // die connect functions werden in ui_mainwindow.h gebaut(README in git), wenn man das design tool nutzt.
     // aber ich habe hier bespiele geschrieben, damit jeder weiß wie das geht.
