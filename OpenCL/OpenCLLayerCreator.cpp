@@ -1,10 +1,9 @@
 //checked
 
 #include <iostream>
+#include <fstream>
 
 #include "OpenCLLayerCreator.hpp"
-
-using namespace std;
 
 cl_mem OpenCLLayerCreator::createBuffer(cl_context context, cl_mem_flags flags, size_t size) {
     cl_int error;
@@ -12,25 +11,25 @@ cl_mem OpenCLLayerCreator::createBuffer(cl_context context, cl_mem_flags flags, 
     cl_mem buffer = clCreateBuffer(context, flags, size, NULL, &error);
 
     if (error == CL_INVALID_CONTEXT) {
-        cout << "Fehler in createBuffer (CL_INVALID_CONTEXT)" << endl;
+        cerr << "Fehler in createBuffer (CL_INVALID_CONTEXT)" << endl;
     }
     else if (error == CL_INVALID_VALUE) {
-        cout << "Error in createBuffer (CL_INVALID_VALUE)." << endl;
+        cerr << "Error in createBuffer (CL_INVALID_VALUE)." << endl;
     }
     else if (error == CL_INVALID_BUFFER_SIZE) {
-        cout << "Error in createBuffer (CL_INVALID_BUFFER_SIZE)." << endl;
+        cerr << "Error in createBuffer (CL_INVALID_BUFFER_SIZE)." << endl;
     }
     else if (error == CL_INVALID_HOST_PTR) {
-        cout << "Error in createBuffer (CL_INVALID_HOST_PTR)." << endl;
+        cerr << "Error in createBuffer (CL_INVALID_HOST_PTR)." << endl;
     }
     else if (error == CL_MEM_OBJECT_ALLOCATION_FAILURE) {
-        cout << "Error in createBuffer (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
+        cerr << "Error in createBuffer (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
     }
     else if (error == CL_OUT_OF_HOST_MEMORY) {
-        cout << "Error in createBuffer (CL_OUT_OF_HOST_MEMORY)." << endl;
+        cerr << "Error in createBuffer (CL_OUT_OF_HOST_MEMORY)." << endl;
     }
     else if (error != CL_SUCCESS) {
-        cout << "Error in createBuffer. Error is not specified!" << endl;
+        cerr << "Error in createBuffer. Error is not specified!" << endl;
     }
 
     return buffer;
@@ -41,110 +40,91 @@ cl_kernel OpenCLLayerCreator::createKernel(cl_program program, const char* funct
     cl_kernel kernel = clCreateKernel(program, functionName, &error);
 
     if (error == CL_INVALID_PROGRAM) {
-        cout << "Error in createKernel (CL_INVALID_PROGRAM)." << endl;
+        cerr << "Error in createKernel (CL_INVALID_PROGRAM)." << endl;
     }
     else if (error == CL_INVALID_PROGRAM_EXECUTABLE) {
-        cout << "Error in createKernel (CL_INVALID_PROGRAM_EXECUTABLE)." << endl;
+        cerr << "Error in createKernel (CL_INVALID_PROGRAM_EXECUTABLE)." << endl;
     }
     else if (error == CL_INVALID_KERNEL_NAME) {
-        cout << "Error in createKernel (CL_INVALID_KERNEL_NAME)." << endl;
+        cerr << "Error in createKernel (CL_INVALID_KERNEL_NAME)." << endl;
     }
     else if (error == CL_INVALID_KERNEL_DEFINITION) {
-        cout << "Error in createKernel (CL_INVALID_KERNEL_DEFINITION)." << endl;
+        cerr << "Error in createKernel (CL_INVALID_KERNEL_DEFINITION)." << endl;
     }
     else if (error == CL_INVALID_VALUE) {
-        cout << "Error in createKernel (CL_INVALID_VALUE)." << endl;
+        cerr << "Error in createKernel (CL_INVALID_VALUE)." << endl;
     }
     else if (error == CL_OUT_OF_HOST_MEMORY) {
-        cout << "Error in createKernel (CL_OUT_OF_HOST_MEMORY)." << endl;
+        cerr << "Error in createKernel (CL_OUT_OF_HOST_MEMORY)." << endl;
     }
     else if (error != CL_SUCCESS) {
-        cout << "Error in createKernel. Error is not specified!" << endl;
+        cerr << "Error in createKernel. Error is not specified!" << endl;
     }
 
     return kernel;
 }
-const char* OpenCLLayerCreator::loadFile(const char* path, size_t* sourceSize) {
-    FILE* fp;
-    char* content;
+string OpenCLLayerCreator::loadFile(const char *path) {
+	ifstream in(path);
+	string contents((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
 
-    errno_t err = fopen_s(&fp, path, "r");
-
-    if (!fp) {
-        cout << "Failed to load file." << endl;
-        return nullptr;
-    }
-
-    content = (char*)malloc(MAX_SOURCE_SIZE);
-    if (content) {
-        *sourceSize = fread(content, 1, MAX_SOURCE_SIZE, fp);
-    }
-
-    fclose(fp);
-
-    if (content) {
-        return content;
-    }
-
-    return nullptr;
+	return contents;
 }
 cl_program OpenCLLayerCreator::createProgram(cl_context context, cl_device_id device, const char* dirKernel) {
     cl_int error;
 
-    size_t sourceSize;
-    const char* content = loadFile(dirKernel, &sourceSize);
+    string content = loadFile(dirKernel);
+    size_t sourceSize=content.length();
+    const char*data=content.c_str();
 
-    cl_program program = clCreateProgramWithSource(context, 1, (const char**)&content, (const size_t*)&sourceSize, &error);
-
-    delete content;
+    cl_program program = clCreateProgramWithSource(context, 1, (const char**)&data, (const size_t*)&sourceSize, &error);
 
     if (error == CL_INVALID_CONTEXT) {
-        cout << "Fehler in createProgramWithSource (CL_INVALID_CONTEXT)." << endl;
+        cerr << "Fehler in createProgramWithSource (CL_INVALID_CONTEXT)." << endl;
     }
     else if (error == CL_INVALID_VALUE) {
-        cout << "Error in createProgramWithSource (CL_INVALID_VALUE)." << endl;
+        cerr << "Error in createProgramWithSource (CL_INVALID_VALUE)." << endl;
     }
     else if (error == CL_OUT_OF_HOST_MEMORY) {
-        cout << "Error in createProgramWithSource (CL_OUT_OF_HOST_MEMORY)." << endl;
+        cerr << "Error in createProgramWithSource (CL_OUT_OF_HOST_MEMORY)." << endl;
     }
     else if (error != CL_SUCCESS) {
-        cout << "Error in createProgramWithSource. Error is not specified!" << endl;
+        cerr << "Error in createProgramWithSource. Error is not specified!" << endl;
     }
 
     error = clBuildProgram(program, 1, &device, NULL, NULL, NULL);
 
     if (error == CL_INVALID_PROGRAM) {
-        cout << "Fehler in buildProgram (CL_INVALID_PROGRAM)." << endl;
+        cerr << "Fehler in buildProgram (CL_INVALID_PROGRAM)." << endl;
     }
     else if (error == CL_INVALID_VALUE) {
-        cout << "Error in buildProgram (CL_INVALID_VALUE)." << endl;
+        cerr << "Error in buildProgram (CL_INVALID_VALUE)." << endl;
     }
     else if (error == CL_INVALID_DEVICE) {
-        cout << "Error in buildProgram (CL_INVALID_DEVICE)." << endl;
+        cerr << "Error in buildProgram (CL_INVALID_DEVICE)." << endl;
     }
     else if (error == CL_INVALID_BINARY) {
-        cout << "Error in buildProgram (CL_INVALID_BINARY)." << endl;
+        cerr << "Error in buildProgram (CL_INVALID_BINARY)." << endl;
     }
     else if (error == CL_INVALID_BUILD_OPTIONS) {
-        cout << "Error in buildProgram (CL_INVALID_BUILD_OPTIONS)." << endl;
+        cerr << "Error in buildProgram (CL_INVALID_BUILD_OPTIONS)." << endl;
     }
     else if (error == CL_INVALID_OPERATION) {
-        cout << "Error in buildProgram (CL_INVALID_OPERATION)." << endl;
+        cerr << "Error in buildProgram (CL_INVALID_OPERATION)." << endl;
     }
     else if (error == CL_COMPILER_NOT_AVAILABLE) {
-        cout << "Error in buildProgram (CL_COMPILER_NOT_AVAILABLE)." << endl;
+        cerr << "Error in buildProgram (CL_COMPILER_NOT_AVAILABLE)." << endl;
     }
     else if (error == CL_BUILD_PROGRAM_FAILURE) {
-        cout << "Error in buildProgram (CL_BUILD_PROGRAM_FAILURE)." << endl;
+        cerr << "Error in buildProgram (CL_BUILD_PROGRAM_FAILURE)." << endl;
     }
     else if (error == CL_INVALID_OPERATION) {
-        cout << "Error in buildProgram (CL_INVALID_OPERATION)." << endl;
+        cerr << "Error in buildProgram (CL_INVALID_OPERATION)." << endl;
     }
     else if (error == CL_OUT_OF_HOST_MEMORY) {
-        cout << "Error in buildProgram (CL_OUT_OF_HOST_MEMORY)." << endl;
+        cerr << "Error in buildProgram (CL_OUT_OF_HOST_MEMORY)." << endl;
     }
     else if (error != CL_SUCCESS) {
-        cout << "Error in buildProgram. Error is not specified!" << endl;
+        cerr << "Error in buildProgram. Error is not specified!" << endl;
     }
 
     return program;
@@ -153,28 +133,28 @@ void OpenCLLayerCreator::enqueueWriteBuffer(cl_command_queue commandQueue, cl_me
     cl_int error = clEnqueueWriteBuffer(commandQueue, mem, CL_TRUE, 0, size, data, 0, NULL, NULL);
 
     if (error == CL_INVALID_COMMAND_QUEUE) {
-        cout << "Error in enqueueWriteBuffer (CL_INVALID_COMMAND_QUEUE)." << endl;
+        cerr << "Error in enqueueWriteBuffer (CL_INVALID_COMMAND_QUEUE)." << endl;
     }
     else if (error == CL_INVALID_CONTEXT) {
-        cout << "Error in enqueueWriteBuffer (CL_INVALID_CONTEXT)." << endl;
+        cerr << "Error in enqueueWriteBuffer (CL_INVALID_CONTEXT)." << endl;
     }
     else if (error == CL_INVALID_MEM_OBJECT) {
-        cout << "Error in enqueueWriteBuffer (CL_INVALID_MEM_OBJECT) ." << endl;
+        cerr << "Error in enqueueWriteBuffer (CL_INVALID_MEM_OBJECT) ." << endl;
     }
     else if (error == CL_INVALID_VALUE) {
-        cout << "Error in enqueueWriteBuffer (CL_INVALID_VALUE)." << endl;
+        cerr << "Error in enqueueWriteBuffer (CL_INVALID_VALUE)." << endl;
     }
     else if (error == CL_INVALID_EVENT_WAIT_LIST) {
-        cout << "Error in enqueueWriteBuffer (CL_INVALID_EVENT_WAIT_LIST)." << endl;
+        cerr << "Error in enqueueWriteBuffer (CL_INVALID_EVENT_WAIT_LIST)." << endl;
     }
     else if (error == CL_MEM_OBJECT_ALLOCATION_FAILURE) {
-        cout << "Error in enqueueWriteBuffer (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
+        cerr << "Error in enqueueWriteBuffer (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
     }
     else if (error == CL_OUT_OF_HOST_MEMORY) {
-        cout << "Error in enqueueWriteBuffer (CL_OUT_OF_HOST_MEMORY)." << endl;
+        cerr << "Error in enqueueWriteBuffer (CL_OUT_OF_HOST_MEMORY)." << endl;
     }
     else if (error != CL_SUCCESS) {
-        cout << "Error in enqueueWriteBuffer. Error is not specified!" << endl;
+        cerr << "Error in enqueueWriteBuffer. Error is not specified!" << endl;
     }
 }
 
@@ -183,7 +163,7 @@ OpenCLLayer* OpenCLLayerCreator::createReluLayer(OpenCLEnvironment* openCLEnviro
 
     cl_device_id deviceId = openCLEnvironment->getDeviceId();
     cl_context context = openCLEnvironment->getContext();
-    cl_command_queue commandQueue = openCLEnvironment->getCommandQueue();
+    //cl_command_queue commandQueue = openCLEnvironment->getCommandQueue();
 
     cl_program program = createProgram(context, deviceId, dirReluKernel);
 
@@ -278,7 +258,7 @@ OpenCLLayer* OpenCLLayerCreator::createMaxPoolLayer(OpenCLEnvironment* openCLEnv
 
     cl_device_id deviceId = openCLEnvironment->getDeviceId();
     cl_context context = openCLEnvironment->getContext();
-    cl_command_queue commandQueue = openCLEnvironment->getCommandQueue();
+    //cl_command_queue commandQueue = openCLEnvironment->getCommandQueue();
 
     cl_program program = createProgram(context, deviceId, dirMaxPoolKernel);
 
@@ -334,7 +314,7 @@ OpenCLLayer* OpenCLLayerCreator::createSoftmaxLayer(OpenCLEnvironment* openCLEnv
 
     cl_device_id deviceId = openCLEnvironment->getDeviceId();
     cl_context context = openCLEnvironment->getContext();
-    cl_command_queue commandQueue = openCLEnvironment->getCommandQueue();
+    //cl_command_queue commandQueue = openCLEnvironment->getCommandQueue();
 
     cl_program program = createProgram(context, deviceId, dirSoftmaxKernel);
 
@@ -525,32 +505,32 @@ void OpenCLLayerCreator::setKernelArg(cl_kernel kernel, cl_uint index, size_t ar
     cl_int error = clSetKernelArg(kernel, index, argSize, argValue);
 
     if (error == CL_INVALID_KERNEL) {
-        cout << "Error in setKernelArg (CL_INVALID_KERNEL)." << endl;
+        cerr << "Error in setKernelArg (CL_INVALID_KERNEL)." << endl;
     }
     else if (error == CL_INVALID_ARG_INDEX) {
-        cout << "Error in setKernelArg (CL_INVALID_ARG_INDEX)." << endl;
+        cerr << "Error in setKernelArg (CL_INVALID_ARG_INDEX)." << endl;
     }
     else if (error == CL_INVALID_ARG_VALUE) {
-        cout << "Error in setKernelArg (CL_INVALID_ARG_VALUE)." << endl;
+        cerr << "Error in setKernelArg (CL_INVALID_ARG_VALUE)." << endl;
     }
     else if (error == CL_INVALID_MEM_OBJECT) {
-        cout << "Error in setKernelArg (CL_INVALID_MEM_OBJECT)." << endl;
+        cerr << "Error in setKernelArg (CL_INVALID_MEM_OBJECT)." << endl;
     }
     else if (error == CL_INVALID_SAMPLER) {
-        cout << "Error in setKernelArg (CL_INVALID_SAMPLER)." << endl;
+        cerr << "Error in setKernelArg (CL_INVALID_SAMPLER)." << endl;
     }
     else if (error == CL_INVALID_ARG_SIZE) {
-        cout << "Error in setKernelArg (CL_INVALID_ARG_SIZE)." << endl;
+        cerr << "Error in setKernelArg (CL_INVALID_ARG_SIZE)." << endl;
     }
     else if (error != CL_SUCCESS) {
-        cout << "Error in setKernelArg. Error is not specified!" << endl;
+        cerr << "Error in setKernelArg. Error is not specified!" << endl;
     }
 }
 void OpenCLLayerCreator::setZeros(cl_mem mem, cl_command_queue commandQueue, size_t size) {
     float* zeros = (float*)malloc(sizeof(float) * size);
 
     if (zeros) {
-        for (int i = 0; i < size; i++) {
+        for (unsigned int i = 0; i < size; i++) {
             zeros[i] = ((float) (0));
         }
 

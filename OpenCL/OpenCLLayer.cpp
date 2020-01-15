@@ -50,28 +50,28 @@ void* OpenCLLayer::enqueueReadBuffer(cl_command_queue commandQueue, size_t size,
 	error = clEnqueueReadBuffer(commandQueue, mem, CL_TRUE, 0, size, returnValue, 0, NULL, NULL);
 
 	if (error == CL_INVALID_COMMAND_QUEUE) {
-		cout << "Error in enqueueReadBuffer (CL_INVALID_COMMAND_QUEUE)." << endl;
+		cerr << "Error in enqueueReadBuffer (CL_INVALID_COMMAND_QUEUE)." << endl;
 	}
 	else if (error == CL_INVALID_CONTEXT) {
-		cout << "Error in enqueueReadBuffer (CL_INVALID_CONTEXT)." << endl;
+		cerr << "Error in enqueueReadBuffer (CL_INVALID_CONTEXT)." << endl;
 	}
 	else if (error == CL_INVALID_MEM_OBJECT) {
-		cout << "Error in enqueueReadBuffer (CL_INVALID_MEM_OBJECT)." << endl;
+		cerr << "Error in enqueueReadBuffer (CL_INVALID_MEM_OBJECT)." << endl;
 	}
 	else if (error == CL_INVALID_VALUE) {
-		cout << "Error in enqueueReadBuffer (CL_INVALID_VALUE)." << endl;
+		cerr << "Error in enqueueReadBuffer (CL_INVALID_VALUE)." << endl;
 	}
 	else if (error == CL_INVALID_EVENT_WAIT_LIST) {
-		cout << "Error in enqueueReadBuffer (CL_INVALID_EVENT_WAIT_LIST)." << endl;
+		cerr << "Error in enqueueReadBuffer (CL_INVALID_EVENT_WAIT_LIST)." << endl;
 	}
 	else if (error == CL_MEM_OBJECT_ALLOCATION_FAILURE) {
-		cout << "Error in enqueueReadBuffer (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
+		cerr << "Error in enqueueReadBuffer (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
 	}
 	else if (error == CL_OUT_OF_HOST_MEMORY) {
-		cout << "Error in enqueueReadBuffer (CL_OUT_OF_HOST_MEMORY)." << endl;
+		cerr << "Error in enqueueReadBuffer (CL_OUT_OF_HOST_MEMORY)." << endl;
 	}
 	else if (error != CL_SUCCESS) {
-		cout << "Error in enqueueReadBuffer. Error is not specified!" << endl;
+		cerr << "Error in enqueueReadBuffer. Error is not specified!" << endl;
 	}
 
 	return returnValue;
@@ -80,28 +80,28 @@ void OpenCLLayer::enqueueWriteBuffer(cl_command_queue commandQueue, cl_mem mem, 
 	cl_int error = clEnqueueWriteBuffer(commandQueue, mem, CL_TRUE, 0, size, data, 0, NULL, NULL);
 
 	if (error == CL_INVALID_COMMAND_QUEUE) {
-		cout << "Error in enqueueWriteBuffer (CL_INVALID_COMMAND_QUEUE)." << endl;
+		cerr << "Error in enqueueWriteBuffer (CL_INVALID_COMMAND_QUEUE)." << endl;
 	}
 	else if (error == CL_INVALID_CONTEXT) {
-		cout << "Error in enqueueWriteBuffer (CL_INVALID_CONTEXT)." << endl;
+		cerr << "Error in enqueueWriteBuffer (CL_INVALID_CONTEXT)." << endl;
 	}
 	else if (error == CL_INVALID_MEM_OBJECT) {
-		cout << "Error in enqueueWriteBuffer (CL_INVALID_MEM_OBJECT) ." << endl;
+		cerr << "Error in enqueueWriteBuffer (CL_INVALID_MEM_OBJECT) ." << endl;
 	}
 	else if (error == CL_INVALID_VALUE) {
-		cout << "Error in enqueueWriteBuffer (CL_INVALID_VALUE)." << endl;
+		cerr << "Error in enqueueWriteBuffer (CL_INVALID_VALUE)." << endl;
 	}
 	else if (error == CL_INVALID_EVENT_WAIT_LIST) {
-		cout << "Error in enqueueWriteBuffer (CL_INVALID_EVENT_WAIT_LIST)." << endl;
+		cerr << "Error in enqueueWriteBuffer (CL_INVALID_EVENT_WAIT_LIST)." << endl;
 	}
 	else if (error == CL_MEM_OBJECT_ALLOCATION_FAILURE) {
-		cout << "Error in enqueueWriteBuffer (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
+		cerr << "Error in enqueueWriteBuffer (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
 	}
 	else if (error == CL_OUT_OF_HOST_MEMORY) {
-		cout << "Error in enqueueWriteBuffer (CL_OUT_OF_HOST_MEMORY)." << endl;
+		cerr << "Error in enqueueWriteBuffer (CL_OUT_OF_HOST_MEMORY)." << endl;
 	}
 	else if (error != CL_SUCCESS) {
-		cout << "Error in enqueueWriteBuffer. Error is not specified!" << endl;
+		cerr << "Error in enqueueWriteBuffer. Error is not specified!" << endl;
 	}
 }
 
@@ -109,46 +109,46 @@ void OpenCLLayer::executeKernel(cl_command_queue commandQueue, cl_kernel kernel,
 	cl_int error = clEnqueueNDRangeKernel(commandQueue, kernel, workDim, NULL, globalWorkSize, NULL, 0, NULL, NULL);
 
 	if (error == CL_INVALID_PROGRAM_EXECUTABLE) {
-		cout << "Error in executeKernel (CL_INVALID_PROGRAM_EXECUTABLE)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_PROGRAM_EXECUTABLE)." << endl;
 	}
 	else if (error == CL_INVALID_COMMAND_QUEUE) {
-		cout << "Error in executeKernel (CL_INVALID_COMMAND_QUEUE)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_COMMAND_QUEUE)." << endl;
 	}
 	else if (error == CL_INVALID_KERNEL) {
-		cout << "Error in executeKernel (CL_INVALID_KERNEL)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_KERNEL)." << endl;
 	}
 	else if (error == CL_INVALID_CONTEXT) {
-		cout << "Error in executeKernel (CL_INVALID_CONTEXT)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_CONTEXT)." << endl;
 	}
 	else if (error == CL_INVALID_KERNEL_ARGS) {
-		cout << "Error in executeKernel (CL_INVALID_KERNEL_ARGS)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_KERNEL_ARGS)." << endl;
 	}
 	else if (error == CL_INVALID_WORK_DIMENSION) {
-		cout << "Error in executeKernel (CL_INVALID_WORK_DIMENSION)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_WORK_DIMENSION)." << endl;
 	}
 	else if (error == CL_INVALID_WORK_GROUP_SIZE) {
-		cout << "Error in executeKernel (CL_INVALID_WORK_GROUP_SIZE)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_WORK_GROUP_SIZE)." << endl;
 	}
 	else if (error == CL_INVALID_WORK_ITEM_SIZE) {
-		cout << "Error in executeKernel (CL_INVALID_WORK_ITEM_SIZE)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_WORK_ITEM_SIZE)." << endl;
 	}
 	else if (error == CL_INVALID_GLOBAL_OFFSET) {
-		cout << "Error in executeKernel (CL_INVALID_GLOBAL_OFFSET)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_GLOBAL_OFFSET)." << endl;
 	}
 	else if (error == CL_OUT_OF_RESOURCES) {
-		cout << "Error in executeKernel (CL_OUT_OF_RESOURCES)." << endl;
+		cerr << "Error in executeKernel (CL_OUT_OF_RESOURCES)." << endl;
 	}
 	else if (error == CL_MEM_OBJECT_ALLOCATION_FAILURE) {
-		cout << "Error in executeKernel (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
+		cerr << "Error in executeKernel (CL_MEM_OBJECT_ALLOCATION_FAILURE)." << endl;
 	}
 	else if (error == CL_INVALID_EVENT_WAIT_LIST) {
-		cout << "Error in executeKernel (CL_INVALID_EVENT_WAIT_LIST)." << endl;
+		cerr << "Error in executeKernel (CL_INVALID_EVENT_WAIT_LIST)." << endl;
 	}
 	else if (error == CL_OUT_OF_HOST_MEMORY) {
-		cout << "Error in executeKernel (CL_OUT_OF_HOST_MEMORY)." << endl;
+		cerr << "Error in executeKernel (CL_OUT_OF_HOST_MEMORY)." << endl;
 	}
 	else if (error != CL_SUCCESS) {
-		cout << "Error in executeKernel. Error is not specified!" << endl;
+		cerr << "Error in executeKernel. Error is not specified!" << endl;
 	}
 }
 
@@ -273,25 +273,25 @@ void OpenCLLayer::setKernelArg(cl_kernel kernel, cl_uint index, size_t argSize, 
 	cl_int error = clSetKernelArg(kernel, index, argSize, argValue);
 
 	if (error == CL_INVALID_KERNEL) {
-		cout << "Error in setKernelArg (CL_INVALID_KERNEL)." << endl;
+		cerr << "Error in setKernelArg (CL_INVALID_KERNEL)." << endl;
 	}
 	else if (error == CL_INVALID_ARG_INDEX) {
-		cout << "Error in setKernelArg (CL_INVALID_ARG_INDEX)." << endl;
+		cerr << "Error in setKernelArg (CL_INVALID_ARG_INDEX)." << endl;
 	}
 	else if (error == CL_INVALID_ARG_VALUE) {
-		cout << "Error in setKernelArg (CL_INVALID_ARG_VALUE)." << endl;
+		cerr << "Error in setKernelArg (CL_INVALID_ARG_VALUE)." << endl;
 	}
 	else if (error == CL_INVALID_MEM_OBJECT) {
-		cout << "Error in setKernelArg (CL_INVALID_MEM_OBJECT)." << endl;
+		cerr << "Error in setKernelArg (CL_INVALID_MEM_OBJECT)." << endl;
 	}
 	else if (error == CL_INVALID_SAMPLER) {
-		cout << "Error in setKernelArg (CL_INVALID_SAMPLER)." << endl;
+		cerr << "Error in setKernelArg (CL_INVALID_SAMPLER)." << endl;
 	}
 	else if (error == CL_INVALID_ARG_SIZE) {
-		cout << "Error in setKernelArg (CL_INVALID_ARG_SIZE)." << endl;
+		cerr << "Error in setKernelArg (CL_INVALID_ARG_SIZE)." << endl;
 	}
 	else if (error != CL_SUCCESS) {
-		cout << "Error in setKernelArg. Error is not specified!" << endl;
+		cerr << "Error in setKernelArg. Error is not specified!" << endl;
 	}
 }
 
