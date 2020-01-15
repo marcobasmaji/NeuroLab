@@ -17,16 +17,20 @@ class MasterController
 
 public:
     MasterController();
+    void setPaths(list<string> paths);
+    void startClassification();
 
 private:
-    ViewController* viewObserver;
-    PredictionController* predictionObserver;
-    NNController* nnObserver;
-    ImagePareser* imageParser;
+    NNController nnObserver;
+    ViewController viewObserver;
+    PredictionController predictionObserver;
+    ImagePareser imageParser;
     string nnType;
     list<string> selectedHardware;
     string mode;
-    list<string> imagePaths;
+    //list<string> imagePaths;
+    list<string>* imagePaths;
+
     void initControllers();
 };
 

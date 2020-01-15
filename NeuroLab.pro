@@ -21,7 +21,17 @@ SOURCES += \
     ControllerModule/NNController.cpp \
     ControllerModule/PredictionController.cpp \
     ControllerModule/ViewController.cpp \
-    HardwareModule/MovidiusEnvironment.cpp \
+    HardwareModule/OpenVinoEnv.cpp \
+    NNModule/AlexNet.cpp \
+    NNModule/ConvolutionLayer.cpp \
+    NNModule/DenseLayer.cpp \
+    NNModule/Layer.cpp \
+    NNModule/Loss.cpp \
+    NNModule/MaxPoolingLayer.cpp \
+    NNModule/NeuroLabNet.cpp \
+    NNModule/ReLULayer.cpp \
+    NNModule/SoftmaxLayer.cpp \
+    NNModule/TrainableLayer.cpp \
     ViewModule/GUI.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
@@ -33,15 +43,35 @@ HEADERS += \
     ControllerModule/NNController.h \
     ControllerModule/PredictionController.h \
     ControllerModule/ViewController.h \
-    HardwareModule/MovidiusEnvironment.h \
+    HardwareModule/OpenVinoEnv.h \
+    NNModule/AlexNet.h \
+    NNModule/ConvolutionLayer.h \
+    NNModule/DenseLayer.h \
+    NNModule/Layer.h \
+    NNModule/Loss.h \
+    NNModule/MaxPoolingLayer.h \
+    NNModule/NeuralNet.h \
+    NNModule/NeuroLabNet.h \
+    NNModule/PretrainedNN.h \
+    NNModule/ReLULayer.h \
+    NNModule/SoftmaxLayer.h \
+    NNModule/TrainableLayer.h \
     ViewModule/GUI.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h
 
 FORMS += \
     ViewModule/MainWindow.ui
+LIBS += /usr/lib/libinference_engine.so
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/lib/release/ -lmkl_tiny_tbb
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/lib/debug/ -lmkl_tiny_tbb
+else:unix: LIBS += -L$$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/lib/ -lmkl_tiny_tbb
+
+INCLUDEPATH += $$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/include
+DEPENDPATH += $$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/include

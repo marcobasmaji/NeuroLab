@@ -9,19 +9,9 @@ MainWindow::MainWindow(QWidget *parent, GUI *partner)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    this->gui = partner;
     ui->setupUi(this);
-    // Update to Bonny: I cant get it to work. I just had the idea, to normally call the slots,
-    // and those will call functions in GUIRequest. Im Writing an example. Search for (Here !!)
-
-    // die connect functions werden in ui_mainwindow.h gebaut(README in git), wenn man das design tool nutzt.
-    // aber ich habe hier bespiele geschrieben, damit jeder weiß wie das geht.
-
-    // connecting a signal to a slot from another class
-    // Here !!!!!
-    connect(ui->LoadButton,SIGNAL(clicked(bool)), this,SLOT(on_LoadButton_clicked()));
-    //connect(ui->LoadButton,SIGNAL(clicked(bool)), this,SLOT(GUIRH->loadImages()));
-    connect(ui->AlexNet,SIGNAL(clicked(bool)), this, SLOT(on_AlexNet_clicked()));
+    this->gui = partner;
+    resultsCounter = 0;
 }
 
 MainWindow::~MainWindow()
@@ -29,33 +19,40 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void MainWindow::on_AlexNet_clicked() {
-    // bespiel, um labels zu ändern
-    ui->label_17->setText("safdsada");
-    // Something like this
-    //guiSettings->setNerualNet("alexnet");
+    guiSettings.setNerualNet("alexnet");
 
 }
 void MainWindow::on_LoadButton_clicked()
 {
     // when load is clicked. tab names should be changed
-    QStringList filesList = QFileDialog::getOpenFileNames(ui->tab_7,
+    QStringList filesList = QFileDialog::getOpenFileNames(this,
                                                             tr("Load Image"), "/home", tr("Image Files (*.png *.jpg *.bmp)"));
     qDebug()<<"Images Loaded"<<endl;
     if (!filesList.isEmpty()){
            for(int i=0; i<filesList.length(); i++){
                QString file = filesList.at(i) ;
-               QImage image(file);
-               image = MainWindow::hasRightSize(image); // make sure its 224 * 224
-               imageList.push_front(image);
+               // only files are needed.
+               //QImage image(file);
+               // image = MainWindow::hasRightSize(image); // make sure its 224 * 224
+               //imageList.push_front(image);
                qDebug()<<"1 Image added to list"<<endl;
+               qDebug()<<file<<endl; // debug
 
            }
-           // should be somewhere else. this is just a test
+           // has nothiung to do with classifying
            displayPreviews();
        }
+
     ui->ClassifyButton->setEnabled(true);
-    // Here !!!!!
-    //gui->loadImages();
+    // turning Qstrings into std strings
+    std::list<string> sl;
+    for(int i = 0;i<filesList.length();i++) {
+        sl.push_back(filesList.front().toStdString());
+    }
+    // loading paths in GUI
+    this->gui->loadPaths(sl);
+    qDebug()<<"load"<<endl; // debug: working.
+
 }
 
 void MainWindow::on_DeleteButton_clicked()
@@ -65,12 +62,14 @@ void MainWindow::on_DeleteButton_clicked()
 
 void MainWindow::on_ClassifyButton_clicked()
 {
-    ui->tabWidget->setCurrentWidget(ui->tab_8);
+    // calling classify in GUI
+    this->gui->classifyImages();
+    // moving into a new results tab
     QWidget* newTab = new QWidget();
-    newTab->setAccessibleName("hola");
-    ui->tabWidget->addTab(newTab,tr("dasd"));
-
+    newTab->setAccessibleName("result");
+    ui->tabWidget->addTab(newTab,tr("Result"));
     ui->tabWidget->setCurrentWidget(newTab);
+    resultsCounter++;
 
 }
 
@@ -79,15 +78,33 @@ void MainWindow::on_StopButton_clicked()
 
 }
 
-// just a test. should be in image parser
-QImage MainWindow::hasRightSize(QImage image ){
-    if ( image.height() > 224 || image.width()> 224) {
-        image = image.scaled(224, 224, Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-    }
-    return image;
-}
-// in another class. just a test
 void MainWindow::displayPreviews() {
+    // TODO !!
+
+    // ideen zum resizen von bilder, um previews zu erstellen
+    /*QWidget wgt;
+    QPalette p = wgt.palette();
+    QImage px("/home/mo/Pictures/Wallpapers/cat.jpg");
+    p.setBrush(QPalette::Window, QBrush(px));
+    wgt.setPalette(p);
+    wgt.show();
+    wgt.resize(500, 500);
+
+
+
+
+    QWidget wgt2;
+    QPalette p2 = wgt2.palette();
+    QImage px2 = px.scaled(224, 224, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    p2.setBrush(QPalette::Window, QBrush(px2));
+    wgt2.setPalette(p2);
+    wgt2.show();
+    wgt2.resize(500, 500);
+
+    px2.save("/home/mo/Pictures/Wallpapers/cat2.jpg");
+
+    */
+
     gridLayout = new QGridLayout();
     gridLayout->setSpacing(2);
 

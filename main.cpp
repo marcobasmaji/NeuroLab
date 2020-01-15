@@ -1,5 +1,6 @@
 #include <ControllerModule/MasterController.h>
 #include <QApplication>
+#include <HardwareModule/OpenVinoEnv.h>
 
 int main(int argc, char *argv[]) {
     // schon gelöst ! XD
@@ -9,6 +10,7 @@ int main(int argc, char *argv[]) {
     // man muss so app immer übergeben.
     // mögliche Lösung https://stackoverflow.com/questions/23804238/must-construct-a-qapplication-before-a-qwidget-invalid-parameter-passed-to-c-r
 
-    MasterController* masterController = new MasterController();
+     MasterController masterController;
+     OpenVinoEnv ov;
 
 }

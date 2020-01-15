@@ -1,4 +1,5 @@
-#include <NeuroLabNet.h> 
+#include "NeuroLabNet.h"
+#include "ConvolutionLayer.h"
 
 // constuctor
 NeuroLabNet::NeuroLabNet(){
@@ -10,7 +11,7 @@ void NeuroLabNet::init() {
 	// image input is i.e. 106x106x3 so output image is (106- filterHeight)/ stride +1 with depth = numFilters. 
 	// so i chose (105 - 6) / 3 +1 = 34
 	// and 50 filters
-
+/*
 	 ConvolutionLayer conv1(105,105,3,6,6,3,3,50);
 	 // now the non linear function
 	 ReLULayer relu1(34,34,50);
@@ -35,15 +36,15 @@ void NeuroLabNet::init() {
 	 layers.push_front(dense);
 	 layers.push_front(soft);
 	 this->lossFunction = loss;
-
+*/
 
 
 }
 
 void NeuroLabNet::classify() {
 	// TODO, parameter need to be coordinated with Jens
-	conv1.forwardPass();
-	relu1.forwardPass();
+    //conv1.forwardPass();
+    //relu1.forwardPass();
 	// and so on
 
 }
@@ -53,7 +54,8 @@ void NeuroLabNet::train() {
 
 }
 
-void executeTransferLearning() {
+void NeuroLabNet::executeTransferLearning() {
 	// no idea .. yet
 
 }
+

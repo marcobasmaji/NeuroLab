@@ -19,7 +19,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr, GUI *partner = nullptr);
+    MainWindow(QWidget *parent, GUI *partner);
     ~MainWindow();
 
 private slots:
@@ -35,14 +35,12 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QList<QImage> imageList;
-
-    QImage hasRightSize(QImage image);
     void displayPreviews();
     QGroupBox *gridGroupBox;
     QGridLayout *gridLayout;
-
     QList<QLabel> imagesPreviews;
-    GUI *gui;
-    GUISettings *guiSettings;
+    GUI* gui;
+    GUISettings guiSettings;
+    int resultsCounter;
 };
 #endif // MAINWINDOW_H
