@@ -6,7 +6,6 @@
 #include <QDebug>
 
 
-
 MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -20,6 +19,10 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_AlexNet_clicked() {
+    guiSettings.setNerualNet("ALEXNET");
 }
 
 void MainWindow::checkAll(){
@@ -87,7 +90,6 @@ void MainWindow::enableCheckbox(HardwareElement checkboxName)
     case FPGA: ui->FPGA_checkbox->setEnabled(true);
         break;
     }
-
 }
 
 void MainWindow::setEnabledModes(bool value)
@@ -180,7 +182,6 @@ void MainWindow::on_HEE_radio_button_clicked()
     guiSettings.setMode("HighestEfficiency");
     viewController->displayAvailableHardware();
     uncheckAll();
-
 }
 
 void MainWindow::on_AlexNet_radio_button_clicked()

@@ -114,5 +114,5 @@ void ViewController::displayAvailableHardware()
     for(HardwareElement element : availableHardware){
        mainWindow->enableCheckbox(element);
     }
-
+    
 }

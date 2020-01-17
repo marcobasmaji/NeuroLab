@@ -40,6 +40,7 @@ private:
     string mode;
     //list<string> imagePaths;
     //vector<string> imagePaths;
+    list<string>* imagePaths;
     list<pair<string,vector<string>>> results;
 
     void initControllers();

@@ -42,3 +42,19 @@ void NNController::setPathList(vector<string> list)
 void NNController::setDistribution(vector<pair<string, int> > distribution) {
 
 }
+
+list<pair<string,vector<string>>> NNController::getResults()
+{
+    list<pair<string,vector<string>>> result;
+    result.push_back({"path",{"result1","result2"}});
+    return result;
+}
+
+void NNController::setPathList(list<string> list)
+{
+    this->pathList = list;
+}
+
+void NNController::setDistribution(vector<pair<string, int> > distribution) {
+
+}

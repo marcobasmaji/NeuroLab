@@ -24,7 +24,7 @@ void MasterController::classify()
     vector<Result> results = nnObserver.classify();
     viewObserver.displayResults(results);
     //results = nnObserver.getResults(); crashes
-
+    
 }
 void MasterController::getPrediction(const string net, const string mode, vector<string> hardware , int nrImages)
 {
@@ -46,8 +46,7 @@ vector<string> MasterController::getAvailableHardware()
     //return availableHardware;
 }
 
-void MasterController::setAvailableHardware(const list<HardwareElement> &value)
-{
+void MasterController::setAvailableHardware(const list<HardwareElement> &value) {
     //availableHardware = value;
 }
 
