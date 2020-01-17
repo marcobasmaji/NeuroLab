@@ -1,16 +1,16 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include<ViewModule/GUI.h>
+#include<ControllerModule/ViewController.h>
 #include <QFileDialog>
 #include <QDebug>
 
 
-MainWindow::MainWindow(QWidget *parent, GUI *partner)
+MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->gui = partner;
+    this->viewController = partner;
     resultsCounter = 0;
 }
 
@@ -19,7 +19,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 void MainWindow::on_AlexNet_clicked() {
-    guiSettings.setNerualNet("alexnet");
+    guiSettings.setNerualNet("ALEXNET");
 
 }
 void MainWindow::on_LoadButton_clicked()
@@ -30,28 +30,32 @@ void MainWindow::on_LoadButton_clicked()
     qDebug()<<"Images Loaded"<<endl;
     if (!filesList.isEmpty()){
            for(int i=0; i<filesList.length(); i++){
-               QString file = filesList.at(i) ;
+               // QString file = filesList.at(i) ;
                // only files are needed.
                //QImage image(file);
                // image = MainWindow::hasRightSize(image); // make sure its 224 * 224
                //imageList.push_front(image);
                qDebug()<<"1 Image added to list"<<endl;
-               qDebug()<<file<<endl; // debug
+               //qDebug()<<file<<endl; // debug
 
            }
-           // has nothiung to do with classifying
+           // has nothiung to do with classifying.
+           // Turn Path into Icons
            displayPreviews();
        }
 
     ui->ClassifyButton->setEnabled(true);
     // turning Qstrings into std strings
-    std::list<string> sl;
+    list<string> sl;
     for(int i = 0;i<filesList.length();i++) {
         sl.push_back(filesList.front().toStdString());
     }
     // loading paths in GUI
-    this->gui->loadPaths(sl);
+    qDebug()<<"load in MainWindow"<<endl;
+    this->viewController->updatePathList(sl);
     qDebug()<<"load"<<endl; // debug: working.
+    //this->guiSettings.setNumImages(filesList.lenght());
+    viewController->getPrediction(this->guiSettings);
 
 }
 
@@ -63,19 +67,19 @@ void MainWindow::on_DeleteButton_clicked()
 void MainWindow::on_ClassifyButton_clicked()
 {
     // calling classify in GUI
-    this->gui->classifyImages();
+    this->viewController->handleClassifyRequest();
     // moving into a new results tab
     QWidget* newTab = new QWidget();
     newTab->setAccessibleName("result");
     ui->tabWidget->addTab(newTab,tr("Result"));
     ui->tabWidget->setCurrentWidget(newTab);
-    resultsCounter++;
+    //resultsCounter++;
 
 }
 
 void MainWindow::on_StopButton_clicked()
 {
-
+    // maybe find a way to stop the classify() method  in here
 }
 
 void MainWindow::displayPreviews() {
@@ -121,7 +125,6 @@ void MainWindow::displayPreviews() {
 
 
         ui->scrollArea->layout()->addWidget(label);
-
 
 
 

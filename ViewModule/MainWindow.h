@@ -6,20 +6,20 @@
 #include<QLabel>
 #include<QGridLayout>
 #include<QCheckBox>
-#include<ViewModule/GUI.h>
+#include<ControllerModule/ViewController.h>
 #include<ViewModule/GUISettings.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class GUI;
+class ViewController;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent, GUI *partner);
+    MainWindow(QWidget *parent, ViewController* partner);
     ~MainWindow();
 
 private slots:
@@ -39,7 +39,7 @@ private:
     QGroupBox *gridGroupBox;
     QGridLayout *gridLayout;
     QList<QLabel> imagesPreviews;
-    GUI* gui;
+    ViewController* viewController;
     GUISettings guiSettings;
     int resultsCounter;
 };

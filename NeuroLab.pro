@@ -32,7 +32,6 @@ SOURCES += \
     NNModule/ReLULayer.cpp \
     NNModule/SoftmaxLayer.cpp \
     NNModule/TrainableLayer.cpp \
-    ViewModule/GUI.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     main.cpp
@@ -56,7 +55,6 @@ HEADERS += \
     NNModule/ReLULayer.h \
     NNModule/SoftmaxLayer.h \
     NNModule/TrainableLayer.h \
-    ViewModule/GUI.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h
 

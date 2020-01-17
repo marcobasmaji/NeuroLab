@@ -18,16 +18,31 @@ void MasterController::setPaths(list<string> paths)
 
     imagePaths = &paths;
     cout<< imagePaths->back();
-    qDebug()<<"whaaaaaaat"<<endl;
+    qDebug()<<"load in master"<<endl;
 
 }
 
-void MasterController::startClassification()
+void MasterController::classify()
 {
 
     qDebug()<<"classify called in Master"<<endl; // debug: working.
     //QStringList* l = {"ss","ss"};
     //this->nnObserver->updateDataSet(l);
-    nnObserver.classify();
 
+    //nnObserver.setPathList(*imagePaths);
+    nnObserver.classify();
+    //results = nnObserver.getResults(); crashes
+
+}
+void MasterController::getPrediction(const string net, const string mode, vector<string> hardware)
+{
+    predictionObserver.calculatePrediction(this->imagePaths->size() ,net, mode,hardware);
+    vector<double> timeConsumption = predictionObserver.getTime();
+    vector<double> powerConsumption = predictionObserver.getPower();
+    double bandwidth = predictionObserver.getBandwidth();
+    double flops = predictionObserver.getFlops();
+    // analog for powerconsumption
+    vector<pair<string, int>> distribution;
+    nnObserver.setDistribution(distribution);
+    viewObserver.displayPrediction(timeConsumption, powerConsumption, bandwidth, flops);
 }

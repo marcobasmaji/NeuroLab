@@ -2,15 +2,27 @@
 #include <QApplication>
 #include<ControllerModule/MasterController.h>
 #include<QDebug>
+#include <ViewModule/MainWindow.h>
 
-ViewController::ViewController(MasterController* partner) : gui(this)
+ViewController::ViewController(MasterController* partner)
 {
-   this->master = partner;
+    char amessage[] = "this is it";
+        char *pmessage = amessage;
+        int argc = 0;
+        char **argv = &pmessage;
+        QApplication app(argc,argv);
+
+    this->master= partner;
+    mainWindow = new MainWindow(nullptr,this);
+    mainWindow->setWindowTitle("NeuroLab");
+    mainWindow->show();
+
+    app.exec();
 }
 void ViewController::updatePathList(list<string> paths)
 
 {
-    qDebug()<<"3"<<endl;
+    qDebug()<<"load in ViewCont"<<endl;
     this->master->setPaths(paths);
 
 
@@ -19,5 +31,21 @@ void ViewController::updatePathList(list<string> paths)
 void ViewController::handleClassifyRequest()
 {
 
-    this->master->startClassification();
+    this->master->classify();
+}
+
+void ViewController::displayResults(list<pair<string, vector<string> > >)
+{
+}
+
+void ViewController::getPrediction(GUISettings settings)
+{
+    string mode = settings.getMode();
+    string net = settings.getNerualNet();
+    vector<string> hardware = settings.gettHardware();
+    this->master->getPrediction(net, mode, hardware);
+}
+
+void ViewController::displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops) {
+
 }

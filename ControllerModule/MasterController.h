@@ -18,7 +18,8 @@ class MasterController
 public:
     MasterController();
     void setPaths(list<string> paths);
-    void startClassification();
+    void classify();
+    void getPrediction(const string net, const string mode, vector<string> hardware);
 
 private:
     NNController nnObserver;
@@ -30,6 +31,7 @@ private:
     string mode;
     //list<string> imagePaths;
     list<string>* imagePaths;
+    list<pair<string,vector<string>>> results;
 
     void initControllers();
 };
