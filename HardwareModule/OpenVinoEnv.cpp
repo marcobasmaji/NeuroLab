@@ -1,13 +1,16 @@
 #include "OpenVinoEnv.h"
-
+#include <QFileInfo>
 #include <QDebug>
 using namespace InferenceEngine;
 
 OpenVinoEnv::OpenVinoEnv() {
     qDebug()<<"openvino called "<<endl; // debug: working.
     CNNNetReader network_reader;
-    network_reader.ReadNetwork("/home/mo/AlexNetModel/alexnet.xml");
-    network_reader.ReadWeights("/home/mo/AlexNetModel/alexnet.bin");
+    QFileInfo file1("../alexnet.xml");
+
+
+    network_reader.ReadNetwork( file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnet.xml");
+    network_reader.ReadWeights(file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnet.bin");
 
     auto network = network_reader.getNetwork();
     this->cnnnetwork = network;
