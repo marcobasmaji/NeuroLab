@@ -12,14 +12,14 @@ private:
 	std::vector<std::pair<int, std::string>> Times;
 	std::vector<std::pair<int, std::string>> HardwareDistribtution;
 public:
-	Prediction(int numberOfImages, std::vector<std::string> vectorOfAvailableHardware, std::string operationmode);
+	Prediction();
 
 	virtual void setTotalSeconds(int TotalDuration);
 	virtual void execute(int numberOfImages, std::vector<std::string> vectorOfAvailableHardware, std::string operationmode) = 0;
 	virtual void setTotalPowerConsumption(int TotalPowerConsumption);
 	virtual void setPowerConsumption();
-	virtual void setTimes();
-	virtual void setHardwareDistribution();
+	virtual void setTimes(std::vector<double>& time);
+	virtual void setHardwareDistribution(std::vector<std::pair<std::string,int>>& hardware);
 	virtual int getTotalPowerConsumption();
 	virtual int getTotalSeconds();
 	virtual std::vector<std::pair<int, std::string>> getPowerConsumption();

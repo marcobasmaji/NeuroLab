@@ -1,6 +1,7 @@
 #include "AlexPrediction.h"
 #pragma once
 #include "Prediction.h"
+#include "DataResults.h"
 #include<string>
 #include<utility>
 #include<list>
@@ -26,8 +27,20 @@ void Prediction::setTotalPowerConsumption(int TotalPowerConsumption)
 	this->TotalPowerConsumption = TotalPowerConsumption;
 }
 
-void Prediction::execute(int numberOfImages, std::list<std::string> listOfAvailableHardware, std::string operationmode)
+void Prediction::execute(int numberOfImages, std::vector<std::string> listOfAvailableHardware, std::string operationmode)
 {
+	std::string highestPerformance = "HighestPerformance";
+	std::string lowestPowerConsumption = "LowestPowerConsumption";
+	std::string highestEfficiency = "HighestEfficiency";
+
+	if (operationmode.compare(highestPerformance)) {
+	}
+
+	if (operationmode.compare(highestEfficiency)) {
+	}
+
+	if (operationmode.compare(lowestPowerConsumption)) {
+	}
 	/*createHardwareDistribution();
 	calculateTimes();
 	setTotalSeconds();
@@ -37,13 +50,25 @@ void Prediction::execute(int numberOfImages, std::list<std::string> listOfAvaila
 	*/
 }
 
-void Prediction::setPowerConsumption()
+Prediction::Prediction()
 {
+	TotalSeconds = 0;
+	TotalPowerConsumption = 0;
+	PowerConsumption = {};
+	Times = {};
+	HardwareDistribtution = {};
+	
 }
 
-void Prediction::setTimes()
-{
+void Prediction::setPowerConsumption(double powerConsumption) {
+	this->PowerConsumption = PowerConsumption;
 }
+
+
+void Prediction::setTimes(std::vector<double>& times) {
+	this->Times = Times;
+}
+
 
 void Prediction::setHardwareDistribution()
 {
@@ -65,13 +90,6 @@ std::list<std::pair<int, std::string>> Prediction::getHardwareDistribtution()
 }
 
 
-Prediction::Prediction(int numberOfImages, std::list<std::string> listOfAvailableHardware, std::string operationmode)
-{
-	TotalSeconds = 0;
-	TotalPowerConsumption = 0;
-	PowerConsumption = {};
-	Times = {};
-	HardwareDistribtution = {};
-}
 
-enum HardwareElement { Movidius1, Movidius2, Movidius3, Movidius4, CPU, FPGA };
+
+

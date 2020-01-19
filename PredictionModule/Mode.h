@@ -2,10 +2,12 @@
 #include <utility>
 #include <list>
 #include <string>
+#include "Hardware.h"
 
 class Mode
 {
 public:
-	virtual std::list<std::pair<std::string , int>>distribute(std::list<std::string>& hardware, int numberOfImages) {}
+	virtual std::vector<Hardware>distributeAndPredict(std::list<std::string>& hardware, int numberOfImages) = 0;
+	//virtual double timeValueOfX(std::vector<double>& polynome, double x);
 };
 
