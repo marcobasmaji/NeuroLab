@@ -4,6 +4,7 @@
 class AlexPrediction :
 	public Prediction
 {
+public:
 	Mode* chooseMode(std::string operationmode);
 };
 

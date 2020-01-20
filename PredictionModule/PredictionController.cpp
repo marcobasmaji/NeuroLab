@@ -1,6 +1,7 @@
 #include "PredictionController.h"
 #include "Mode.h"
 #include "AlexPrediction.h"
+#include "NeuroPrediction.h"
 #include <iostream>
 
 DataResults PredictionController::calculatePredictionType(std::vector<std::string>& availableHardware, std::string Operationmode, int numberOfImages, std::string NN)
@@ -8,26 +9,21 @@ DataResults PredictionController::calculatePredictionType(std::vector<std::strin
 	std::string alexnet = "Alexnet";
 	std::string neuronet = "neuronet";
 	if (NN.compare(alexnet) == 0) {
-		AlexPrediction alex = new AlexPrediction();
-		Mode *mode = alex.chooseMode(Operationmode);
-		DataResults results = DataResults((mode->distributeAndPredict(availableHardware, numberOfImages)));
+		AlexPrediction *alex = new AlexPrediction;
+		Mode* mode = alex->chooseMode(Operationmode);
+		std::vector<Hardware> vectorResults = (mode->distributeAndPredict(availableHardware, numberOfImages));
+		DataResults*  results = new DataResults(vectorResults);
 		delete mode;
-		return results;
+		delete alex;
+		return *results;
 	}
 	if (NN.compare(neuronet) == 0) {
-		NeuroPrediction neuro = PredictionController::makePrediction(availableHardware, Operationmode, numberOfImages);
+		NeuroPrediction* neuro = new NeuroPrediction();
+		std::vector<Hardware> vectorResults = neuro->distributeAndPredict(availableHardware, numberOfImages);
+		DataResults* results = new DataResults(vectorResults);
+		delete neuro;
+		return *results;
+
 	}
 }
 
-AlexPrediction PredictionController::createPrediction(std::vector<std::string>& hardware,std::string operationnmode , int numberOfImages)
-{
-	
-
-
-	
-}
-
-NeuroPrediction PredictionController::makePrediction(std::vector<std::string>& hardware, std::string operationmode, int numberOfImages)
-{
-	return NeuroPrediction();
-}

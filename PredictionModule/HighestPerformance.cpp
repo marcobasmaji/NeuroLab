@@ -145,6 +145,10 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 
 }
 
+HighestPerformance::HighestPerformance()
+{
+}
+
 double HighestPerformance::TimeValueOfX(std::vector<double>& polynome, double x)
 {
 	double value;

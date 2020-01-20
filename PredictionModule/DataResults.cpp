@@ -2,14 +2,7 @@
 #include "Hardware.h"
 
 
-DataResults::DataResults(std::vector<std::pair<std::string, int>>& hardwareDistribution, std::vector<std::pair<std::string, double>>& Times, std::vector<std::pair<std::string, double>>& PowerConsumption)
-{
-	this->hardwareDistribution = hardwareDistribution;
-	this->PowerConsumption = PowerConsumption;
-	this->Times = Times;
-}
-
-DataResults::DataResults(std::vector<hardware>& results) {
+DataResults::DataResults(std::vector<Hardware>& results) {
 	std::vector<std::pair<std::string, int>> hDistribution;
 	std::vector<std::pair<std::string, double>> times;
 	std::vector<std::pair<std::string, double>> pConsumption;

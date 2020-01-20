@@ -1,6 +1,10 @@
 #include "NeuroPrediction.h"
 #include <iostream>
 
+NeuroPrediction::NeuroPrediction()
+{
+}
+
 std::vector<Hardware> NeuroPrediction::distributeAndPredict(std::vector<std::string> availableHardware, int numberOfImages)
 {
 	std::string cpu = "CPU";
