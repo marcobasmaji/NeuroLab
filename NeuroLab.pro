@@ -62,6 +62,8 @@ HEADERS += \
 
 FORMS += \
     ViewModule/MainWindow.ui
+LIBS += /usr/lib/libinference_engine.so \
+        /usr/lib/libformat_reader.so
 
 
 # Default rules for deployment.

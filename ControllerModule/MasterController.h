@@ -39,8 +39,7 @@ private:
     //list<HardwareElement> availableHardware;// in viewcontroller gesetzt
     string mode;
     //list<string> imagePaths;
-    //vector<string> imagePaths;
-    list<string>* imagePaths;
+    vector<string> imagePaths;
     list<pair<string,vector<string>>> results;
 
     void initControllers();

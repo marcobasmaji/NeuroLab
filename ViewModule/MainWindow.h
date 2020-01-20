@@ -13,7 +13,6 @@
 #include <string>
 #include <QListWidgetItem>
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -67,6 +66,7 @@ private slots:
     void on_prediction_button_clicked();
 
     private:
+
     Ui::MainWindow *ui;
     QList<QImage> imageList;
     void displayPreview(const QIcon imageIcon, const QString imagePath);

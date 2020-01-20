@@ -41,18 +41,21 @@ void NNController::setPathList(vector<string> list)
 
 void NNController::setDistribution(vector<pair<string, int> > distribution) {
 
+    return pnn.classify();
 }
 
-list<pair<string,vector<string>>> NNController::getResults()
+
+pair<string,vector<pair<string,float>>> NNController::getResults()
 {
-    list<pair<string,vector<string>>> result;
-    result.push_back({"path",{"result1","result2"}});
+    pair<string,vector<pair<string,float>>> result;
     return result;
 }
 
-void NNController::setPathList(list<string> list)
+void NNController::setPathList(vector<string> list)
 {
-    this->pathList = list;
+    //this->pathList = list;
+    qDebug()<<"classify called in NNcontroller"<<endl; // debug: working
+    pnn.setImagePaths(list);
 }
 
 void NNController::setDistribution(vector<pair<string, int> > distribution) {

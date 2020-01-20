@@ -300,6 +300,18 @@ void MainWindow::on_Refresh_hardware_clicked()
     }
 }
 
+void MainWindow::displayResults(vector<Result> results)
+{
+    pair<string,float> p = results.back().getLabelsAndProb().front();
+    QString qstr = QString::fromStdString(p.first);
+    // moving into a new results tab
+    QLabel *label = new QLabel(qstr);
+    ui->tabWidget->insertTab(1,label,"result");
+    ui->tabWidget->setCurrentIndex(1);
+
+
+}
+
 
 void MainWindow::on_prediction_button_clicked()
 {

@@ -21,7 +21,6 @@ ViewController::ViewController(MasterController* partner)
     app.exec();
 }
 
-
 void ViewController::updatePathList(vector<string> paths)
 
 {
