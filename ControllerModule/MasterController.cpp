@@ -2,41 +2,31 @@
 #include <QApplication>
 #include <QLabel>
 #include <QDebug>
+#include <DataModule/Result.h>
 
 MasterController::MasterController() : viewObserver(this)
 {
-    initControllers();
-
 }
-
-void MasterController::initControllers() {
-
-}
-void MasterController::setPaths(list<string> paths)
+void MasterController::setPaths(vector<string> paths)
 {
-    qDebug()<<"4"<<endl;
-
-    imagePaths = &paths;
-    cout<< imagePaths->back();
-    qDebug()<<"load in master"<<endl;
+    this->nnObserver.setPathList(paths);
+    // cout<< imagePaths->back()
+    qDebug()<<"load in master"<<endl; //ok
 
 }
 
 void MasterController::classify()
 {
+    qDebug()<<"classify called in Master"<<endl; // debug: working
 
-    qDebug()<<"classify called in Master"<<endl; // debug: working.
-    //QStringList* l = {"ss","ss"};
-    //this->nnObserver->updateDataSet(l);
-
-    //nnObserver.setPathList(*imagePaths);
-    nnObserver.classify();
+    vector<Result> results = nnObserver.classify();
+    viewObserver.displayResults(results);
     //results = nnObserver.getResults(); crashes
 
 }
 void MasterController::getPrediction(const string net, const string mode, vector<string> hardware)
 {
-    predictionObserver.calculatePrediction(this->imagePaths->size() ,net, mode,hardware);
+    predictionObserver.calculatePrediction(imagePaths.size() ,net, mode,hardware);
     vector<double> timeConsumption = predictionObserver.getTime();
     vector<double> powerConsumption = predictionObserver.getPower();
     double bandwidth = predictionObserver.getBandwidth();

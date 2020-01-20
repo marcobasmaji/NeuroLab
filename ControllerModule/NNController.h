@@ -1,7 +1,7 @@
 #ifndef NNCONTROLLER_H
 #define NNCONTROLLER_H
 #include<QApplication>
-#include<NNModule/AlexNet.h>
+#include<NNModule/PretrainedNN.h>
 #include <iostream>
 #include <list>
 # include<string.h>
@@ -12,15 +12,14 @@ class NNController
 {
 public:
     NNController();
-    void classify();
-    void updateDataSet(QStringList dataPaths);
-    list<pair<string,vector<string>>>getResults();
-    void setPathList(list<string>);
+    vector<Result> classify();
+    //list<pair<string,vector<string>>>getResults();
+    void setPathList(vector<string>);
     void setDistribution( vector<pair<string, int>> distribution);
+    pair<string,vector<pair<string,float>>> getResults();
 private:
-    QStringList dataPaths;
-    AlexNet pnn;
-    list<string> pathList;
+    PretrainedNN pnn;
+    vector<string> pathList;
 
 };
 

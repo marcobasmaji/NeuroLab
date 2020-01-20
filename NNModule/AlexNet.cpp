@@ -6,6 +6,5 @@ AlexNet::AlexNet()
 }
 void AlexNet::classify(QStringList paths)
 {
-    ovEnv->initMovidius();
     ovEnv->classify();
 }

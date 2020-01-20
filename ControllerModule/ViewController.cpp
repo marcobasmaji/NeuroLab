@@ -19,7 +19,7 @@ ViewController::ViewController(MasterController* partner)
 
     app.exec();
 }
-void ViewController::updatePathList(list<string> paths)
+void ViewController::updatePathList(vector<string> paths)
 
 {
     qDebug()<<"load in ViewCont"<<endl;
@@ -34,8 +34,9 @@ void ViewController::handleClassifyRequest()
     this->master->classify();
 }
 
-void ViewController::displayResults(list<pair<string, vector<string> > >)
+void ViewController::displayResults(vector<Result> results)
 {
+    mainWindow->displayResults(results);
 }
 
 void ViewController::getPrediction(GUISettings settings)

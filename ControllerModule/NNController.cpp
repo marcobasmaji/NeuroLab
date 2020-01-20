@@ -1,33 +1,32 @@
 #include "NNController.h"
 #include<list>
 #include <QDebug>
+#include <opencv2/opencv.hpp>
+#include <QFile>
 
 NNController::NNController()
 {
 
 }
-void NNController::classify()
+vector<Result> NNController::classify()
 {
     qDebug()<<"classify called in NN"<<endl; // debug:
-    pnn.classify({""});
+
+    return pnn.classify();
 }
 
-void NNController::updateDataSet(QStringList dataPaths)
-{
-    this->dataPaths = dataPaths;
 
-}
-
-list<pair<string,vector<string>>> NNController::getResults()
+pair<string,vector<pair<string,float>>> NNController::getResults()
 {
-    list<pair<string,vector<string>>> result;
-    result.push_back({"path",{"result1","result2"}});
+    pair<string,vector<pair<string,float>>> result;
     return result;
 }
 
-void NNController::setPathList(list<string> list)
+void NNController::setPathList(vector<string> list)
 {
-    this->pathList = list;
+    //this->pathList = list;
+    qDebug()<<"classify called in NNcontroller"<<endl; // debug: working
+    pnn.setImagePaths(list);
 }
 
 void NNController::setDistribution(vector<pair<string, int> > distribution) {

@@ -29,6 +29,7 @@ SOURCES += \
     NNModule/Loss.cpp \
     NNModule/MaxPoolingLayer.cpp \
     NNModule/NeuroLabNet.cpp \
+    NNModule/PretrainedNN.cpp \
     NNModule/ReLULayer.cpp \
     NNModule/SoftmaxLayer.cpp \
     NNModule/TrainableLayer.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     ControllerModule/NNController.h \
     ControllerModule/PredictionController.h \
     ControllerModule/ViewController.h \
+    DataModule/Result.h \
     HardwareModule/OpenVinoEnv.h \
     NNModule/AlexNet.h \
     NNModule/ConvolutionLayer.h \
@@ -60,7 +62,8 @@ HEADERS += \
 
 FORMS += \
     ViewModule/MainWindow.ui
-LIBS += /usr/lib/libinference_engine.so
+LIBS += /usr/lib/libinference_engine.so \
+        /usr/lib/libformat_reader.so
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

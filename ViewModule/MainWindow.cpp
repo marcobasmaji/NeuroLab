@@ -46,13 +46,13 @@ void MainWindow::on_LoadButton_clicked()
 
     ui->ClassifyButton->setEnabled(true);
     // turning Qstrings into std strings
-    list<string> sl;
+    vector<string> vec;
     for(int i = 0;i<filesList.length();i++) {
-        sl.push_back(filesList.front().toStdString());
+        vec.push_back(filesList.front().toStdString());
     }
     // loading paths in GUI
     qDebug()<<"load in MainWindow"<<endl;
-    this->viewController->updatePathList(sl);
+    this->viewController->updatePathList(vec);
     qDebug()<<"load"<<endl; // debug: working.
     //this->guiSettings.setNumImages(filesList.lenght());
     viewController->getPrediction(this->guiSettings);
@@ -68,11 +68,7 @@ void MainWindow::on_ClassifyButton_clicked()
 {
     // calling classify in GUI
     this->viewController->handleClassifyRequest();
-    // moving into a new results tab
-    QWidget* newTab = new QWidget();
-    newTab->setAccessibleName("result");
-    ui->tabWidget->addTab(newTab,tr("Result"));
-    ui->tabWidget->setCurrentWidget(newTab);
+
     //resultsCounter++;
 
 }
@@ -129,6 +125,18 @@ void MainWindow::displayPreviews() {
 
 
     }
+
+}
+
+void MainWindow::displayResults(vector<Result> results)
+{
+    pair<string,float> p = results.back().getLabelsAndProb().front();
+    QString qstr = QString::fromStdString(p.first);
+    // moving into a new results tab
+    QLabel *label = new QLabel(qstr);
+    ui->tabWidget->insertTab(1,label,"result");
+    ui->tabWidget->setCurrentIndex(1);
+
 
 }
 

@@ -8,6 +8,7 @@
 #include<QCheckBox>
 #include<ControllerModule/ViewController.h>
 #include<ViewModule/GUISettings.h>
+#include <DataModule/Result.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,6 +23,9 @@ public:
     MainWindow(QWidget *parent, ViewController* partner);
     ~MainWindow();
 
+    void displayResults(vector<Result> results);
+    void displayPrediction();
+
 private slots:
     void on_AlexNet_clicked();
     void on_LoadButton_clicked();
@@ -31,6 +35,8 @@ private slots:
     void on_ClassifyButton_clicked();
 
     void on_StopButton_clicked();
+
+
 
 private:
     Ui::MainWindow *ui;

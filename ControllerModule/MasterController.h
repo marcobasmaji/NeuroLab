@@ -17,7 +17,7 @@ class MasterController
 
 public:
     MasterController();
-    void setPaths(list<string> paths);
+    void setPaths(vector<string> paths);
     void classify();
     void getPrediction(const string net, const string mode, vector<string> hardware);
 
@@ -30,7 +30,7 @@ private:
     list<string> selectedHardware;
     string mode;
     //list<string> imagePaths;
-    list<string>* imagePaths;
+    vector<string> imagePaths;
     list<pair<string,vector<string>>> results;
 
     void initControllers();
