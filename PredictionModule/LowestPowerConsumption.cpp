@@ -1,6 +1,6 @@
 
 #include "LowestPowerConsumption.h"
-std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<std::string>& hardware, int numberOfImages) {
+std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardware, int numberOfImages) {
 	std::vector<Hardware> list;
 	std::string examplestring = "example";
 	double requiredTime = 0;
@@ -52,6 +52,10 @@ std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<st
 	//throw "CPU needed for this type of neural network. No Batch-processing is supported";
 
 
+}
+
+LowestPowerConsumption::LowestPowerConsumption()
+{
 }
 
 double LowestPowerConsumption::TimeValueOfX(std::vector<double>& polynome, double x)

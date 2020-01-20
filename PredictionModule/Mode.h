@@ -7,7 +7,7 @@
 class Mode
 {
 public:
-	virtual std::vector<Hardware>distributeAndPredict(std::list<std::string>& hardware, int numberOfImages) = 0;
+	virtual std::vector<Hardware>distributeAndPredict(std::vector<std::string>& hardware, int numberOfImages) = 0;
 	//virtual double timeValueOfX(std::vector<double>& polynome, double x);
 };
 

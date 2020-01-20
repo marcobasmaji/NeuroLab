@@ -5,7 +5,7 @@
 #include<algorithm>
 
 
-std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
+std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
 	int badgesize = 5;
 	int numberOfHardwareElements = 0;
 	std::vector<std::string> hardwares; 

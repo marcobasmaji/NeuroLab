@@ -1,8 +1,9 @@
 #pragma once
 #include "Prediction.h"
+#include"Mode.h"
 class AlexPrediction :
 	public Prediction
 {
-	double chooseMode(std::string operationmode);
+	Mode* chooseMode(std::string operationmode);
 };
 
