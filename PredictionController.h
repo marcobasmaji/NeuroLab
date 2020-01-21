@@ -1,10 +1,16 @@
 #pragma once
 #include <list>
-#include <string>
+#include <vector>
+#include "AlexPrediction.h"
+#include "NeuroPrediction.h"
+#include "DataResults.h"
 class PredictionController
 {
 public:
-	void calculatePrediction(std::list<std::string> availableHardware,std::string Operationmode, int numberOfImages,std::string NN);
+	DataResults calculatePredictionType(std::vector<std::string>& availableHardware,std::string Operationmode, int numberOfImages,std::string NN);
+	
+
+	
 };
 
 
