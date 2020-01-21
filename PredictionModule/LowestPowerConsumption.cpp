@@ -14,12 +14,13 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 	double powerConsumptionFPGA = 0;
 	double powerConsumptionCPU = 0;
 	double powerConsumptionMovidius = 0;
+	LowestPowerConsumption* low = new LowestPowerConsumption;
 	for (std::string movidius : sticks) {
 		for (std::string elem : hardware) {
 			if (elem.compare(movidius) == 0) {
 				example.name = movidius;
 				example.polynome = polynomMovidius;
-				example.requiredTime = TimeValueOfX(example.polynome,example.numberOfAssignedImages);
+				example.requiredTime = low->TimeValueOfX(example.polynome,example.numberOfAssignedImages);
 				example.powerconsumption = example.requiredTime*powerConsumptionMovidius;
 				list.push_back(example);
 				return list;
@@ -27,25 +28,26 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 
 		}
 	}
-	for (std::string elem : hardware) {
-		if (elem.compare(CPU)) == 0) {
-			example.name = elem;
+	for (std::string element : hardware) {
+		if ((element.compare(CPU)) == 0) {
+			example.name = element;
 				example.polynome = polynomCPU;
-				example.requiredTime = TimeValueOfX(example.polynome,example.numberOfAssignedImages);
+				example.requiredTime = low->TimeValueOfX(example.polynome,example.numberOfAssignedImages);
 				example.powerconsumption = example.requiredTime*powerConsumptionCPU;
 				list.push_back(example);
 				return list;
 		}
 	}
 		for (std::string elem : hardware) {
-		if (elem.compare(FPGA)) == 0) {
+		if ((elem.compare(FPGA)) == 0) {
 			example.name = elem;
 				example.polynome = polynomFPGA;
-				example.requiredTime = TimeValueOfX(example.polynome,example.numberOfAssignedImages);
+				example.requiredTime = low->TimeValueOfX(example.polynome,example.numberOfAssignedImages);
 				example.powerconsumption = example.requiredTime*powerConsumptionFPGA;
 				list.push_back(example);
 				return list;
 		}
+		delete low;
 		return list;
 	}
 	
@@ -60,7 +62,7 @@ LowestPowerConsumption::LowestPowerConsumption()
 
 double LowestPowerConsumption::TimeValueOfX(std::vector<double>& polynome, double x)
 {
-	double value;
+	double value = 0;
 	for (int i = 0; i < polynome.size(); i++) {
 		value = value + pow(polynome[polynome.size() - i], x);
 	}

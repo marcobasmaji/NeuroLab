@@ -10,7 +10,5 @@ Hardware::Hardware(std::string name, int numberOfassignedImages, double required
 	this->powerconsumption = powerconsumption;
 }
 
-bool Hardware::sortbytime(Hardware& a, Hardware& b)
-{
-	return (a.requiredTime < b.requiredTime);
-}
+
+

@@ -3,25 +3,24 @@
 #include<list>
 #include<iostream>
 #include "Prediction.h"
+#include"PredictionController.h"
+#include"DataResults.h"
 
 using namespace std;
 
 
 int main()
 {
-    list<string> stringlist = {};
+    std::vector<std::string> list;
+    std::string CPU = "CPU";
+std::string nn = "Alexnet";
+    std::string HighestP = "HighestPerformance";
+    list.push_back(CPU);
+    int numberOfImages = 5;
+    PredictionController* n = new PredictionController;
+    DataResults d = n->calculatePredictionType(list, HighestP, numberOfImages, nn);
+    std::cout << d.TotalTime;
     
-    stringlist.push_back("HI");
-    string elem = "Movidius1";
-    string name = "Movidius1";
-    if (((elem.compare("Movidius1")) && (elem.compare("Movidius2")) && (elem.compare("Movidius3")) && (elem.compare("Movidius4")) )) {
-        cout << "true";
-    }
-    else {
-        cout << "false";
-    }
-   // Prediction p(3, stringlist, "lowestPowerConsumption");
-    //cout << p.getTotalSeconds();
  
 }
 

@@ -8,7 +8,6 @@
 std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
 	int badgesize = 5;
 	int numberOfHardwareElements = 0;
-	std::vector<std::string> hardwares; 
 	std::string movidius1 = "Movidius1";
 	std::string movidius2 = "Movidius2";
 	std::string movidius3 = "Movidius3";
@@ -26,6 +25,7 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 	std::vector<Hardware> hardwarevector;
 	std::vector<std::vector<Hardware>> constellations;
 	double powerConsumptionMovidius = 17;
+	HighestPerformance* hi = new HighestPerformance;
 
 	for (std::string element : hardwares) {
 		if (element.compare(movidius1) == 0) {
@@ -63,34 +63,38 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 	for (auto element : hardwarevector) {
 		element.numberOfAssignedImages = numberOfImages / numberOfHardwareElements;// welche Elemente sind noch nicht initialisiert(rest)
 		double numberAssignedImages = (double)element.numberOfAssignedImages;
-		element.requiredTime = TimeValueOfX(element.polynome, numberAssignedImages);
+		element.requiredTime = hi->TimeValueOfX(element.polynome, numberAssignedImages);
 	}
 	
 	//sorts after time it takes for the hardareElements to finish the tasks assigned to them
-	std::sort(hardwarevector.begin(), hardwarevector.end(), example.sortbytime);
+	std::sort(hardwarevector.begin(), hardwarevector.end());
 	int size = hardwarevector.size();
 	for (int k = 0; k < size - 1; k++) {
-		for (int j = 0; j < hardwarevector.size() + 1; j++) {
+		for (size_t j = 0; j < hardwarevector.size() + 1; j++) {
 			std::vector<Hardware> hardwarevec = hardwarevector;
-			for (int i = 0; i < hardwarevec.size() / 2; i++) {
+			for (size_t i = 0; i < hardwarevec.size() / 2; i++) {
 				while (hardwarevec.at(i).requiredTime < hardwarevec.at(size - i - 1).requiredTime) {
 					hardwarevec.at(i).numberOfAssignedImages = hardwarevec.at(i).numberOfAssignedImages + badgesize;
 					hardwarevec.at(size - i - 1).numberOfAssignedImages = hardwarevec.at(size - 1 - i).numberOfAssignedImages - badgesize;
 					double numberOfAssignedImages = (double)hardwarevec.at(i).numberOfAssignedImages;
-					hardwarevec.at(i).requiredTime = TimeValueOfX(hardwarevec.at(i).polynome,numberOfAssignedImages);
+					hardwarevec.at(i).requiredTime = hi->TimeValueOfX(hardwarevec.at(i).polynome,numberOfAssignedImages);
 					double numberOfAssignedImagesEnd = hardwarevec.at(size - i - 1).numberOfAssignedImages;
-					hardwarevec.at(size - i - 1).requiredTime = TimeValueOfX(hardwarevec.at(size - i - 1).polynome, numberOfAssignedImagesEnd);
+					hardwarevec.at(size - i - 1).requiredTime = hi->TimeValueOfX(hardwarevec.at(size - i - 1).polynome, numberOfAssignedImagesEnd);
 
 				}
-				std::sort(hardwarevec.begin(), hardwarevec.end(), example.sortbytime);
+				std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
+					return h1.requiredTime < h2.requiredTime;
+					});
 			}
 			constellations.push_back(hardwarevec);//wird der hier auch ver�ndert ?
-			for (int m = 0; m < hardwarevector.size(); m++) {
+			for (size_t m = 0; m < hardwarevector.size(); m++) {
 				hardwarevector.at(m).numberOfAssignedImages = numberOfImages / (numberOfHardwareElements - 1);
 				double numberOfAssignedImages = hardwarevector.at(m).numberOfAssignedImages;
-				hardwarevector.at(m).requiredTime = TimeValueOfX(hardwarevector.at(m).polynome,numberOfAssignedImages);
+				hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome,numberOfAssignedImages);
 			}
-			std::sort(hardwarevector.begin(), hardwarevector.end(), example.sortbytime);
+			std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
+				return h1.requiredTime < h2.requiredTime;
+				});
 			hardwarevector.pop_back();
 			// am ineffizienteste muss aussoritert werden durch neue vermutete Verteilung oder auf bestehen der alten?
 		}
@@ -115,7 +119,7 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 	return constellations.at(counterPower);*/
 	int counter = 0;
 	int ireturn = 0;
-	int minimumTime = constellations.at(0).back().requiredTime;
+	double minimumTime = constellations.at(0).back().requiredTime;
 	for (auto target : constellations) {
 		if (target.back().requiredTime < minimumTime) {
 			minimumTime = target.back().requiredTime;
@@ -129,6 +133,7 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 		std::pair<std::string, int> name = std::make_pair(element.name, element.numberOfAssignedImages);
 		returnvalue.push_back(name);
 	}
+	delete hi;
 	return constellations.at(counter);
 	
 
@@ -152,7 +157,7 @@ HighestPerformance::HighestPerformance()
 double HighestPerformance::TimeValueOfX(std::vector<double>& polynome, double x)
 {
 	double value;
-	for (int i = 0; i < polynome.size(); i++) {
+	for (size_t i = 0; i < polynome.size(); i++) {
 		value = value + pow(polynome[polynome.size() - i], x);
 	}
 	return value;

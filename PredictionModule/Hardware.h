@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 class Hardware
 {
 public:
@@ -9,7 +10,7 @@ public:
 	std::vector<double> polynome;
 	double powerconsumption;
 	Hardware(std::string name,int numberOfassignedImages, double requiredTime, std::vector<double>& polynome, double powerconsumption);
-	bool sortbytime(Hardware& a, Hardware& b);
+
 
 	
 	
