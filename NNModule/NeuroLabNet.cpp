@@ -1,9 +1,19 @@
 #include "NeuroLabNet.h"
-#include "ConvolutionLayer.h"
+#include "Layers/ConvolutionLayer.h"
+#include "Layers/ReLULayer.h"
+
 
 // constuctor
 NeuroLabNet::NeuroLabNet(){
 	// do nothing?
+    //OpenCLEnvironmentCreator* clCreator = new OpenCLEnvironmentCreator();
+    //HardwareType type = HardwareType::CPU;
+    //OpenCLEnvironment* env = clCreator->createOpenCLEnvironment(type);
+
+    //clEnv = env;
+
+
+
 }
 
 void NeuroLabNet::init() {
@@ -38,7 +48,8 @@ void NeuroLabNet::init() {
 	 this->lossFunction = loss;
 */
 
-
+    ReLULayer relu1(34,34,50);
+    layers.push_front(relu1);
 }
 
 void NeuroLabNet::classify() {
@@ -55,7 +66,7 @@ void NeuroLabNet::train() {
 }
 
 void NeuroLabNet::executeTransferLearning() {
-	// no idea .. yet
+    // no idea .. yet
 
 }
 

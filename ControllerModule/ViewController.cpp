@@ -50,3 +50,18 @@ void ViewController::getPrediction(GUISettings settings)
 void ViewController::displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops) {
 
 }
+
+void ViewController::setNeuralNet(string nn)
+{
+
+}
+
+void ViewController::setOpMode(string mode)
+{
+
+}
+
+void ViewController::setHardwareDist(vector<string> hardwareDist)
+{
+
+}

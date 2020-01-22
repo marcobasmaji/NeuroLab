@@ -2,7 +2,8 @@
 #include <string.h>
 #include <utility> 
 #include <list> 
-#include "Loss.h"
+#include "Layers/Layer.h"
+//#include "Loss.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ public:
 protected:
     //Loss lossFunction;
 	unsigned int netID;
-    //list<Layer> layers;
+    list<Layer> layers;
     //DataSet dataSet;
 	double loss;
 	double cumulativeLoss;

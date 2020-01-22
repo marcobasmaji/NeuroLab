@@ -9,7 +9,7 @@
 #include "CL/cl.h"
 #include "OpenCLLayer.hpp"
 #include "OpenCLEnvironment.hpp"
-#include "HardwareType.hpp"
+#include "HardwareType.cpp"
 
 class OpenCLEnvironmentCreator {
 public:
@@ -18,7 +18,7 @@ public:
     *   @param hardwareType This attribute selects the hardware for which the OpenCLEnvironment class will be created.
     *   @return 			The return value is the initialized OpenCLEnvironment object that has been created of the desired hardware type.
     */
-    OpenCLEnvironment* createOpenCLEnvironment(enum HardwareType hardwareType);
+    OpenCLEnvironment* createOpenCLEnvironment(HardwareType);
 
 private:
     /**

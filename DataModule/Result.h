@@ -1,8 +1,6 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-
-
 #include <iostream>
 #include <vector>
 using namespace std;

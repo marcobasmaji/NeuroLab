@@ -97,7 +97,6 @@ vector<Result> OpenVinoEnv::classify() {
 
 
     inferRequest.Infer();
-    //inferRequest.Wait(IInferRequest::WaitMode::RESULT_READY);
 
     //process output
     InferenceEngine::OutputsDataMap output_info(network.getOutputsInfo());
@@ -164,6 +163,26 @@ void OpenVinoEnv::setImageNames(std::vector<std::string> imageNames)
 {
     this->imageNames = imageNames;
     //cout <<imageNames.back();
+}
+
+void OpenVinoEnv::setPlatforms(vector<string> platforms)
+{
+    if(platforms.size()<1)
+    {
+        cerr << "No hardware was chosen";
+    }
+    else if(platforms.size() == 1)
+    {
+        this->deviceName = platforms.back();
+    }
+    else
+    {
+        this->deviceName="HETERO:";
+        for(auto &item:platforms)
+        {
+            this->deviceName += item;
+        }
+    }
 }
 
 

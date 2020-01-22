@@ -21,18 +21,15 @@ SOURCES += \
     ControllerModule/NNController.cpp \
     ControllerModule/PredictionController.cpp \
     ControllerModule/ViewController.cpp \
+    DataModule/Shape.cpp \
     HardwareModule/OpenVinoEnv.cpp \
-    NNModule/AlexNet.cpp \
-    NNModule/ConvolutionLayer.cpp \
-    NNModule/DenseLayer.cpp \
-    NNModule/Layer.cpp \
-    NNModule/Loss.cpp \
-    NNModule/MaxPoolingLayer.cpp \
+    NNModule/Layers/ConvolutionLayer.cpp \
+    NNModule/Layers/DenseLayer.cpp \
+    NNModule/Layers/MaxPoolingLayer.cpp \
+    NNModule/Layers/ReLULayer.cpp \
+    NNModule/Layers/SoftmaxLayer.cpp \
     NNModule/NeuroLabNet.cpp \
     NNModule/PretrainedNN.cpp \
-    NNModule/ReLULayer.cpp \
-    NNModule/SoftmaxLayer.cpp \
-    NNModule/TrainableLayer.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     main.cpp
@@ -44,19 +41,17 @@ HEADERS += \
     ControllerModule/PredictionController.h \
     ControllerModule/ViewController.h \
     DataModule/Result.h \
+    DataModule/Shape.h \
     HardwareModule/OpenVinoEnv.h \
-    NNModule/AlexNet.h \
-    NNModule/ConvolutionLayer.h \
-    NNModule/DenseLayer.h \
-    NNModule/Layer.h \
-    NNModule/Loss.h \
-    NNModule/MaxPoolingLayer.h \
+    NNModule/Layers/ConvolutionLayer.h \
+    NNModule/Layers/DenseLayer.h \
+    NNModule/Layers/Layer.h \
+    NNModule/Layers/MaxPoolingLayer.h \
+    NNModule/Layers/ReLULayer.h \
+    NNModule/Layers/SoftmaxLayer.h \
     NNModule/NeuralNet.h \
     NNModule/NeuroLabNet.h \
     NNModule/PretrainedNN.h \
-    NNModule/ReLULayer.h \
-    NNModule/SoftmaxLayer.h \
-    NNModule/TrainableLayer.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h
 

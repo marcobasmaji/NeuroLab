@@ -79,7 +79,9 @@ void MainWindow::on_StopButton_clicked()
 }
 
 void MainWindow::displayPreviews() {
-    // TODO !!
+    // TODO !
+    QImage image;
+    image.pixel(2,2);
 
     // ideen zum resizen von bilder, um previews zu erstellen
     /*QWidget wgt;

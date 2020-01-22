@@ -20,6 +20,9 @@ public:
     void displayResults(vector<Result>);
     void getPrediction(GUISettings settings);
     void displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops);
+    void setNeuralNet(string nn);
+    void setOpMode(string mode);
+    void setHardwareDist(vector<string> hardwareDist);
 private:
     //MainWindow* mainWindow;
     MasterController* master;
