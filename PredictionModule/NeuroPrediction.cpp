@@ -1,10 +1,19 @@
 #include "NeuroPrediction.h"
 #include <iostream>
-
+/**
+ * @brief Construct a new Neuro Prediction:: Neuro Prediction object
+ * 
+ */
 NeuroPrediction::NeuroPrediction()
 {
 }
-
+/**
+ * @brief this method makes the hardware distribution for our own nn. 
+ * 
+ * @param availableHardware a vector of strings that contain strings with the names of the hardware elements the user wants to use
+ * @param numberOfImages  an integer with the number of images that the user wants to get classified
+ * @return std::vector<Hardware>  a vector containing hardware elements.
+ */
 std::vector<Hardware> NeuroPrediction::distributeAndPredict(std::vector<std::string> availableHardware, int numberOfImages)
 {
 	std::string cpu = "CPU";
@@ -25,6 +34,7 @@ std::vector<Hardware> NeuroPrediction::distributeAndPredict(std::vector<std::str
 		}
 	}
 	std::cerr << "The CPU is needed with this neural network";
+	return list;
 
 }
 double NeuroPrediction::TimeValueOfX(std::vector<double>& polynome, double x)

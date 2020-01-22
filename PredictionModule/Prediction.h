@@ -1,7 +1,8 @@
 #pragma once
 #include<vector>
 #include<string>
-#include <utility>
+#pragma once
+#include <vector>
 
 class Prediction
 {

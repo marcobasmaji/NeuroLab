@@ -1,3 +1,4 @@
+#pragma once
 #include "HighestEfficiency.h"
 #include <algorithm>
 std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
@@ -65,10 +66,14 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 		return h1.requiredTime < h2.requiredTime;
 		});
 	int size = hardwarevector.size();
+	int j = 0;
+	int i = 0;
 	for (int k = 0; k < size - 1; k++) {
-		for (int j = 0; j < hardwarevector.size() + 1; j++) {
+		for (size_t sJ = 0; sJ < hardwarevector.size() + 1; sJ++) {
+			j = sJ;
 			std::vector<Hardware> hardwarevec = hardwarevector;
-			for (int i = 0; i < hardwarevec.size() / 2; i++) {
+			for (size_t sI = 0; sI < hardwarevec.size() / 2; sI++) {
+				i = sI;
 				while (hardwarevec.at(i).requiredTime < hardwarevec.at(size - i - 1).requiredTime) {
 					hardwarevec.at(i).numberOfAssignedImages = hardwarevec.at(i).numberOfAssignedImages + badgesize;
 					hardwarevec.at(size - i - 1).numberOfAssignedImages = hardwarevec.at(size - 1 - i).numberOfAssignedImages - badgesize;
@@ -83,7 +88,9 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 					});
 			}
 			constellations.push_back(hardwarevec);
-			for (int m = 0; m < hardwarevector.size(); m++) {
+			int m = 0;
+			for (size_t sM = 0; sM < hardwarevector.size(); sM++) {
+				m = sM;
 				hardwarevector.at(m).numberOfAssignedImages = numberOfImages / (numberOfHardwareElements - 1);
 				double numberOfAssignedImages = hardwarevector.at(m).numberOfAssignedImages;
 				hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome, numberOfAssignedImages);
@@ -112,10 +119,12 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 	double  minimumQuotient = powerVector.at(0).first / powerVector.at(0).second;
 	//if it is not the following code runs over all pairs in the vector and updates the minimal quotient.
 	//the adress of the optimal adress in the constellation is stored in the integer counterPower
-	for (int i = 0; i < powerVector.size() - 1; i++) {
-		if ((powerVector.at(i).first / powerVector.at(i).second) < minimumQuotient) {
-			minimumQuotient = (powerVector.at(i).first / powerVector.at(i).second);
-			counterPower = i;
+	int t = 0;
+	for (size_t sT = 0; sT < powerVector.size() - 1; sT++) {
+		t = sT;
+		if ((powerVector.at(t).first / powerVector.at(t).second) < minimumQuotient) {
+			minimumQuotient = (powerVector.at(t).first / powerVector.at(t).second);
+			counterPower = t;
 		}
 	}
 	return constellations.at(counterPower);
@@ -131,8 +140,11 @@ bool HighestEfficiency::sortbytime(Hardware& a, Hardware& b)
 double HighestEfficiency::TimeValueOfX(std::vector<double>& polynome, double x)
 {
 	double value = 0;
-	for (int i = 0; i < polynome.size(); i++) {
-		value = value + pow(polynome[polynome.size() - i], x);
+	int i = 0;
+	for (size_t sI = 0; sI < polynome.size(); sI++) {
+		i = sI;
+		int size = polynome.size();
+		value = value + pow(polynome[size - i], x);
 	}
 	return value;
 }

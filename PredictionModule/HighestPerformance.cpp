@@ -1,10 +1,17 @@
+#pragma once
 #include "HighestPerformance.h"
 #include "hardware.h"
 #include<list>
 #include<math.h>
 #include<algorithm>
 
-
+/**
+ * @brief Construct a new std::vector<Hardware>Mode::distribute And Predict object 
+ * This method returns a vector of hardware elements which represent a optimal constellation. Meaning that each hardware element in it has an integer with the number of images assigned to it as attribute-.
+ * These images distributed in a way that the overall classification is done in as little time as possible
+ * @param hardwares a reference to a vector of strings that contain the name of the chosen hardware elements
+ * @param numberOfImages  an integer that contains the number of images that the user wants to classify
+ */
 std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
 	int badgesize = 5;
 	int numberOfHardwareElements = 0;
@@ -67,7 +74,9 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 	}
 	
 	//sorts after time it takes for the hardareElements to finish the tasks assigned to them
-	std::sort(hardwarevector.begin(), hardwarevector.end());
+	std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
+		return h1.requiredTime < h2.requiredTime;
+		});
 	int size = hardwarevector.size();
 	for (int k = 0; k < size - 1; k++) {
 		for (size_t j = 0; j < hardwarevector.size() + 1; j++) {
@@ -156,9 +165,10 @@ HighestPerformance::HighestPerformance()
 
 double HighestPerformance::TimeValueOfX(std::vector<double>& polynome, double x)
 {
-	double value;
-	for (size_t i = 0; i < polynome.size(); i++) {
-		value = value + pow(polynome[polynome.size() - i], x);
+	double value = 0;
+	int size = polynome.size();
+	for (size_t i = 0; i < size; i++) {
+		value = value + pow(polynome[size - i], x);
 	}
 	return value;
 }

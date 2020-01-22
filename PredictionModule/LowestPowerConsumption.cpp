@@ -52,7 +52,7 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 	}
 	
 	//throw "CPU needed for this type of neural network. No Batch-processing is supported";
-
+		return list;
 
 }
 
@@ -63,8 +63,9 @@ LowestPowerConsumption::LowestPowerConsumption()
 double LowestPowerConsumption::TimeValueOfX(std::vector<double>& polynome, double x)
 {
 	double value = 0;
-	for (int i = 0; i < polynome.size(); i++) {
-		value = value + pow(polynome[polynome.size() - i], x);
+	int size = polynome.size();
+	for (int i = 0; i < size; i++) {
+		value = value + pow(polynome[size - i], x);
 	}
 	return value;
 }

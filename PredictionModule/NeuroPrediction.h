@@ -7,9 +7,8 @@ class NeuroPrediction :
 public:
 	NeuroPrediction();
 	std::vector<Hardware>distributeAndPredict(std::vector<std::string> availableHardware, int numberOfImages);
-	double TimeValueOfX(std::vector<double>& polynome, double x)
-	{
-	}
+	double TimeValueOfX(std::vector<double>& polynome, double x);
+
 
 };
 
