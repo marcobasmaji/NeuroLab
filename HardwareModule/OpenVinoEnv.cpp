@@ -96,7 +96,6 @@ vector<Result> OpenVinoEnv::classify() {
 
 
     inferRequest.Infer();
-    //inferRequest.Wait(IInferRequest::WaitMode::RESULT_READY);
 
     //process output
     InferenceEngine::OutputsDataMap output_info(network.getOutputsInfo());

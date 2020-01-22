@@ -268,7 +268,50 @@ void MainWindow::on_StopButton_clicked()
     // maybe find a way to stop the classify() method  in here
 }
 
+void MainWindow::displayPreviews() {
+    // TODO !
+    QImage image;
+    image.pixel(2,2);
 
+    // ideen zum resizen von bilder, um previews zu erstellen
+    /*QWidget wgt;
+    QPalette p = wgt.palette();
+    QImage px("/home/mo/Pictures/Wallpapers/cat.jpg");
+    p.setBrush(QPalette::Window, QBrush(px));
+    wgt.setPalette(p);
+    wgt.show();
+    wgt.resize(500, 500);
+
+
+
+
+    QWidget wgt2;
+    QPalette p2 = wgt2.palette();
+    QImage px2 = px.scaled(224, 224, Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    p2.setBrush(QPalette::Window, QBrush(px2));
+    wgt2.setPalette(p2);
+    wgt2.show();
+    wgt2.resize(500, 500);
+
+    px2.save("/home/mo/Pictures/Wallpapers/cat2.jpg");
+
+    */
+
+    gridLayout = new QGridLayout();
+    gridLayout->setSpacing(2);
+
+    ui->scrollArea->setLayout(gridLayout);
+    QPixmap pixmap;
+    for(QImage image : imageList) {
+        pixmap.convertFromImage(image,Qt::AutoColor);        //Display preview
+        //QIcon icon(pixmap);
+        QLabel *label = new QLabel();
+        label->setFixedSize(100,100);
+        //QCheckBox *imageCheckBox = new QCheckBox();
+        label->setPixmap(pixmap);
+        //label->setPixmap(pixmap);
+    }
+}
 void MainWindow::displayResults(vector<Result> results)
 {
     pair<string,float> p = results.back().getLabelsAndProb().front();

@@ -33,13 +33,6 @@ private:
     InferenceEngine::CNNNetwork cnnnetwork;
     InferenceEngine::InputsDataMap inputInfo;
     InferenceEngine::OutputsDataMap outputInfo;
-    //string pathToIR;
-    string structurePath;
-    string weightsPath;
-
-    std::vector<std::string> imageNames;
-
-    vector<Result> endResults;
 
 
     //string pathToIR;
@@ -47,7 +40,6 @@ private:
     string weightsPath;
     std::vector<std::string> imageNames;
     vector<Result> endResults;
-    string deviceName;
 };
 
 #endif // OPENVINOENV_H

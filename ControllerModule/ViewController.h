@@ -26,7 +26,7 @@ public:
     void displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops);
     void setNeuralNet(string nn);
     void setOpMode(string mode);
-    //void setHardwareDist(vector<string> hardwareDist);
+    void setHardwareDist(vector<string> hardwareDist);
     list<HardwareElement> availableHardware;
     void setAvailableHardware(const list<string> &hardwareElements);
     void displayAvailableHardware();
