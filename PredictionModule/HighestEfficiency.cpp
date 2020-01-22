@@ -1,8 +1,9 @@
 #pragma once
 #include "HighestEfficiency.h"
 #include <algorithm>
-std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
-	int badgesize = 5;
+#include <iostream>
+std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
+	int badgesize = 1;
 	int numberOfHardwareElements = 0;
 	std::string movidius1 = "Movidius1";
 	std::string movidius2 = "Movidius2";
@@ -53,8 +54,10 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 			Hardware h{ element,number,requiredTime,polynomCPU,27 };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
+			
 		}
 	}
+	//inital distribution of images on the hardware elements
 	for (auto element : hardwarevector) {
 		element.numberOfAssignedImages = numberOfImages / numberOfHardwareElements;// welche Elemente sind noch nicht initialisiert(rest)
 		double numberAssignedImages = (double)element.numberOfAssignedImages;
@@ -66,9 +69,10 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 		return h1.requiredTime < h2.requiredTime;
 		});
 	int size = hardwarevector.size();
+	std::cout << numberOfHardwareElements << " "<< size;
 	int j = 0;
 	int i = 0;
-	for (int k = 0; k < size - 1; k++) {
+	for (int k = 0; k < size ; k++) {
 		for (size_t sJ = 0; sJ < hardwarevector.size() + 1; sJ++) {
 			j = sJ;
 			std::vector<Hardware> hardwarevec = hardwarevector;
@@ -87,23 +91,27 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 					return h1.requiredTime < h2.requiredTime;
 					});
 			}
-			constellations.push_back(hardwarevec);
-			int m = 0;
-			for (size_t sM = 0; sM < hardwarevector.size(); sM++) {
-				m = sM;
-				hardwarevector.at(m).numberOfAssignedImages = numberOfImages / (numberOfHardwareElements - 1);
-				double numberOfAssignedImages = hardwarevector.at(m).numberOfAssignedImages;
-				hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome, numberOfAssignedImages);
-			}
-			std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
+		constellations.push_back(hardwarevec);
+		std::cout << "Constellation added";
+
+		int m = 0;
+		for (size_t sM = 0; sM < hardwarevector.size()-1; sM++) {
+			m = sM;
+			hardwarevector.at(m).numberOfAssignedImages = numberOfImages / (numberOfHardwareElements - 1);
+			double numberOfAssignedImages = hardwarevector.at(m).numberOfAssignedImages;
+			hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome, numberOfAssignedImages);
+		}
+		std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
 				return h1.requiredTime < h2.requiredTime;
 				});
-			delete hi;
-			hardwarevector.pop_back();
-			
+		delete hi;
+		hardwarevector.pop_back();		
 		}
 	}
+	std::cout << hardwarevector.size();
+	std::cout << constellations.size() << "Constellation size";
 	//initalize
+
 	int counterPower = 0;
 	double minPower = 0;
 	// A vecctor containing a pair with the totalPowerConsumption of a certain constellation of hardwareelements and their required time
@@ -115,7 +123,8 @@ std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwa
 		}
 		powerVector.push_back(std::make_pair(power,powerTarget.back().requiredTime));
 	}
-	//hypothesis first quotient of the powerVector is the most optimal one. 
+	//hypothesis first quotient of the powerVector is the most optimal one.
+
 	double  minimumQuotient = powerVector.at(0).first / powerVector.at(0).second;
 	//if it is not the following code runs over all pairs in the vector and updates the minimal quotient.
 	//the adress of the optimal adress in the constellation is stored in the integer counterPower
@@ -144,7 +153,7 @@ double HighestEfficiency::TimeValueOfX(std::vector<double>& polynome, double x)
 	for (size_t sI = 0; sI < polynome.size(); sI++) {
 		i = sI;
 		int size = polynome.size();
-		value = value + pow(polynome[size - i], x);
+		value = value + pow(polynome.at(size-i-1), x);
 	}
 	return value;
 }

@@ -8,7 +8,7 @@ class HighestPerformance :
 {
 public:
 	HighestPerformance();
-	std::vector<Hardware> Mode::distributeAndPredict(std::vector<std::string>& name, int numberOfImages);
+	std::vector<Hardware> distributeAndPredict(std::vector<std::string>& name, int numberOfImages);
 	double TimeValueOfX(std::vector<double>& polynome, double x);
 };
 

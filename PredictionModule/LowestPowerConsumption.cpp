@@ -1,6 +1,6 @@
 
 #include "LowestPowerConsumption.h"
-std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardware, int numberOfImages) {
+std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<std::string>& hardware, int numberOfImages) {
 	std::vector<Hardware> list;
 	std::string examplestring = "example";
 	double requiredTime = 0;

@@ -12,7 +12,7 @@
  * @param hardwares a reference to a vector of strings that contain the name of the chosen hardware elements
  * @param numberOfImages  an integer that contains the number of images that the user wants to classify
  */
-std::vector<Hardware>Mode::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
+std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
 	int badgesize = 5;
 	int numberOfHardwareElements = 0;
 	std::string movidius1 = "Movidius1";
