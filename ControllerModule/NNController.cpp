@@ -40,7 +40,6 @@ void NNController::setPathList(vector<string> list)
 }
 
 void NNController::setDistribution(vector<pair<string, int> > distribution) {
-
     return pnn.classify();
 }
 
