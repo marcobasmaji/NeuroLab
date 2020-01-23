@@ -1,5 +1,6 @@
 
 #include "LowestPowerConsumption.h"
+#include <iostream>
 std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<std::string>& hardware, int numberOfImages) {
 	std::vector<Hardware> list;
 	std::string examplestring = "example";
@@ -64,8 +65,10 @@ double LowestPowerConsumption::TimeValueOfX(std::vector<double>& polynome, doubl
 {
 	double value = 0;
 	int size = polynome.size();
-	for (int i = 0; i < size; i++) {
-		value = value + pow(polynome[size - i], x);
+	for (size_t i = 0; i < size; i++) {
+		value = value + polynome.at(i) * pow(x, (size - i - 1));
+		std::cout << value << "hi";
+
 	}
 	return value;
 }

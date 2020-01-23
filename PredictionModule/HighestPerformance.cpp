@@ -4,6 +4,7 @@
 #include<list>
 #include<math.h>
 #include<algorithm>
+#include <iostream>
 
 /**
  * @brief Construct a new std::vector<Hardware>Mode::distribute And Predict object 
@@ -67,18 +68,17 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 			numberOfHardwareElements++;
 		}
 	}
-	for (auto element : hardwarevector) {
-		element.numberOfAssignedImages = numberOfImages / numberOfHardwareElements;// welche Elemente sind noch nicht initialisiert(rest)
-		double numberAssignedImages = (double)element.numberOfAssignedImages;
-		element.requiredTime = hi->TimeValueOfX(element.polynome, numberAssignedImages);
-	}
+	for (auto i = hardwarevector.begin(); i != hardwarevector.end(); i++) {
+		i->numberOfAssignedImages = numberOfImages / numberOfHardwareElements;
+		i->requiredTime = hi->TimeValueOfX(i->polynome, i->numberOfAssignedImages);
+	}// rest noch nicht initialisiert
 	
 	//sorts after time it takes for the hardareElements to finish the tasks assigned to them
 	std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
 		return h1.requiredTime < h2.requiredTime;
 		});
 	int size = hardwarevector.size();
-	for (int k = 0; k < size - 1; k++) {
+	for (int k = 0; k < size; k++) {
 		for (size_t j = 0; j < hardwarevector.size() + 1; j++) {
 			std::vector<Hardware> hardwarevec = hardwarevector;
 			for (size_t i = 0; i < hardwarevec.size() / 2; i++) {
@@ -96,7 +96,7 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 					});
 			}
 			constellations.push_back(hardwarevec);//wird der hier auch ver�ndert ?
-			for (size_t m = 0; m < hardwarevector.size(); m++) {
+			for (size_t m = 0; m < hardwarevector.size()-1; m++) {
 				hardwarevector.at(m).numberOfAssignedImages = numberOfImages / (numberOfHardwareElements - 1);
 				double numberOfAssignedImages = hardwarevector.at(m).numberOfAssignedImages;
 				hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome,numberOfAssignedImages);
@@ -129,6 +129,7 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 	int counter = 0;
 	int ireturn = 0;
 	double minimumTime = constellations.at(0).back().requiredTime;
+	std::cout << "sind wir hier";
 	for (auto target : constellations) {
 		if (target.back().requiredTime < minimumTime) {
 			minimumTime = target.back().requiredTime;
@@ -136,14 +137,17 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 		}
 		counter++;
 	}
-	std::vector<std::pair<std::string, int>> returnvalue;
+	std::cout << counter << "xD";
+	/**std::vector<std::pair<std::string, int>> returnvalue;
 
+	std::cout <<"Ha"<< counter << "Ho";
 	for (auto element : constellations.at(counter)) {
 		std::pair<std::string, int> name = std::make_pair(element.name, element.numberOfAssignedImages);
 		returnvalue.push_back(name);
 	}
+	*/ // ich glaube der teil ist nicht mehr notwendig
 	delete hi;
-	return constellations.at(counter);
+	return constellations.at(ireturn);
 	
 
 	
@@ -168,7 +172,9 @@ double HighestPerformance::TimeValueOfX(std::vector<double>& polynome, double x)
 	double value = 0;
 	int size = polynome.size();
 	for (size_t i = 0; i < size; i++) {
-		value = value + pow(polynome[size - i], x);
+		value = value + polynome.at(i)*pow(x, (size-i-1));
+		std::cout << value;
+
 	}
 	return value;
 }

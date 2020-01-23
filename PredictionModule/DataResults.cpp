@@ -7,15 +7,19 @@ DataResults::DataResults(std::vector<Hardware>& results) {
 	std::vector<std::pair<std::string, double>> times;
 	std::vector<std::pair<std::string, double>> pConsumption;
 	double TotalPowerConsumption = 0;
+	double TotalRequiredTime = 0;
 	
-	for (auto element : results) {
-		std::pair<std::string, int> hardwareV = std::make_pair(element.name, element.numberOfAssignedImages);
+	
+	for (auto i = results.begin(); i != results.end(); i++) {
+		std::pair<std::string, int> hardwareV = std::make_pair(i->name,i->numberOfAssignedImages);
 		hDistribution.push_back(hardwareV);
-		std::pair<std::string, double> time = std::make_pair(element.name, element.requiredTime);
+		std::pair<std::string, double> time = std::make_pair(i->name, i->requiredTime);
 		times.push_back(time);
-		std::pair<std::string, double> cons = std::make_pair(element.name, element.powerconsumption);
+		double powerConsumptionHardware = (i->requiredTime*i->powerconsumption);
+		std::pair<std::string, double> cons = std::make_pair(i->name, powerConsumptionHardware);
 		pConsumption.push_back(cons);
-		TotalPowerConsumption = TotalPowerConsumption + element.powerconsumption;
+		TotalPowerConsumption = TotalPowerConsumption + powerConsumptionHardware;
+
 	}
 	this->hardwareDistribution = hDistribution;
 	this->PowerConsumption = pConsumption;

@@ -51,19 +51,25 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 			numberOfHardwareElements++;
 		}
 		if (element.compare(CPU) == 0) {
-			Hardware h{ element,number,requiredTime,polynomCPU,27 };
+			Hardware h{ element,number,requiredTime,polynomCPU,24 };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 			
 		}
 	}
 	//inital distribution of images on the hardware elements
-	for (auto element : hardwarevector) {
+	/*for (auto element : hardwarevector) {
 		element.numberOfAssignedImages = numberOfImages / numberOfHardwareElements;// welche Elemente sind noch nicht initialisiert(rest)
+		std::cout << element.numberOfAssignedImages << "HI";
 		double numberAssignedImages = (double)element.numberOfAssignedImages;
 		element.requiredTime = hi->TimeValueOfX(element.polynome, numberAssignedImages);
+	std::cout << element.requiredTime << "ooo " ;
+	}*/
+	for (auto i = hardwarevector.begin(); i != hardwarevector.end(); i++) {
+		i->numberOfAssignedImages = numberOfImages / numberOfHardwareElements;
+		i->requiredTime = hi->TimeValueOfX(i->polynome, i->numberOfAssignedImages);
 	}
-
+	std::cout <<  hardwarevector.at(0).requiredTime <<" ";
 	//sorts after time it takes for the hardareElements to finish the tasks assigned to them
 	std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
 		return h1.requiredTime < h2.requiredTime;
@@ -72,12 +78,14 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 	std::cout << numberOfHardwareElements << " "<< size;
 	int j = 0;
 	int i = 0;
+	std::cout <<"how?"<< hardwarevector.at(0).requiredTime << "Here?";
 	for (int k = 0; k < size ; k++) {
 		for (size_t sJ = 0; sJ < hardwarevector.size() + 1; sJ++) {
 			j = sJ;
 			std::vector<Hardware> hardwarevec = hardwarevector;
 			for (size_t sI = 0; sI < hardwarevec.size() / 2; sI++) {
 				i = sI;
+				std::cout << "we are in";
 				while (hardwarevec.at(i).requiredTime < hardwarevec.at(size - i - 1).requiredTime) {
 					hardwarevec.at(i).numberOfAssignedImages = hardwarevec.at(i).numberOfAssignedImages + badgesize;
 					hardwarevec.at(size - i - 1).numberOfAssignedImages = hardwarevec.at(size - 1 - i).numberOfAssignedImages - badgesize;
@@ -92,8 +100,7 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 					});
 			}
 		constellations.push_back(hardwarevec);
-		std::cout << "Constellation added";
-
+		std::cout << "Constellation added" << hardwarevec.at(0).requiredTime << "time";
 		int m = 0;
 		for (size_t sM = 0; sM < hardwarevector.size()-1; sM++) {
 			m = sM;
@@ -109,7 +116,7 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 		}
 	}
 	std::cout << hardwarevector.size();
-	std::cout << constellations.size() << "Constellation size";
+	std::cout << constellations.size() << "Constellation size" << constellations.at(0).at(0).requiredTime << "end";
 	//initalize
 
 	int counterPower = 0;
@@ -123,6 +130,7 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 		}
 		powerVector.push_back(std::make_pair(power,powerTarget.back().requiredTime));
 	}
+	std::cout << "  "<< powerVector.at(0).first <<"powervector";
 	//hypothesis first quotient of the powerVector is the most optimal one.
 
 	double  minimumQuotient = powerVector.at(0).first / powerVector.at(0).second;
@@ -136,6 +144,7 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 			counterPower = t;
 		}
 	}
+	std::cout << constellations.at(counterPower).at(0).powerconsumption << "brother"<< constellations.at(counterPower).at(0).requiredTime;
 	return constellations.at(counterPower);
 	
 }
