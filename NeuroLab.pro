@@ -36,6 +36,7 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    ControllerModule/HardwareElement.h \
     ControllerModule/ImagePareser.h \
     ControllerModule/MasterController.h \
     ControllerModule/NNController.h \

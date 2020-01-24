@@ -15,10 +15,13 @@ ViewController::ViewController(MasterController* partner)
     this->master= partner;
     mainWindow = new MainWindow(nullptr,this);
     mainWindow->setWindowTitle("NeuroLab");
+    this->displayAvailableHardware();
     mainWindow->show();
 
     app.exec();
 }
+
+
 void ViewController::updatePathList(vector<string> paths)
 
 {
@@ -30,7 +33,6 @@ void ViewController::updatePathList(vector<string> paths)
 
 void ViewController::handleClassifyRequest()
 {
-
     this->master->classify();
 }
 
@@ -43,7 +45,7 @@ void ViewController::getPrediction(GUISettings settings)
 {
     string mode = settings.getMode();
     string net = settings.getNerualNet();
-    vector<string> hardware = settings.gettHardware();
+    vector<string> hardware = settings.getSelectedHardware();
     this->master->getPrediction(net, mode, hardware);
 }
 
@@ -53,15 +55,56 @@ void ViewController::displayPrediction(vector<double> timeConsumption, vector<do
 
 void ViewController::setNeuralNet(string nn)
 {
-
+    //master->setNNType(nn);
 }
 
 void ViewController::setOpMode(string mode)
 {
-
+   // master->setMode(mode);
 }
 
-void ViewController::setHardwareDist(vector<string> hardwareDist)
+
+
+void ViewController::setAvailableHardware(const list<string> &hardwareElements)
 {
+    availableHardware.clear();
+    for(string hardware : hardwareElements){
+        if(hardware.compare("Movidius") == 0 || hardware.compare("Movidius.1") == 0){
+            availableHardware.push_back(MOV1);
+        }
+
+        if(hardware.compare("Movidius.2") == 0){
+            availableHardware.push_back(MOV2);
+        }
+        if(hardware.compare("Movidius.3") == 0){
+            availableHardware.push_back(MOV3);
+        }
+
+        if(hardware.compare("Movidius.4") == 0){
+            availableHardware.push_back(MOV4);
+        }
+
+        if(hardware.compare("CPU") == 0){
+            availableHardware.push_back(CPU);
+        }
+
+        if(hardware.compare("GPU") == 0){
+            availableHardware.push_back(GPU);
+        }
+
+        if(hardware.compare("FPGA") == 0){
+            availableHardware.push_back(FPGA);
+        }
+    }
+}
+
+
+void ViewController::displayAvailableHardware()
+{
+    setAvailableHardware({ "CPU"});
+    mainWindow->disableHWCheckboxes();
+    for(HardwareElement element : availableHardware){
+       mainWindow->enableCheckbox(element);
+    }
 
 }

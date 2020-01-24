@@ -9,6 +9,9 @@
 #include<ControllerModule/ViewController.h>
 #include<ViewModule/GUISettings.h>
 #include <DataModule/Result.h>
+#include <ControllerModule/HardwareElement.h>
+#include <string>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,9 +28,10 @@ public:
 
     void displayResults(vector<Result> results);
     void displayPrediction();
+    void enableCheckbox(HardwareElement checkboxName);
+    void disableHWCheckboxes();
 
 private slots:
-    void on_AlexNet_clicked();
     void on_LoadButton_clicked();
 
     void on_DeleteButton_clicked();
@@ -36,7 +40,22 @@ private slots:
 
     void on_StopButton_clicked();
 
+    void on_LPC_radio_button_clicked();
 
+    void on_HP_radio_button_clicked();
+
+    void on_HEE_radio_button_clicked();
+
+    void on_AlexNet_radio_button_clicked();
+
+    void on_NeuroLabNet_radio_button_clicked();
+
+    void checkAll();
+    void uncheckAll();
+
+    void on_SelectAllHardware_clicked();
+
+    void on_Refresh_hardware_clicked();
 
 private:
     Ui::MainWindow *ui;

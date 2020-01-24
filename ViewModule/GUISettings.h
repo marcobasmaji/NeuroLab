@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <ControllerModule/HardwareElement.h>
 using namespace std;
 
 class GUISettings
@@ -15,8 +16,8 @@ public:
     void setMode(string mode){
         this->mode = mode;
     }
-    void setHardware(vector<string> hardware) {
-        this->hardware = hardware;
+    void setSelectedHardware(vector<HardwareElement> hardware) {
+        //this->hardware = hardware;
     }
     string getNerualNet(){
         return nn;
@@ -24,7 +25,7 @@ public:
     string getMode(){
         return mode;
     }
-    vector<string> gettHardware() {
+    vector<string> getSelectedHardware() {
         return hardware;
     }
 

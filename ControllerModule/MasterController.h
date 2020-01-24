@@ -9,6 +9,8 @@
 #include <ControllerModule/PredictionController.h>
 #include <ControllerModule/NNController.h>
 #include <ControllerModule/ImagePareser.h>
+#include <ControllerModule/HardwareElement.h>
+
 
 using namespace std;
 
@@ -20,7 +22,12 @@ public:
     void setPaths(vector<string> paths);
     void classify();
     void getPrediction(const string net, const string mode, vector<string> hardware);
-    vector<string> getAvailableHardware();
+    void setNNType(string nn);
+    void setMode(string mode);
+    list<HardwareElement> getAvailableHardware() const;
+    void setAvailableHardware(const list<HardwareElement> &value);
+    list<HardwareElement> getSelectedHardware() const;
+    void setSelectedHardware(const list<HardwareElement> &value);
 
 private:
     NNController nnObserver;
@@ -28,7 +35,8 @@ private:
     PredictionController predictionObserver;
     ImagePareser imageParser;
     string nnType;
-    list<string> selectedHardware;
+    list<HardwareElement> selectedHardware;
+    //list<HardwareElement> availableHardware;// in viewcontroller gesetzt
     string mode;
     //list<string> imagePaths;
     vector<string> imagePaths;
