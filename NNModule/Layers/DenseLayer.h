@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include <DataModule/Shape.h>
+#include "Layer.h"
 
-class DenseLayer
+class DenseLayer : public Layer
 {
 public:
     DenseLayer(size_t inputHeight,

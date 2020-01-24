@@ -25,6 +25,7 @@ SOURCES += \
     HardwareModule/OpenVinoEnv.cpp \
     NNModule/Layers/ConvolutionLayer.cpp \
     NNModule/Layers/DenseLayer.cpp \
+    NNModule/Layers/Loss.cpp \
     NNModule/Layers/MaxPoolingLayer.cpp \
     NNModule/Layers/ReLULayer.cpp \
     NNModule/Layers/SoftmaxLayer.cpp \
@@ -46,6 +47,7 @@ HEADERS += \
     NNModule/Layers/ConvolutionLayer.h \
     NNModule/Layers/DenseLayer.h \
     NNModule/Layers/Layer.h \
+    NNModule/Layers/Loss.h \
     NNModule/Layers/MaxPoolingLayer.h \
     NNModule/Layers/ReLULayer.h \
     NNModule/Layers/SoftmaxLayer.h \
@@ -57,17 +59,36 @@ HEADERS += \
 
 FORMS += \
     ViewModule/MainWindow.ui
-LIBS += /usr/lib/libinference_engine.so \
-        /usr/lib/libformat_reader.so
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/lib/release/ -lmkl_tiny_tbb
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/lib/debug/ -lmkl_tiny_tbb
-else:unix: LIBS += -L$$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/lib/ -lmkl_tiny_tbb
 
-INCLUDEPATH += $$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/include
-DEPENDPATH += $$PWD/../../intel/openvino/deployment_tools/inference_engine/external/mkltiny_lnx/include
+# Libraries
+
+LIBS += -L$$PWD/Tools/openvino/lib/ -linference_engine
+LIBS += -L$$PWD/Tools/format_reader/ -lformat_reader
+LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
+LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
+LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
+unix:!macx: LIBS += -L$$PWD/tbb/ -ltbb
+unix:!macx: LIBS += -L$$PWD/tbb/ -ltbbmalloc
+
+
+# Headers
+
+INCLUDEPATH += $$PWD/Tools/openvino/include
+DEPENDPATH += $$PWD/Tools/openvino/include
+
+INCLUDEPATH += $$PWD/Tools/opencv2/include
+DEPENDPATH += $$PWD/Tools/opencv2/include
+
+
+
+
+
+
+

@@ -3,9 +3,10 @@
 
 #include <iostream>
 #include <DataModule/Shape.h>
+#include "Layer.h"
 
 
-class MaxPoolingLayer
+class MaxPoolingLayer : public Layer
 {
 public:
     MaxPoolingLayer(size_t inputHeight,

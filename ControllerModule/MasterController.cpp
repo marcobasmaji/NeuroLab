@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QDebug>
 #include <DataModule/Result.h>
+#include <Tools/openvino/include/inference_engine.hpp>
 
 MasterController::MasterController() : viewObserver(this)
 {
@@ -35,4 +36,10 @@ void MasterController::getPrediction(const string net, const string mode, vector
     vector<pair<string, int>> distribution;
     nnObserver.setDistribution(distribution);
     viewObserver.displayPrediction(timeConsumption, powerConsumption, bandwidth, flops);
+}
+
+vector<string> MasterController::getAvailableHardware()
+{
+    InferenceEngine::Core core;
+    return core.GetAvailableDevices();
 }

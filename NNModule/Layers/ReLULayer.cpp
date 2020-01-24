@@ -10,7 +10,7 @@ ReLULayer::ReLULayer(size_t inputHeight,
                     inputDepth(inputDepth)
                 {
     OpenCLLayerCreator* clCreator = new OpenCLLayerCreator();
-    //OpenCLLayer* relu = clCreator->createReluLayer(openclenv,);
+    //OpenCLLayer* relu = clCreator->createReluLayer(clEnv,);
 
                 }
 

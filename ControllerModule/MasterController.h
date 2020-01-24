@@ -20,6 +20,7 @@ public:
     void setPaths(vector<string> paths);
     void classify();
     void getPrediction(const string net, const string mode, vector<string> hardware);
+    vector<string> getAvailableHardware();
 
 private:
     NNController nnObserver;

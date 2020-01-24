@@ -1,6 +1,11 @@
 #include "NeuroLabNet.h"
 #include "Layers/ConvolutionLayer.h"
 #include "Layers/ReLULayer.h"
+#include "Layers/MaxPoolingLayer.h"
+#include "Layers/SoftmaxLayer.h"
+#include "Layers/DenseLayer.h"
+
+
 
 
 // constuctor
@@ -53,10 +58,46 @@ void NeuroLabNet::init() {
 }
 
 void NeuroLabNet::classify() {
-	// TODO, parameter need to be coordinated with Jens
-    //conv1.forwardPass();
-    //relu1.forwardPass();
-	// and so on
+    // for each image, read, resize and turn into a 3D array of pixels
+    for(auto &item:dataSet)
+    {
+        cv::Mat img; //cv::imread(item); //doesnt work
+        if(img.empty())
+        {
+            cerr<<"Image is invalid";
+            continue;
+        }
+        if(img.channels()!=3)
+        {
+            cerr<<"Image doesn't have enough channels";
+        }
+        cv::Mat resizedImg;
+        cv::Size size(105,105);
+        // resize image
+        cv::resize(img,resizedImg,size,cv::INTER_LINEAR);
+        // a 3D array of type float to save pixel values
+        float pixels[105][105][3]={};
+
+        for(unsigned int i =0;i<sizeof(pixels);i++)
+        {
+            for(unsigned int j =0;j<sizeof(pixels);j++)
+            {
+                for(unsigned int h =0;h<sizeof(pixels);h++)
+                {
+                    // the function at returns an array with the length 3, whereby each field has the red, blue or green value
+                    pixels[i][j][h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
+                }
+            }
+        }
+
+        ReLULayer r(2,2,2);
+
+        // TODO, parameter need to be coordinated with Jens
+        //conv1.forwardPass();
+        //relu1.forwardPass();
+        // and so on
+    }
+
 
 }
 
@@ -68,5 +109,10 @@ void NeuroLabNet::train() {
 void NeuroLabNet::executeTransferLearning() {
     // no idea .. yet
 
+}
+
+void NeuroLabNet::updateDataSet(vector<string> dataSet)
+{
+    this->dataSet = dataSet;
 }
 

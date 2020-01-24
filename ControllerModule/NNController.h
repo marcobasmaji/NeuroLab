@@ -2,6 +2,7 @@
 #define NNCONTROLLER_H
 #include<QApplication>
 #include<NNModule/PretrainedNN.h>
+#include<NNModule/NeuroLabNet.h>
 #include <iostream>
 #include <list>
 # include<string.h>
@@ -16,10 +17,13 @@ public:
     //list<pair<string,vector<string>>>getResults();
     void setPathList(vector<string>);
     void setDistribution( vector<pair<string, int>> distribution);
+    void setCurrentNN(string currentNN);
     pair<string,vector<pair<string,float>>> getResults();
 private:
     PretrainedNN pnn;
+    NeuroLabNet neuroLabNet;
     vector<string> pathList;
+    string currentNN = "ALEXNET";
 
 };
 

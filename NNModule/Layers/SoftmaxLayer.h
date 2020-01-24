@@ -1,8 +1,11 @@
 #ifndef SOFTMAXLAYER_H
 #define SOFTMAXLAYER_H
+
 #include <iostream>
 #include <DataModule/Shape.h>
-class SoftmaxLayer
+#include "Layer.h"
+
+class SoftmaxLayer : public Layer
 {
 public:
     SoftmaxLayer(size_t numInputs);

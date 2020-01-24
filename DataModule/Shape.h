@@ -6,6 +6,9 @@ class Shape
 {
 public:
     Shape();
+    float*** pixels;
+private:
+
 };
 
 #endif // SHAPE_H
