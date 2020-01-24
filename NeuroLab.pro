@@ -62,15 +62,13 @@ HEADERS += \
 
 FORMS += \
     ViewModule/MainWindow.ui
-LIBS += /usr/lib/libinference_engine.so \
-        /usr/lib/libformat_reader.so
+
 
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
 
 # Libraries
 
@@ -90,8 +88,6 @@ DEPENDPATH += $$PWD/Tools/openvino/include
 
 INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
-
-
 
 
 
