@@ -9,8 +9,7 @@ using namespace std;
 class GUISettings
 {
 public:
-    GUISettings();
-
+    GUISettings()
 
     int getNrImages() const;
     void setNrImages(int value);

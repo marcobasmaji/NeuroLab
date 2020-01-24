@@ -510,6 +510,7 @@
   <tabstop>StopButton</tabstop>
   <tabstop>LoadButton</tabstop>
   <tabstop>DeleteButton</tabstop>
+  <tabstop>scrollArea</tabstop>
   <tabstop>AlexNet_radio_button</tabstop>
   <tabstop>Mov2_checkbox</tabstop>
   <tabstop>Mov3_checkbox</tabstop>

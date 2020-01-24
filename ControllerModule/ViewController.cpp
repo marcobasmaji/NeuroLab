@@ -67,8 +67,6 @@ void ViewController::setOpMode(string mode)
    // master->setMode(mode);
 }
 
-
-
 void ViewController::setAvailableHardware(const list<string> &hardwareElements)
 {
     availableHardware.clear();
@@ -77,6 +75,7 @@ void ViewController::setAvailableHardware(const list<string> &hardwareElements)
             availableHardware.push_back(MOV);
         }
         if(hardware.compare("Movidius.1") == 0){
+
             availableHardware.push_back(MOV1);
         }
 
@@ -115,8 +114,14 @@ void ViewController::displayAvailableHardware()
     }
 }
 
-void ViewController::setHardwareDist(vector<string> hardwareDist)
+
+void ViewController::displayAvailableHardware()
 {
+    setAvailableHardware({ "CPU"});
+    mainWindow->disableHWCheckboxes();
+    for(HardwareElement element : availableHardware){
+       mainWindow->enableCheckbox(element);
+    }
 
 }
 

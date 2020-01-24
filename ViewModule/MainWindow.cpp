@@ -6,6 +6,7 @@
 #include <QDebug>
 
 
+
 MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -21,6 +22,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+<<<<<<< HEAD
 void MainWindow::on_AlexNet_clicked() {
     guiSettings.setNerualNet("ALEXNET");
 }
@@ -99,6 +101,7 @@ void MainWindow::setEnabledModes(bool value)
     ui->HP_radio_button->setEnabled(value);
 
 }
+
 void MainWindow::disableHWCheckboxes()
 {
     ui->Mov1_checkbox->setEnabled(false);
@@ -207,8 +210,32 @@ void MainWindow::displayPreview(const QIcon imageIcon, const QString imagePath) 
     QListWidgetItem *newItem;
     newItem  = new QListWidgetItem(imageIcon, imagePath);
     ui->previewArea->addItem(newItem);
+}
+
+void MainWindow::on_HEE_radio_button_clicked()
+{
+    guiSettings.setMode("HighestEfficiency");
+    viewController->displayAvailableHardware();
+    uncheckAll();
 
 }
+
+void MainWindow::on_AlexNet_radio_button_clicked()
+{
+    guiSettings.setNerualNet("AlexNet");
+    viewController->displayAvailableHardware();
+    uncheckAll();
+}
+
+void MainWindow::on_NeuroLabNet_radio_button_clicked()
+{
+    guiSettings.setNerualNet("NeuroLab");
+    uncheckAll();
+    disableHWCheckboxes();
+    ui->CPU_checkbox->setCheckState(Qt::Checked);
+
+}
+
 void MainWindow::on_LoadButton_clicked()
 {
     // when load is clicked. tab names should be changed
@@ -342,7 +369,6 @@ void MainWindow::on_Refresh_hardware_clicked()
         on_NeuroLabNet_radio_button_clicked();
     }
 }
-
 void MainWindow::displayResults(vector<Result> results)
 {
     pair<string,float> p = results.back().getLabelsAndProb().front();
@@ -352,9 +378,14 @@ void MainWindow::displayResults(vector<Result> results)
     ui->tabWidget->insertTab(1,label,"result");
     ui->tabWidget->setCurrentIndex(1);
 
-
 }
 
+void MainWindow::on_SelectAllHardware_clicked()
+{
+    if(guiSettings.getNerualNet() == "AlexNet"){
+        checkAll();
+    }
+}
 
 void MainWindow::on_prediction_button_clicked()
 {
