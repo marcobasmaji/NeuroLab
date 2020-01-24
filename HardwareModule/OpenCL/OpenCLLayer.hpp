@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "CL/cl.h"
+#include "../../Tools/opencl/include/cl.h"
 
 #include "OpenCLEnvironment.hpp"
 
