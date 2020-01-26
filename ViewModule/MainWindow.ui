@@ -109,6 +109,9 @@
     </widget>
    </widget>
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -120,7 +123,13 @@
     <property name="currentIndex">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="tab_7">
+    <property name="tabsClosable">
+     <bool>false</bool>
+    </property>
+    <property name="movable">
+     <bool>false</bool>
+    </property>
+    <widget class="QWidget" name="main">
      <attribute name="title">
       <string>Main</string>
      </attribute>
@@ -200,40 +209,17 @@
        <string>Delete</string>
       </property>
      </widget>
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="geometry">
-       <rect>
-        <x>29</x>
-        <y>49</y>
-        <width>401</width>
-        <height>331</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_2">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>399</width>
-         <height>329</height>
-        </rect>
-       </property>
-      </widget>
-     </widget>
      <widget class="QGroupBox" name="groupBox_4">
       <property name="geometry">
        <rect>
         <x>450</x>
-        <y>20</y>
+        <y>60</y>
         <width>251</width>
         <height>401</height>
        </rect>
       </property>
       <property name="title">
-       <string>Prediction</string>
+       <string/>
       </property>
       <widget class="QLabel" name="label_18">
        <property name="geometry">
@@ -369,11 +355,29 @@
        </layout>
       </widget>
      </widget>
-    </widget>
-    <widget class="QWidget" name="results">
-     <attribute name="title">
-      <string>Results</string>
-     </attribute>
+     <widget class="QPushButton" name="prediction_button">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>10</y>
+        <width>141</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Calculate prediction</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="previewArea">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>431</width>
+        <height>341</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QGroupBox" name="HardwareOptions">
@@ -506,7 +510,6 @@
   <tabstop>StopButton</tabstop>
   <tabstop>LoadButton</tabstop>
   <tabstop>DeleteButton</tabstop>
-  <tabstop>scrollArea</tabstop>
   <tabstop>AlexNet_radio_button</tabstop>
   <tabstop>Mov2_checkbox</tabstop>
   <tabstop>Mov3_checkbox</tabstop>

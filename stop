@@ -1,0 +1,523 @@
+[33mcommit d660a4aec594b5efada357636c79f34cc7328643[m[33m ([m[1;36mHEAD -> [m[1;32mopenvino_bianca[m[33m)[m
+Author: codaubianca <codau_bianca>
+Date:   Mon Jan 27 00:04:29 2020 +0100
+
+    GUI image previews, load and delete button checked
+
+[33mcommit 23f9893326500f72affe258457d3cf4c3b592b04[m
+Author: codaubianca <codau_bianca>
+Date:   Sun Jan 26 23:58:13 2020 +0100
+
+    GUI image previews, load and delete button checked
+
+[33mcommit a2eec3c801e63c8b9e91f13967d4461651be8da1[m[33m ([m[1;31morigin/openvino_bianca[m[33m)[m
+Author: codaubianca <codau_bianca>
+Date:   Fri Jan 24 13:41:10 2020 +0100
+
+    View side menu implemented
+
+[33mcommit 17977f559e6393f0f9c260ee5eb0eaeaf247e0a1[m
+Author: codaubianca <codau_bianca>
+Date:   Thu Jan 23 15:17:40 2020 +0100
+
+    Updated master version
+
+[33mcommit 6b9b275958694bdf314880357f859469e46263b2[m
+Author: codaubianca <codau_bianca>
+Date:   Fri Jan 17 03:34:47 2020 +0100
+
+    moved OpenCL part to hardware module directory and changed the OpenVinoEnv
+
+[33mcommit d68be7447212c43b1f18313430e4299c7100fbe7[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Wed Jan 15 19:37:35 2020 +0100
+
+    ViewBuildController, ViewRequestController, GuiBuilder, GuiRequest merged into one class ViewController. classify() in MasterController implemented, but needs to be fixed
+
+[33mcommit d96c490b79745e32a56a350878c6db6f8eca91b7[m
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Wed Jan 15 11:25:17 2020 +0100
+
+    commiting Bonny's MainWindow
+
+[33mcommit 19e52f016feb69e57915c0784bc0652f208d668a[m
+Merge: 64d40d5 d2a95e6
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Wed Jan 15 10:39:25 2020 +0100
+
+    Merge branch 'master' of https://github.com/mobasmaji/NeuroLab
+
+[33mcommit 64d40d51f10fde58f9435a26682e25b07a7fc49f[m
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Wed Jan 15 10:39:13 2020 +0100
+
+    Building controllers and starting a classification with OpenVino
+
+[33mcommit d2a95e616de06db8145d39896243cf1291628efd[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 20:03:51 2020 +0100
+
+    Update PSENeuroLab
+
+[33mcommit 2f0afb93e7d6db44e4efdc888b7ca220cca26124[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:23:09 2020 +0100
+
+    Update README.me
+
+[33mcommit 246ebffb20da3a55022dc9148e660e897101f675[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:21:02 2020 +0100
+
+    Update README.me
+
+[33mcommit 6949753e9e54da9773181b7ec0fabb0bcf08e93b[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:20:49 2020 +0100
+
+    Update README.me
+
+[33mcommit dd69b4752fa679aab260530cbc9c70cb8ae01c05[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:19:43 2020 +0100
+
+    Create README.me
+
+[33mcommit 620f64ecf87dc2ccd55a596f609e604d3bc97dee[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:15:39 2020 +0100
+
+    Update OpenCLEnvironment.cpp
+
+[33mcommit 8989b9f3728f9eabc1c9981659f0d34e90007bd6[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:15:23 2020 +0100
+
+    Update OpenCLEnvironment.hpp
+
+[33mcommit 5ce58a7c905abc569010e215dd7827e25c5b1fc6[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:15:07 2020 +0100
+
+    Update OpenCLEnvironmentCreator.cpp
+
+[33mcommit 129d05c0060de98d4e10615b2c0d8784102bf6c5[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:14:51 2020 +0100
+
+    Update OpenCLEnvironmentCreator.hpp
+
+[33mcommit 6859e884c7591caf5a300da62f8ad7cf3e9c8260[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:14:37 2020 +0100
+
+    Update OpenCLLayer.cpp
+
+[33mcommit 9d4d2421e469488d30e2feb189d33fca46609cba[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:14:24 2020 +0100
+
+    Update OpenCLLayer.hpp
+
+[33mcommit 2fbec8bf35521a4969b6130cdc03346070c2dc50[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:13:52 2020 +0100
+
+    Update OpenCLLayerCreator.cpp
+
+[33mcommit ddadb4d0df796f70133992702fcf6adbcf1499ba[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:13:30 2020 +0100
+
+    Update OpenCLLayerCreator.hpp
+
+[33mcommit 87d42181909d32448423df3cdd034b762ed35e95[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:13:12 2020 +0100
+
+    Update PSENeuroLab
+
+[33mcommit 953e8ef648c58998fb9793f913ef663d0380af95[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:12:53 2020 +0100
+
+    Update ReleaseCLObjectsManager.cpp
+
+[33mcommit ad96218a1d4ab16997a55f8761993fb013f2ba4a[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:12:41 2020 +0100
+
+    Update ReleaseCLObjectsManager.hpp
+
+[33mcommit 3437fca2ac9141ec896196618447442cbd693def[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:12:17 2020 +0100
+
+    Update HardwareEnvironment.cpp
+
+[33mcommit 8d9888c191ea20e647b75da7a7cd057285641476[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:11:57 2020 +0100
+
+    Update HardwareEnvironment.hpp
+
+[33mcommit 18ed2e73605a03a489b549cfb6418fb9f6b2541f[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:11:23 2020 +0100
+
+    finished
+
+[33mcommit af4442d43971dce5080abc9b64bde6d910f633ac[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:11:01 2020 +0100
+
+    Update HardwareType.cpp
+
+[33mcommit a36863e0fab776522823114bb95cb3daa2536167[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:10:15 2020 +0100
+
+    Delete Relu.cl
+
+[33mcommit 2c56c12adc3a30b63bc3ec25f3d10133e14f71b0[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:10:08 2020 +0100
+
+    Delete Softmax.cl
+
+[33mcommit 703f7da132c1c296ca28079e8873df4027f2938c[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:10:00 2020 +0100
+
+    Delete Pad.cl
+
+[33mcommit 45198793152532bda93d0ce71bb4de258cce6ca9[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:09:52 2020 +0100
+
+    Delete MaxPool.cl
+
+[33mcommit 6325ac3b9eef2f8eafc1eff0f84286145cfa80f7[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:09:44 2020 +0100
+
+    Delete Dense.cl
+
+[33mcommit e380f88dc48da9b1e3fc6fe593d9acb15de56688[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:09:37 2020 +0100
+
+    Delete Conv.cl
+
+[33mcommit 217713fe861c2fcd8626a9f866420a61ecfffea0[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:09:26 2020 +0100
+
+    Create Softmax.cl
+
+[33mcommit 9411492d02292fd6cf495ce7ce856db2f875230a[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:09:16 2020 +0100
+
+    Create Relu.cl
+
+[33mcommit 701a37963ba87e9fa5c93c64a80f4bc7168446bc[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:09:08 2020 +0100
+
+    Create Pad.cl
+
+[33mcommit 9653b6059e00d1198a712fd2c4d4f66cf78e811f[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:08:58 2020 +0100
+
+    Create MaxPool.cl
+
+[33mcommit 39a4fc56bc00bdab2914589a12dc75d23204c130[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:08:46 2020 +0100
+
+    Create Conv.cl
+
+[33mcommit 559b10d9867120a86d2b48aa12ef8f98bedbecbd[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Mon Jan 13 18:08:32 2020 +0100
+
+    Create Dense.cl
+
+[33mcommit 0cc5e14abad0e0bad363760b9b359cfe93e62d13[m
+Merge: 4c80f4e 1c1bda4
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Mon Jan 13 12:23:08 2020 +0100
+
+    Merge branch 'master' of https://github.com/mobasmaji/NeuroLab
+
+[33mcommit 4c80f4eb16a0658fe2df2df6392ea45bf5febed8[m
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Mon Jan 13 12:22:58 2020 +0100
+
+    connected master with view, deleted uneeded classes for the moment
+
+[33mcommit 1c1bda4b5d5f9f73ff2a1215580d9d0eb9a1bb69[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Sun Jan 12 15:56:50 2020 +0100
+
+    Update README.md
+
+[33mcommit 79f17c790732cd96f752a9bb7996f0ef3e9cac7e[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Sat Jan 11 17:52:18 2020 +0100
+
+    Update MainWindow.cpp
+
+[33mcommit 5cb29051ab2f81b5bfc3a5873a6e50d407916ded[m
+Merge: 48ca87e 65c9976
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Sat Jan 11 17:49:46 2020 +0100
+
+    Merge branch 'master' of https://github.com/mobasmaji/NeuroLab
+
+[33mcommit 48ca87e7d40defa60f4f97fdbbd0ed976765be0a[m
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Sat Jan 11 17:49:11 2020 +0100
+
+    Building controllers and GUI
+
+[33mcommit 65c99765e6e7ec876deeb9f66b6a3eb852c51825[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:40:16 2020 +0100
+
+    Create Softmax.cl
+
+[33mcommit 65e012896b839a26ce8c0d97900799a119618b18[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:40:04 2020 +0100
+
+    Create Conv.cl
+
+[33mcommit b03577a3c753f373502ba0951c7c702615862b74[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:39:49 2020 +0100
+
+    Create Dense.cl
+
+[33mcommit bbbcd716e298280992889211c2291b4a5bbc2dc8[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:39:36 2020 +0100
+
+    Create MaxPool.cl
+
+[33mcommit 50050a4c033b6c03bfb2f290f58af6bc1ca905ef[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:39:22 2020 +0100
+
+    Create Pad.cl
+
+[33mcommit 27d633ad2e41e179afcabeafde370e9fd7c675d4[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:39:10 2020 +0100
+
+    Create Relu.cl
+
+[33mcommit 68111334de84d694edb4d9e0768d35ba5af6249f[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:38:13 2020 +0100
+
+    Create PSENeuroLab
+
+[33mcommit 6ee34312373bac6c71b02cd048059c6defd12530[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:37:37 2020 +0100
+
+    Create ReleaseCLObjectsManager.hpp
+
+[33mcommit b4719cc74a16a4af6a20d3d622b92cab267c08e3[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:37:15 2020 +0100
+
+    Create ReleaseCLObjectsManager.cpp
+
+[33mcommit 89c617302fb751485501b759bdbf0f4dda6c9679[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:37:00 2020 +0100
+
+    Create OpenCLLayerCreator.hpp
+
+[33mcommit ed9bd45be2232e045e18e2827d8d0c61b42e1f3d[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:36:41 2020 +0100
+
+    Create OpenCLLayerCreator.cpp
+
+[33mcommit 914c5a0f88434500316cd7b7bab9532a6bde7bda[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:36:05 2020 +0100
+
+    Create OpenCLLayer.hpp
+
+[33mcommit 5c25f451ea25c9bf46ca29c5c1df32cc0b5fd21e[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:35:46 2020 +0100
+
+    Create OpenCLLayer.cpp
+
+[33mcommit 2119fdacddcba63e2afb18b233e83c59d9e056cd[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:34:48 2020 +0100
+
+    Create OpenCLEnvironmentCreator.hpp
+
+[33mcommit 857b050ffdff5dfd09886bac3b949c5ba1a9fb26[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:33:03 2020 +0100
+
+    Create OpenCLEnvironmentCreator.cpp
+
+[33mcommit 950eeb77601ba3f162f04b9a3270b2fbe4616c62[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:32:44 2020 +0100
+
+    Create OpenCLEnvironment.hpp
+
+[33mcommit f1df72f8ebdb8ea15a16334c4d2e13a9378b9687[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:32:26 2020 +0100
+
+    Create OpenCLEnvironment.cpp
+
+[33mcommit 29e3d00e963c37ecc74673349dab1e0aed5c51be[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:32:02 2020 +0100
+
+    Create HardwareType.cpp
+
+[33mcommit 6b5da528bb93ac54c103a1c51ce57840e547ca9c[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:31:46 2020 +0100
+
+    Create HardwareEnvironment.hpp
+
+[33mcommit 4424fdbaca655790ab97ce0f518edfe19c99f6ea[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:31:28 2020 +0100
+
+    Create HardwareEnvironment.cpp
+
+[33mcommit 04bead77292278610968cd16176781bdb87dcda3[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:31:08 2020 +0100
+
+    Delete OpenCL
+
+[33mcommit a959ad2471709093d145e1b6bf26cbad3177f0bf[m
+Author: Jens21 <58881271+Jens21@users.noreply.github.com>
+Date:   Wed Jan 8 16:27:06 2020 +0100
+
+    Create OpenCL
+
+[33mcommit 42209622a858fc7dc1c0e5904445af265481173a[m
+Author: kitgitter <57494175+kitgitter@users.noreply.github.com>
+Date:   Sun Jan 5 15:08:34 2020 +0100
+
+    Add files via upload
+    
+    First commit created the classes without the implementation yet
+
+[33mcommit 5bb5c1c5eaf5063824e121761ebda40c94b6cd18[m
+Merge: bff390d 36241cc
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Tue Dec 24 15:12:55 2019 +0100
+
+    Merge branch 'master' of https://github.com/mobasmaji/NeuroLab
+
+[33mcommit bff390d727be2cc18d306ffcbb01877374971227[m
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Tue Dec 24 15:12:39 2019 +0100
+
+    Started implementing the Movidius environment
+
+[33mcommit b0afa21e38117588e93286b137a5b93555069add[m
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Tue Dec 24 15:12:08 2019 +0100
+
+    Started implementing NeuroLabNet including the abstract classes
+
+[33mcommit 36241cc2e46c4e5e22aa1d1639f3a1e9ba368b38[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Tue Dec 24 14:52:53 2019 +0100
+
+    Update README.md
+
+[33mcommit 4329c47cdc1796d558ed382959377ab245ff0e16[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Sat Dec 21 11:42:57 2019 +0100
+
+    Update README.md
+    
+    Added notes on Qt
+
+[33mcommit c2cb3b3a91ac4c0f83f4f890e973dff9f401f832[m
+Author: mobasmaji <m.basmaji@gmail.com>
+Date:   Sat Dec 21 11:24:44 2019 +0100
+
+    First commit. Uploaded the Qt files
+
+[33mcommit 5663bb92de018329b1c83a13993ed86f7fecff85[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Sat Dec 21 10:04:52 2019 +0100
+
+    Create MovidiusEnvironment.cpp
+
+[33mcommit 6e25856c7b1e8b1b04126f02974aa456b095b571[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Sat Dec 21 10:04:20 2019 +0100
+
+    Create NeuralNet.cpp
+
+[33mcommit a1038ca8d308dd14dbc635ba1189f4fa49a119fa[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Sat Dec 21 10:03:53 2019 +0100
+
+    Create AlexPrediction.cpp
+
+[33mcommit 27b349d9714a3e5525f271fd084cd70fc8987015[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Sat Dec 21 09:58:35 2019 +0100
+
+    Rename GUIModule/GUIBuilder.cpp to ViewModule/GUIBuilder.cpp
+
+[33mcommit 93f0bb87d48ff2b4d41121893c8fd0e472d73cd1[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Sat Dec 21 09:57:57 2019 +0100
+
+    Rename Controller/MasterController.cpp to ControllerModule/MasterController.cpp
+
+[33mcommit 2c468238691542a8f3f5ced6b3a7846c44fdddde[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Wed Dec 18 10:50:36 2019 +0100
+
+    Create Shape.cpp
+
+[33mcommit 3a2faaf8da86eab5666963aba5e83affda531cd2[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Wed Dec 18 10:49:12 2019 +0100
+
+    Rename GUIBuilder to GUIBuilder.cpp
+
+[33mcommit af037e31fe0053aa59cb1175904b3ac50426c529[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Wed Dec 18 10:48:51 2019 +0100
+
+    Create GUIBuilder
+
+[33mcommit 959631f70c01ba41206c2f93fd728338c13c15b9[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Wed Dec 18 10:47:25 2019 +0100
+
+    Create MasterController.cpp
+
+[33mcommit d22b27580fee37c4b36eb7bfa2451153c6e504d7[m
+Author: Mo Basmaji <39270206+mobasmaji@users.noreply.github.com>
+Date:   Wed Dec 18 10:39:57 2019 +0100
+
+    Initial commit

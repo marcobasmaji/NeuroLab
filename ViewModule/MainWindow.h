@@ -1,16 +1,17 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include<QMainWindow>
-#include<QGroupBox>
-#include<QLabel>
-#include<QGridLayout>
-#include<QCheckBox>
-#include<ControllerModule/ViewController.h>
-#include<ViewModule/GUISettings.h>
+#include <QMainWindow>
+#include <QGroupBox>
+#include <QLabel>
+#include <QGridLayout>
+#include <QCheckBox>
+#include <ControllerModule/ViewController.h>
+#include <ViewModule/GUISettings.h>
 #include <DataModule/Result.h>
 #include <ControllerModule/HardwareElement.h>
 #include <string>
+#include <QListWidgetItem>
 
 
 QT_BEGIN_NAMESPACE
@@ -52,20 +53,29 @@ private slots:
 
     void checkAll();
     void uncheckAll();
+    void setEnabledModes(bool value);
 
     void on_SelectAllHardware_clicked();
 
     void on_Refresh_hardware_clicked();
 
-private:
+
+    void on_previewArea_clicked(const QModelIndex &index);
+
+    void on_previewArea_itemClicked(QListWidgetItem *item);
+
+    void on_prediction_button_clicked();
+
+    private:
     Ui::MainWindow *ui;
     QList<QImage> imageList;
-    void displayPreviews();
+    void displayPreview(const QIcon imageIcon, const QString imagePath);
     QGroupBox *gridGroupBox;
     QGridLayout *gridLayout;
     QList<QLabel> imagesPreviews;
     ViewController* viewController;
     GUISettings guiSettings;
     int resultsCounter;
+    QListWidgetItem *imageToBeRemoved;
 };
-#endif // MAINWINDOW_H
+#endif // MAINWINDOW_H(imageToBeRemoved)

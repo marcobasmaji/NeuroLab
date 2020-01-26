@@ -30,11 +30,13 @@ public:
     list<HardwareElement> availableHardware;
     void setAvailableHardware(const list<string> &hardwareElements);
     void displayAvailableHardware();
+    void removeImage(string imagePath);
 
 private:
     //MainWindow* mainWindow;
     MasterController* master;
     MainWindow *mainWindow;
+    WellcomePanel
     list<string> l;
 
 

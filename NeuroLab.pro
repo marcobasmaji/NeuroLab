@@ -33,6 +33,7 @@ SOURCES += \
     NNModule/PretrainedNN.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
+    ViewModule/WellcomePanel.cpp \
     main.cpp
 
 HEADERS += \
@@ -56,7 +57,8 @@ HEADERS += \
     NNModule/NeuroLabNet.h \
     NNModule/PretrainedNN.h \
     ViewModule/GUISettings.h \
-    ViewModule/MainWindow.h
+    ViewModule/MainWindow.h \
+    ViewModule/WellcomePanel.h
 
 FORMS += \
     ViewModule/MainWindow.ui
@@ -86,8 +88,6 @@ DEPENDPATH += $$PWD/Tools/openvino/include
 
 INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
-
-
 
 
 

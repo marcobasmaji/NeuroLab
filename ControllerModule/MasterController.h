@@ -21,7 +21,7 @@ public:
     MasterController();
     void setPaths(vector<string> paths);
     void classify();
-    void getPrediction(const string net, const string mode, vector<string> hardware);
+    void getPrediction(const string net, const string mode, vector<string> hardware, int nrImages);
     void setNNType(string nn);
     void setMode(string mode);
     list<HardwareElement> getAvailableHardware() const;
@@ -39,7 +39,7 @@ private:
     //list<HardwareElement> availableHardware;// in viewcontroller gesetzt
     string mode;
     //list<string> imagePaths;
-    vector<string> imagePaths;
+    //vector<string> imagePaths;
     list<pair<string,vector<string>>> results;
 
     void initControllers();

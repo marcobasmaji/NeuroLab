@@ -11,6 +11,7 @@ MasterController::MasterController() : viewObserver(this)
 void MasterController::setPaths(vector<string> paths)
 {
     this->nnObserver.setPathList(paths);
+    //this->imagePaths = paths;
     // cout<< imagePaths->back()
     qDebug()<<"load in master"<<endl; //ok
 
@@ -25,9 +26,9 @@ void MasterController::classify()
     //results = nnObserver.getResults(); crashes
 
 }
-void MasterController::getPrediction(const string net, const string mode, vector<string> hardware)
+void MasterController::getPrediction(const string net, const string mode, vector<string> hardware , int nrImages)
 {
-    predictionObserver.calculatePrediction(imagePaths.size() ,net, mode,hardware);
+    predictionObserver.calculatePrediction(nrImages ,net, mode,hardware);
     vector<double> timeConsumption = predictionObserver.getTime();
     vector<double> powerConsumption = predictionObserver.getPower();
     double bandwidth = predictionObserver.getBandwidth();
