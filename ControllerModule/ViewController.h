@@ -1,7 +1,6 @@
 #ifndef VIEWCONTROLLER_H
 #define VIEWCONTROLLER_H
 
-#include<ViewModule/MainWindow.h>
 #include<ViewModule/GUISettings.h>
 #include <string>
 #include <stdio.h>
@@ -9,6 +8,7 @@
 #include <iostream>
 #include <DataModule/Result.h>
 #include <ControllerModule/HardwareElement.h>
+#include <list>
 
 using namespace std;
 // defining a class here to avoid having a loop of includes.
@@ -36,7 +36,7 @@ private:
     //MainWindow* mainWindow;
     MasterController* master;
     MainWindow *mainWindow;
-    WellcomePanel
+    //WellcomePanel panel;
     list<string> l;
 
 

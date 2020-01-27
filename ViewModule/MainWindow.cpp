@@ -22,11 +22,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-<<<<<<< HEAD
-void MainWindow::on_AlexNet_clicked() {
-    guiSettings.setNerualNet("ALEXNET");
-}
-
 void MainWindow::checkAll(){
     for (HardwareElement hw : viewController->availableHardware) {
         switch(hw){
@@ -116,7 +111,7 @@ void MainWindow::disableHWCheckboxes()
 
 void MainWindow::on_LPC_radio_button_clicked()
 {
-    if(guiSettings.getNn().compare("NeuroLab")){
+    if(guiSettings.getNn().compare("NeuroLab") == 0){
         return;
     }
     guiSettings.setMode("LowestPowerConsumption");
@@ -131,7 +126,7 @@ void MainWindow::on_LPC_radio_button_clicked()
             this->disableHWCheckboxes();
             //this->enableCheckbox(MOV1);
             ui->Mov1_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setHardware({MOV1});
+            guiSettings.setHardware({MOV});
             break;
         case MOV1 : hasMovidius = true;
             this->disableHWCheckboxes();
@@ -168,7 +163,7 @@ void MainWindow::on_LPC_radio_button_clicked()
 
 void MainWindow::on_HP_radio_button_clicked()
 {
-    if(guiSettings.getNn().compare("NeuroLab")){
+    if(guiSettings.getNn().compare("NeuroLab")==0){
         return;
     }
     guiSettings.setMode("HighestPerformance");
@@ -179,7 +174,7 @@ void MainWindow::on_HP_radio_button_clicked()
 
 void MainWindow::on_HEE_radio_button_clicked()
 {
-    if(guiSettings.getNn().compare("NeuroLab")){
+    if(guiSettings.getNn().compare("NeuroLab")==0){
         return;
     }
     guiSettings.setMode("HighestEfficiency");
@@ -212,29 +207,6 @@ void MainWindow::displayPreview(const QIcon imageIcon, const QString imagePath) 
     ui->previewArea->addItem(newItem);
 }
 
-void MainWindow::on_HEE_radio_button_clicked()
-{
-    guiSettings.setMode("HighestEfficiency");
-    viewController->displayAvailableHardware();
-    uncheckAll();
-
-}
-
-void MainWindow::on_AlexNet_radio_button_clicked()
-{
-    guiSettings.setNerualNet("AlexNet");
-    viewController->displayAvailableHardware();
-    uncheckAll();
-}
-
-void MainWindow::on_NeuroLabNet_radio_button_clicked()
-{
-    guiSettings.setNerualNet("NeuroLab");
-    uncheckAll();
-    disableHWCheckboxes();
-    ui->CPU_checkbox->setCheckState(Qt::Checked);
-
-}
 
 void MainWindow::on_LoadButton_clicked()
 {
@@ -295,50 +267,7 @@ void MainWindow::on_StopButton_clicked()
     // maybe find a way to stop the classify() method  in here
 }
 
-void MainWindow::displayPreviews() {
-    // TODO !
-    QImage image;
-    image.pixel(2,2);
 
-    // ideen zum resizen von bilder, um previews zu erstellen
-    /*QWidget wgt;
-    QPalette p = wgt.palette();
-    QImage px("/home/mo/Pictures/Wallpapers/cat.jpg");
-    p.setBrush(QPalette::Window, QBrush(px));
-    wgt.setPalette(p);
-    wgt.show();
-    wgt.resize(500, 500);
-
-
-
-
-    QWidget wgt2;
-    QPalette p2 = wgt2.palette();
-    QImage px2 = px.scaled(224, 224, Qt::KeepAspectRatio,Qt::SmoothTransformation);
-    p2.setBrush(QPalette::Window, QBrush(px2));
-    wgt2.setPalette(p2);
-    wgt2.show();
-    wgt2.resize(500, 500);
-
-    px2.save("/home/mo/Pictures/Wallpapers/cat2.jpg");
-
-    */
-
-    gridLayout = new QGridLayout();
-    gridLayout->setSpacing(2);
-
-    ui->scrollArea->setLayout(gridLayout);
-    QPixmap pixmap;
-    for(QImage image : imageList) {
-        pixmap.convertFromImage(image,Qt::AutoColor);        //Display preview
-        //QIcon icon(pixmap);
-        QLabel *label = new QLabel();
-        label->setFixedSize(100,100);
-        //QCheckBox *imageCheckBox = new QCheckBox();
-        label->setPixmap(pixmap);
-        //label->setPixmap(pixmap);
-    }
-}
 void MainWindow::displayResults(vector<Result> results)
 {
     pair<string,float> p = results.back().getLabelsAndProb().front();
@@ -367,23 +296,6 @@ void MainWindow::on_Refresh_hardware_clicked()
     }
     if(guiSettings.getNn() == "NeuroLab"){
         on_NeuroLabNet_radio_button_clicked();
-    }
-}
-void MainWindow::displayResults(vector<Result> results)
-{
-    pair<string,float> p = results.back().getLabelsAndProb().front();
-    QString qstr = QString::fromStdString(p.first);
-    // moving into a new results tab
-    QLabel *label = new QLabel(qstr);
-    ui->tabWidget->insertTab(1,label,"result");
-    ui->tabWidget->setCurrentIndex(1);
-
-}
-
-void MainWindow::on_SelectAllHardware_clicked()
-{
-    if(guiSettings.getNerualNet() == "AlexNet"){
-        checkAll();
     }
 }
 

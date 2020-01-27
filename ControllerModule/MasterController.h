@@ -24,7 +24,7 @@ public:
     void getPrediction(const string net, const string mode, vector<string> hardware, int nrImages);
     void setNNType(string nn);
     void setMode(string mode);
-    list<HardwareElement> getAvailableHardware() const;
+    vector<string> getAvailableHardware();
     void setAvailableHardware(const list<HardwareElement> &value);
     list<HardwareElement> getSelectedHardware() const;
     void setSelectedHardware(const list<HardwareElement> &value);

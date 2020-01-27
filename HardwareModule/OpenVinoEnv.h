@@ -40,6 +40,7 @@ private:
     string weightsPath;
     std::vector<std::string> imageNames;
     vector<Result> endResults;
+    string deviceName;
 };
 
 #endif // OPENVINOENV_H

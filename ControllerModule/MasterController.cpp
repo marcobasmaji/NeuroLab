@@ -45,29 +45,6 @@ vector<string> MasterController::getAvailableHardware()
     return core.GetAvailableDevices();
     //return availableHardware;
 }
-void MasterController::setAvailableHardware(const list<HardwareElement> &value) {
-    //availableHardware = value;
-}
-
-list<HardwareElement> MasterController::getSelectedHardware() const
-{
-    return selectedHardware;
-}
-
-void MasterController::setSelectedHardware(const list<HardwareElement> &value)
-{
-    selectedHardware = value;
-}
-vector<string> MasterController::getAvailableHardware()
-{
-    InferenceEngine::Core core;
-    return core.GetAvailableDevices();
-}
-
-void MasterController::setAvailableHardware(const list<HardwareElement> &value)
-{
-    //availableHardware = value;
-}
 
 list<HardwareElement> MasterController::getSelectedHardware() const
 {

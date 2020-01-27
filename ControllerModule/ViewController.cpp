@@ -115,13 +115,3 @@ void ViewController::displayAvailableHardware()
 }
 
 
-void ViewController::displayAvailableHardware()
-{
-    setAvailableHardware({ "CPU"});
-    mainWindow->disableHWCheckboxes();
-    for(HardwareElement element : availableHardware){
-       mainWindow->enableCheckbox(element);
-    }
-
-}
-
