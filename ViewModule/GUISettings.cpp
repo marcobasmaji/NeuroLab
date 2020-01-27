@@ -5,6 +5,7 @@ GUISettings::GUISettings()
     //set default values:
     this->nn = "AlexNet";
     this->mode = "HighestPerfomance";
+    this->nrImages = 0;
 }
 
 int GUISettings::getNrImages() const
@@ -14,7 +15,7 @@ int GUISettings::getNrImages() const
 
 void GUISettings::setNrImages(int value)
 {
-    nrImages = value;
+    nrImages += value;
 }
 
 vector<string> GUISettings::getHardware() const

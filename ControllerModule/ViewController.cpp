@@ -54,7 +54,7 @@ void ViewController::getPrediction(GUISettings settings)
 }
 
 void ViewController::displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops) {
-
+    mainWindow->displayPrediction();
 }
 
 void ViewController::setNeuralNet(string nn)
@@ -107,7 +107,7 @@ void ViewController::setAvailableHardware(const list<string> &hardwareElements)
 
 void ViewController::displayAvailableHardware()
 {
-    setAvailableHardware({"Movidius.1", "Movidius.2", "CPU"});
+    //setAvailableHardware({"Movidius.1", "Movidius.2", "CPU"});
     mainWindow->disableHWCheckboxes();
     for(HardwareElement element : availableHardware){
        mainWindow->enableCheckbox(element);

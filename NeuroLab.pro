@@ -23,6 +23,10 @@ SOURCES += \
     ControllerModule/ViewController.cpp \
     DataModule/Shape.cpp \
     HardwareModule/OpenVinoEnv.cpp \
+    HardwareModule/OpenCL/OpenCLEnvironment.hpp \
+    HardwareModule/OpenCL/OpenCLEnvironmentCreator.hpp \
+    HardwareModule/OpenCL/OpenCLLayer.hpp \
+    HardwareModule/OpenCL/ReleaseCLObjectsManager.hpp \
     NNModule/Layers/ConvolutionLayer.cpp \
     NNModule/Layers/DenseLayer.cpp \
     NNModule/Layers/Loss.cpp \
@@ -31,6 +35,12 @@ SOURCES += \
     NNModule/Layers/SoftmaxLayer.cpp \
     NNModule/NeuroLabNet.cpp \
     NNModule/PretrainedNN.cpp \
+    PredictionModule/Prediction.cpp \
+    PredictionModule/NeuroPrediction.cpp \
+    PredictionModule/LowestPowerConsumption.cpp \
+    PredictionModule/HighestPerformance.cpp \
+    PredictionModule/HighestEfficiency.cpp \
+    PredictionModule/AlexPrediction.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/WellcomePanel.cpp \
@@ -45,7 +55,10 @@ HEADERS += \
     ControllerModule/ViewController.h \
     DataModule/Result.h \
     DataModule/Shape.h \
-    HardwareModule/OpenVinoEnv.h \
+    HardwareModule/OpenCL/OpenCLEnvironment.hpp \
+    HardwareModule/OpenCL/OpenCLEnvironmentCreator.hpp \
+    HardwareModule/OpenCL/OpenCLLayer.hpp \
+    HardwareModule/OpenCL/ReleaseCLObjectsManager.hpp \
     NNModule/Layers/ConvolutionLayer.h \
     NNModule/Layers/DenseLayer.h \
     NNModule/Layers/Layer.h \
@@ -56,6 +69,12 @@ HEADERS += \
     NNModule/NeuralNet.h \
     NNModule/NeuroLabNet.h \
     NNModule/PretrainedNN.h \
+    PredictionModule/Prediction.h \
+    PredictionModule/NeuroPrediction.h \
+    PredictionModule/LowestPowerConsumption.h \
+    PredictionModule/HighestPerformance.h \
+    PredictionModule/HighestEfficiency.h \
+    PredictionModule/AlexPrediction.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/WellcomePanel.h
@@ -71,12 +90,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 # Libraries
 
 LIBS += -L$$PWD/Tools/openvino/lib/ -linference_engine
-LIBS += -L$$PWD/Tools/format_reader/ -lformat_reader
+LIBS += -L$$PWD/Tools/common/format_reader/ -lformat_reader
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
-unix:!macx: LIBS += -L$$PWD/tbb/ -ltbb
-unix:!macx: LIBS += -L$$PWD/tbb/ -ltbbmalloc
+LIBS += -L$$PWD/Tools/tbb/ -ltbb
+LIBS += -L$$PWD/Tools/tbb/ -ltbbmalloc
 
 
 # Headers

@@ -234,7 +234,7 @@ void MainWindow::on_LoadButton_clicked()
     qDebug()<<"load in MainWindow"<<endl;
     this->viewController->updatePathList(vec);
     qDebug()<<"load"<<endl; // debug: working.
-    //this->guiSettings.setNumImages(filesList.lenght());
+    this->guiSettings.setNrImages(filesList.size());
     viewController->getPrediction(this->guiSettings);
 
 }
@@ -247,10 +247,28 @@ void MainWindow::on_previewArea_itemClicked(QListWidgetItem *item)
 
 void MainWindow::on_DeleteButton_clicked()
 {
+    if(imageToBeRemoved == NULL){
+         //nothing to delete
+        return;
+    }
     string imagePath = imageToBeRemoved->text().toStdString();
+    //remove image path stored in ViewController
     viewController->removeImage(imagePath);
+
+    //remove image from main window
     int row = ui->previewArea->row(imageToBeRemoved);
     ui->previewArea->takeItem(row);
+
+    //decrease total nr of images stored in guiSettings
+    guiSettings.setNrImages(-1);
+
+    imageToBeRemoved = NULL;
+    ui->DeleteButton->setEnabled(false);
+
+    //if there are no more images left, gray out classify button
+    if(guiSettings.getNrImages() == 0){
+        ui->ClassifyButton->setEnabled(false);
+    }
 }
 
 void MainWindow::on_ClassifyButton_clicked()
