@@ -11,6 +11,7 @@ MasterController::MasterController() : viewObserver(this)
 void MasterController::setPaths(vector<string> paths)
 {
     this->nnObserver.setPathList(paths);
+    //this->imagePaths = paths;
     // cout<< imagePaths->back()
     qDebug()<<"load in master"<<endl; //ok
 
@@ -23,11 +24,11 @@ void MasterController::classify()
     vector<Result> results = nnObserver.classify();
     viewObserver.displayResults(results);
     //results = nnObserver.getResults(); crashes
-
+    
 }
-void MasterController::getPrediction(const string net, const string mode, vector<string> hardware)
+void MasterController::getPrediction(const string net, const string mode, vector<string> hardware , int nrImages)
 {
-    predictionObserver.calculatePrediction(imagePaths.size() ,net, mode,hardware);
+    predictionObserver.calculatePrediction(nrImages ,net, mode,hardware);
     vector<double> timeConsumption = predictionObserver.getTime();
     vector<double> powerConsumption = predictionObserver.getPower();
     double bandwidth = predictionObserver.getBandwidth();
@@ -42,4 +43,15 @@ vector<string> MasterController::getAvailableHardware()
 {
     InferenceEngine::Core core;
     return core.GetAvailableDevices();
+    //return availableHardware;
+}
+
+list<HardwareElement> MasterController::getSelectedHardware() const
+{
+    return selectedHardware;
+}
+
+void MasterController::setSelectedHardware(const list<HardwareElement> &value)
+{
+    selectedHardware = value;
 }

@@ -33,9 +33,11 @@ SOURCES += \
     NNModule/PretrainedNN.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
+    ViewModule/WellcomePanel.cpp \
     main.cpp
 
 HEADERS += \
+    ControllerModule/HardwareElement.h \
     ControllerModule/ImagePareser.h \
     ControllerModule/MasterController.h \
     ControllerModule/NNController.h \
@@ -55,17 +57,16 @@ HEADERS += \
     NNModule/NeuroLabNet.h \
     NNModule/PretrainedNN.h \
     ViewModule/GUISettings.h \
-    ViewModule/MainWindow.h
+    ViewModule/MainWindow.h \
+    ViewModule/WellcomePanel.h
 
 FORMS += \
     ViewModule/MainWindow.ui
-
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
 
 # Libraries
 
@@ -85,10 +86,4 @@ DEPENDPATH += $$PWD/Tools/openvino/include
 
 INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
-
-
-
-
-
-
 

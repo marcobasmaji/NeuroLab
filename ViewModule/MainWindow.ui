@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,7 +17,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QGroupBox" name="NeuralNetOptions">
     <property name="geometry">
      <rect>
       <x>1</x>
@@ -37,7 +40,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QRadioButton" name="AlexNet">
+       <widget class="QRadioButton" name="AlexNet_radio_button">
         <property name="text">
          <string>AlexNet</string>
         </property>
@@ -47,7 +50,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="NeuroLabNet">
+       <widget class="QRadioButton" name="NeuroLabNet_radio_button">
         <property name="text">
          <string>NeuroLab Net</string>
         </property>
@@ -56,7 +59,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_2">
+   <widget class="QGroupBox" name="ModeOptions">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -79,7 +82,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QRadioButton" name="radioButton_3">
+       <widget class="QRadioButton" name="HP_radio_button">
         <property name="text">
          <string>High Performance</string>
         </property>
@@ -89,14 +92,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton_19">
+       <widget class="QRadioButton" name="LPC_radio_button">
         <property name="text">
          <string>Low Power Consumption</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioButton_20">
+       <widget class="QRadioButton" name="HEE_radio_button">
         <property name="text">
          <string>High Energy Efficiency</string>
         </property>
@@ -106,6 +109,9 @@
     </widget>
    </widget>
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>280</x>
@@ -117,7 +123,13 @@
     <property name="currentIndex">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="tab_7">
+    <property name="tabsClosable">
+     <bool>false</bool>
+    </property>
+    <property name="movable">
+     <bool>false</bool>
+    </property>
+    <widget class="QWidget" name="main">
      <attribute name="title">
       <string>Main</string>
      </attribute>
@@ -197,40 +209,17 @@
        <string>Delete</string>
       </property>
      </widget>
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="geometry">
-       <rect>
-        <x>29</x>
-        <y>49</y>
-        <width>401</width>
-        <height>331</height>
-       </rect>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents_2">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>399</width>
-         <height>329</height>
-        </rect>
-       </property>
-      </widget>
-     </widget>
      <widget class="QGroupBox" name="groupBox_4">
       <property name="geometry">
        <rect>
         <x>450</x>
-        <y>20</y>
+        <y>60</y>
         <width>251</width>
         <height>401</height>
        </rect>
       </property>
       <property name="title">
-       <string>Prediction</string>
+       <string/>
       </property>
       <widget class="QLabel" name="label_18">
        <property name="geometry">
@@ -338,7 +327,7 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
-         <widget class="QLabel" name="label_17">
+         <widget class="QLabel" name="Bandwith_label">
           <property name="text">
            <string>Bandwidth:</string>
           </property>
@@ -357,7 +346,7 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_8">
         <item>
-         <widget class="QLabel" name="label_19">
+         <widget class="QLabel" name="FLOPS_label">
           <property name="text">
            <string>FLOPS:</string>
           </property>
@@ -366,20 +355,38 @@
        </layout>
       </widget>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab_8">
-     <attribute name="title">
-      <string>Results</string>
-     </attribute>
+     <widget class="QPushButton" name="prediction_button">
+      <property name="geometry">
+       <rect>
+        <x>560</x>
+        <y>10</y>
+        <width>141</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Calculate prediction</string>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="previewArea">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>50</y>
+        <width>431</width>
+        <height>341</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_3">
+   <widget class="QGroupBox" name="HardwareOptions">
     <property name="geometry">
      <rect>
       <x>1</x>
       <y>249</y>
       <width>261</width>
-      <height>261</height>
+      <height>301</height>
      </rect>
     </property>
     <property name="title">
@@ -396,55 +403,87 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_13">
       <item>
-       <widget class="QCheckBox" name="checkBox_13">
+       <widget class="QCheckBox" name="Mov1_checkbox">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="text">
          <string>Movidius Stick 1</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="Mov2_checkbox">
         <property name="text">
          <string>Movidius Stick 2</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_2">
+       <widget class="QCheckBox" name="Mov3_checkbox">
         <property name="text">
          <string>Movidius Stick 3</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_3">
+       <widget class="QCheckBox" name="Mov4_checkbox">
         <property name="text">
          <string>Movidius Stick 4</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_14">
+       <widget class="QCheckBox" name="CPU_checkbox">
         <property name="text">
          <string>CPU</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_15">
+       <widget class="QCheckBox" name="GPU_checkbox">
         <property name="text">
          <string>GPU</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_16">
+       <widget class="QCheckBox" name="FPGA_checkbox">
         <property name="text">
          <string>FPGA</string>
         </property>
        </widget>
       </item>
      </layout>
+    </widget>
+    <widget class="QPushButton" name="SelectAllHardware">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>260</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Select All</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Refresh_hardware">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>260</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Refresh</string>
+     </property>
     </widget>
    </widget>
   </widget>
@@ -460,6 +499,26 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>Mov1_checkbox</tabstop>
+  <tabstop>NeuroLabNet_radio_button</tabstop>
+  <tabstop>HP_radio_button</tabstop>
+  <tabstop>LPC_radio_button</tabstop>
+  <tabstop>HEE_radio_button</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>ClassifyButton</tabstop>
+  <tabstop>StopButton</tabstop>
+  <tabstop>LoadButton</tabstop>
+  <tabstop>DeleteButton</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>AlexNet_radio_button</tabstop>
+  <tabstop>Mov2_checkbox</tabstop>
+  <tabstop>Mov3_checkbox</tabstop>
+  <tabstop>Mov4_checkbox</tabstop>
+  <tabstop>CPU_checkbox</tabstop>
+  <tabstop>GPU_checkbox</tabstop>
+  <tabstop>FPGA_checkbox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

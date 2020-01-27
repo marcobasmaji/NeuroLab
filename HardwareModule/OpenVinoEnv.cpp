@@ -64,7 +64,6 @@ vector<Result> OpenVinoEnv::classify() {
     size_t batchSize = network.getBatchSize();
     std::cout << "Batch size is " << std::to_string(batchSize) << std::endl;
 
-
     // Load model
     auto executable_network = core.LoadNetwork(network, "CPU");
 
@@ -136,9 +135,6 @@ vector<Result> OpenVinoEnv::classify() {
     }
     return endResults;
 }
-
-
-
 
 void OpenVinoEnv::chooseNeuralNet(string nn) {
     if(nn == ("alexnet"))
