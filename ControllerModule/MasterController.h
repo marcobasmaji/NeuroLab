@@ -1,7 +1,7 @@
 #ifndef MASTERCONTROLLER_H
 #define MASTERCONTROLLER_H
 #include <QApplication>
-#include<string.h>
+#include <string.h>
 #include <iostream>
 #include <list>
 #include <iterator>
@@ -30,7 +30,6 @@ private:
     string nnType;
     list<string> selectedHardware;
     string mode;
-    //list<string> imagePaths;
     vector<string> imagePaths;
     list<pair<string,vector<string>>> results;
 

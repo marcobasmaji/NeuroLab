@@ -1,5 +1,5 @@
 #include "NNController.h"
-#include<list>
+#include <list>
 #include <QDebug>
 #include <QFile>
 
@@ -11,34 +11,52 @@ vector<Result> NNController::classify()
 {
     qDebug()<<"classify called in NN"<<endl; // debug:
 
-    return pnn.classify();
-}
-
-
-pair<string,vector<pair<string,float>>> NNController::getResults()
-{
-    pair<string,vector<pair<string,float>>> result;
-    return result;
+    if(currentNN == "ALEXNET")
+    {
+        pnn.setImagePaths(pathList);
+        return pnn.classify();
+    }
+    else if(currentNN == "GOOGLENET")
+    {
+        pnn.setImagePaths(pathList);
+        return pnn.classify();
+    }
+    else if(currentNN == "NEUROLABNET")
+    {
+        neuroLabNet.updateDataSet(pathList);
+        return neuroLabNet.classify();
+    }
+    else
+    {
+        return {};
+    }
 }
 
 void NNController::setPathList(vector<string> list)
 {
-    //this->pathList = list;
-    if(currentNN == "ALEXNET")
-    {
-    qDebug()<<"classify called in NNcontroller"<<endl; // debug: working
-    pnn.setImagePaths(list);
-    }
-    else if(currentNN == "GOOGLENET")
-    {
-        pnn.setImagePaths(list);
-    }
-    else if(currentNN == "NEUROLABNET")
-    {
+    this->pathList = list;
 
-    }
 }
 
 void NNController::setDistribution(vector<pair<string, int> > distribution) {
 
+}
+
+void NNController::setHardwareDistribution(vector<string> distr)
+{
+    if(currentNN == "ALEXNET")
+    {
+        pnn.setHardwareDistribution(distr);
+    }
+    else if(currentNN == "GOOGLENET")
+    {
+        pnn.setHardwareDistribution(distr);
+    }
+    else if(currentNN == "NEUROLABNET")
+    {
+        // can we run our net on other platforms than CPU ?
+    }
+    else
+    {
+    }
 }

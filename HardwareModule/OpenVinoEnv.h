@@ -16,6 +16,7 @@ public:
     vector<Result> classify();
     void chooseNeuralNet(string nn);
     void setImageNames(std::vector<std::string> imageNames);
+    void setPlatforms(vector<string>);
 
 private:
     void readIR();
@@ -26,13 +27,14 @@ private:
     void infer();
     void processOutput();
     // for hardware Distrubution
-    void setPlatforms(vector<string>);
+
 
     InferenceEngine::Core core;
     InferenceEngine::InferencePlugin plugin;
     InferenceEngine::CNNNetwork cnnnetwork;
     InferenceEngine::InputsDataMap inputInfo;
     InferenceEngine::OutputsDataMap outputInfo;
+    InferenceEngine::ExecutableNetwork execNetwork;
 
 
     //string pathToIR;

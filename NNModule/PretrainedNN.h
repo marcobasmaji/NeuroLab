@@ -14,7 +14,10 @@ class PretrainedNN
 public:
     PretrainedNN();
     void setImagePaths(vector<string> imagePaths);
+    void setPlatforms(vector<string> platforms);
     vector<Result> classify();
+    void setNerualNet(string nn);
+    void setHardwareDistribution(vector<string>);
 private:
     OpenVinoEnv vino;
 };

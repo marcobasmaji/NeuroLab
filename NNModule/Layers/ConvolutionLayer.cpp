@@ -1,6 +1,6 @@
 #include "ConvolutionLayer.h"
 
-CovolutionLayer::CovolutionLayer(
+ConvolutionLayer::ConvolutionLayer(
         OpenCLEnvironment* clEnv,
         size_t inputHeight,
         size_t inputWidth,
@@ -20,22 +20,43 @@ CovolutionLayer::CovolutionLayer(
       numFilters(numFilters)
 {
     this->clEnv = clEnv;
+    OpenCLLayerCreator* openCLLayerCreator = new OpenCLLayerCreator();
+    OpenCLLayer* cLconv = openCLLayerCreator->createConvLayer(clEnv,10,inputDepth,inputHeight,
+                                                              inputWidth,20,28,28,filterHeight,
+                                                              filterWidth,horizontalStride,verticalStride);
+    this->clLayer = cLconv;
+    clLayer->setWeights(clEnv,getWeights(filterWidth*filterHeight*numFilters),filterWidth*filterHeight*numFilters);
+    clLayer->setBiases(clEnv,getWeights(numFilters),numFilters);
+    clLayer->setLearningRate(0.2);
 
 }
 
-void CovolutionLayer::forwardPass(float [105][105][3])
+void ConvolutionLayer::forwardPass(float input[],float output[])
 {
-        /*OpenCLLayerCreator* openCLLayerCreator = new OpenCLLayerCreator();
-        OpenCLLayer* conv1 = openCLLayerCreator->createConvLayer(clEnv,10,3,105,105,50,34,34,6,6,3,3);
-        srand(time(NULL));
-        int length = 6*6*50;
-            float* weights= (float*)malloc(sizeof(float)*(length));
 
-            for (int i = 0; i < length; i++) {
-                weights[i] = static_cast <float> (rand()) / static_cast <float> (RAND_MAX)/length*20;
-            }
-        conv1->setWeights(clEnv,weights,6*6*50);
-        conv1->setLearningRate(0.2);
-        conv1->setInputs(clEnv,weights,105*105*3);
-        conv1->computeForward(clEnv,10,50);*/
+        clLayer->setInputs(clEnv,input,inputHeight*inputWidth*inputDepth);
+        clLayer->computeForward(clEnv,10,numFilters);
+
+}
+void ConvolutionLayer::backPropagate(float *upstreamGrad)
+{
+}
+OpenCLLayer* ConvolutionLayer::getCLLayer()
+{
+    return clLayer;
+}
+
+float* ConvolutionLayer::getWeights(int length) {
+
+    float* weights= (float*)malloc(sizeof(float)*length);
+
+    for (int i = 0; i < length; i++) {
+        weights[i] = getRandom();
+    }
+
+    return weights;
+}
+
+float ConvolutionLayer::getRandom() {
+    return rand() / float(RAND_MAX);
 }

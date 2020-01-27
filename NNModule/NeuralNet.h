@@ -11,7 +11,7 @@ class NeuralNet
 {
 public:
     virtual void init() = 0;
-    virtual void classify() = 0;
+    //virtual void classify() = 0;
     virtual void train() = 0;
     virtual void executeTransferLearning()=0;
     /*void updateDataSet(DataSet dataSet) {
@@ -24,7 +24,6 @@ public:
 protected:
     //Loss lossFunction;
 	unsigned int netID;
-    list<Layer> layers;
     //DataSet dataSet;
 	double loss;
 	double cumulativeLoss;

@@ -3,17 +3,21 @@
 
 #include <iostream>
 #include <DataModule/Shape.h>
+#include <HardwareModule/OpenCL/OpenCLEnvironment.hpp>
+#include <HardwareModule/OpenCL/OpenCLLayer.hpp>
+#include <HardwareModule/OpenCL/OpenCLLayerCreator.hpp>
 #include "Layer.h"
 
 class DenseLayer : public Layer
 {
 public:
-    DenseLayer(size_t inputHeight,
+    DenseLayer(OpenCLEnvironment* clEnv,
+size_t inputHeight,
                  size_t inputWidth,
                  size_t inputDepth,
                  size_t numOutputs);
-    void forwardPass(Shape &input, Shape &output);
-    void backPropagate(Shape &upstreamGrad);
+    void forwardPass(float input[], float output[]);
+    void backPropagate(float upstreamGrad[]);
     void updateWeightsAndBiases(size_t batchSize, double learningRate);
     Shape getGradientWrtWeights() { return gradWeights; }
 
@@ -29,7 +33,12 @@ public:
 
      void setBiases(Shape biases) { this->biases = biases; }
 
+
+     OpenCLLayer *getCLLayer();
+
 private:
+     OpenCLEnvironment* clEnv;
+     OpenCLLayer* clLayer;
      size_t inputHeight;
        size_t inputWidth;
        size_t inputDepth;
@@ -48,6 +57,8 @@ private:
        Shape accumulatedGradInput;
        Shape accumulatedGradWeights;
        Shape accumulatedGradBiases;
+       float* getWeights(int length);
+       float getRandom();
 };
 
 #endif // DENSELAYER_H

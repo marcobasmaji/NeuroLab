@@ -7,38 +7,45 @@
 #include <HardwareModule/OpenCL/OpenCLLayerCreator.hpp>
 #include "Layer.h"
 
-class CovolutionLayer: public Layer
+class ConvolutionLayer: public Layer
 {
 public:
-    CovolutionLayer(OpenCLEnvironment* clEnv,
-            size_t inputHeight,
-            size_t inputWidth,
-            size_t inputDepth,
-            size_t filterHeight,
-            size_t filterWidth,
-            size_t horizontalStride,
-            size_t verticalStride,
-            size_t numFilters);
-    void forwardPass(float input[105][105][3]);
-    void backPropagate(Shape upstreamGrad);
+    ConvolutionLayer(OpenCLEnvironment* clEnv,
+                     size_t inputHeight,
+                     size_t inputWidth,
+                     size_t inputDepth,
+                     size_t filterHeight,
+                     size_t filterWidth,
+                     size_t horizontalStride,
+                     size_t verticalStride,
+                     size_t numFilters);
+    void forwardPass(float input[], float output[]);
+    void backPropagate(float upstreamGrad[]);
+    OpenCLLayer* getCLLayer();
+
+
 private:
     OpenCLEnvironment* clEnv;
+    OpenCLLayer* clLayer;
     size_t inputHeight;
-      size_t inputWidth;
-      size_t inputDepth;
-      size_t filterHeight;
-      size_t filterWidth;
-      size_t horizontalStride;
-      size_t verticalStride;
-      size_t numFilters;
+    size_t inputWidth;
+    size_t inputDepth;
+    size_t filterHeight;
+    size_t filterWidth;
+    size_t horizontalStride;
+    size_t verticalStride;
+    size_t numFilters;
 
-      Shape filters;
-      Shape input;
-        Shape output;
-        Shape gradInput;
-        Shape accumulatedGradInput;
-        Shape gradFilters;
-        Shape accumulatedGradFilters;
+    Shape filters;
+    Shape input;
+    Shape output;
+    Shape gradInput;
+    Shape accumulatedGradInput;
+    Shape gradFilters;
+    Shape accumulatedGradFilters;
+
+    float* getWeights(int length);
+    float getRandom();
 };
 
 #endif // COVOLUTIONLAYER_H

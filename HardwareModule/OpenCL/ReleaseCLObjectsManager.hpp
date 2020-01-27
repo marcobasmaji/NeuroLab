@@ -5,7 +5,7 @@
 
 #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
 
-#include "../../Tools/opencl/include/cl.h"
+ #include "CL/cl.h"
 
 class ReleaseCLObjectsManager {
 public:

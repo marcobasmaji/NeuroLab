@@ -3,22 +3,29 @@
 
 #include <iostream>
 #include <DataModule/Shape.h>
+#include <HardwareModule/OpenCL/OpenCLEnvironment.hpp>
+#include <HardwareModule/OpenCL/OpenCLLayer.hpp>
+#include <HardwareModule/OpenCL/OpenCLLayerCreator.hpp>
 #include "Layer.h"
 
 
 class ReLULayer: public Layer
 {
 public:
-    ReLULayer(size_t inputHeight,
+    ReLULayer(OpenCLEnvironment* clEnv,
+              size_t inputHeight,
            size_t inputWidth,
            size_t inputDepth);
     //Forward and Back Propagation
-    void forwardPass(Shape &input, Shape &output);
-    void backPropagate(Shape upstreamGrad);
+    void forwardPass(float input[], float output[]);
+    void backPropagate(float upstreamGrad[]);
+    OpenCLLayer* getCLLayer();
     //Getter for the Input Gradient
     Shape getInputGrad();
 
 private:
+    OpenCLEnvironment* clEnv;
+    OpenCLLayer* clLayer;
     size_t inputHeight;
     size_t inputWidth;
     size_t inputDepth;
