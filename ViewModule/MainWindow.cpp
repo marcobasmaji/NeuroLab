@@ -286,8 +286,9 @@ void MainWindow::on_ClassifyButton_clicked()
 
 void MainWindow::on_StopButton_clicked()
 {
-    // maybe find a way to stop the classify() method  in here
+
 }
+
 /*QLabel *createImageLabel(QString path) {
     QLabel *imageLabel = new QLabel();
     QPixmap image(path);
@@ -334,11 +335,13 @@ void MainWindow::displayResults(vector<Result> results)
         QLabel *imageLabel = new QLabel();
         QPixmap image(path);
 
-        pair<string,float> p = results.back().getLabelsAndProb().front();
-        QString qstr = QString::fromStdString(p.first);
-        //moving into a new results tab
-        QLabel *label = new QLabel(qstr);
-        labelsLayout->addWidget(label);
+        vector<pair<string, float>> labelsAndprob = result.getLabelsAndProb();
+        for(int i = 0; i < 5; i++){
+            int probPercent = (int) (labelsAndprob[i].second * 100);
+            string prob = to_string(probPercent);
+            QString label = QString::fromStdString(labelsAndprob[i].first + ' ' + prob + '%');
+            labelsLayout->addWidget(new QLabel(label));
+        }
 
         imageLabel->setPixmap(image);
         imageLabel->setScaledContents(true);

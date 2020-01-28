@@ -121,7 +121,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="tabsClosable">
      <bool>false</bool>
@@ -387,11 +387,6 @@
        <enum>QAbstractItemView::NoSelection</enum>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Page</string>
-     </attribute>
     </widget>
    </widget>
    <widget class="QGroupBox" name="HardwareOptions">

@@ -16,7 +16,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ControllerModule/HardwareSurveillence.cpp \
     ControllerModule/ImagePareser.cpp \
     ControllerModule/MasterController.cpp \
     ControllerModule/NNController.cpp \
@@ -52,7 +51,6 @@ SOURCES += \
 
 HEADERS += \
     ControllerModule/HardwareElement.h \
-    ControllerModule/HardwareSurveillence.h \
     ControllerModule/ImagePareser.h \
     ControllerModule/MasterController.h \
     ControllerModule/NNController.h \
