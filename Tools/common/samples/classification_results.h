@@ -52,7 +52,7 @@ public:
     explicit ClassificationResult(InferenceEngine::Blob::Ptr output_blob,
                                   std::vector<std::string> image_names = {},
                                   size_t batch_size = 1,
-                                  size_t num_of_top = 5,
+                                  size_t num_of_top = 10,
                                   std::vector<std::string> labels = {}) :
             _nTop(num_of_top),
             _outBlob(std::move(output_blob)),

@@ -5,6 +5,8 @@
 #include "Layers/SoftmaxLayer.h"
 #include "Layers/DenseLayer.h"
 
+using namespace cv;
+
 
 
 
@@ -53,14 +55,14 @@ void NeuroLabNet::init() {
     // output is an array with the length 100
     SoftmaxLayer soft(clEnv,100);
     //Loss loss(100)
-    layers.push_front(&conv1);
-    layers.push_front(&relu1);
-    layers.push_front(&maxP1);
-    layers.push_front(&conv2);
-    layers.push_front(&relu2);
-    layers.push_front(&maxP2);
-    layers.push_front(&dense);
-    layers.push_front(&soft);
+    layers.push_back(&conv1);
+    layers.push_back(&relu1);
+    layers.push_back(&maxP1);
+    layers.push_back(&conv2);
+    layers.push_back(&relu2);
+    layers.push_back(&maxP2);
+    layers.push_back(&dense);
+    layers.push_back(&soft);
     // init first layer
 
     // connect layers
@@ -114,12 +116,14 @@ vector<Result> NeuroLabNet::classify() {
         {
             item->forwardPass(pixels,pixels);
         }
-        layers.front()->getCLLayer()->getOutputs(clEnv,10,1,100,1,(int*)100);
-        //results.push_back();
+        float* prob = layers.back()->getCLLayer()->getOutputs(clEnv,10,1,100,1,(int*)100);
+        Result result;
+        result.setPath(item);
+        result.setLabelsAndProb(getLabelWithProb(prob));
+
+        results.push_back(result);
     }
     return results;
-
-
 }
 
 void NeuroLabNet::train() {
@@ -137,8 +141,138 @@ void NeuroLabNet::updateDataSet(vector<string> dataSet)
     this->dataSet = dataSet;
 }
 
-void NeuroLabNet::trainWithCifar100()
+
+vector<pair<string,float>> NeuroLabNet::getLabelWithProb(float prob[])
 {
+    // need to parse labels with prob. and sort it and get the top 5
+    vector<pair<string,float>> vec;
+    std::fstream file("/home/mo/gitNeuro/NeuroLab/DataModule/NeuroLabLabels/fine_label_names.txt");
+    string line;
+    int i =0;
+    while(getline(file,line))
+    {
+        pair<string,float> pair;
+        pair.first = line;
+        pair.second = prob[i];
+        //sort(vec.begin(),vec.end(),sortBySec);
+        vec.push_back(pair);
+        i++;
+    }
+
+    return vec ;
 
 }
+
+void NeuroLabNet::trainWithCifar100()
+{
+    string filename;
+    filename = "/home/mo/Downloads/cifar-100-binary/train.bin";
+    vector<Mat> batch;
+    Mat label = Mat::zeros(1, 10000, CV_64FC1);
+    //read_batch(filename, batch, label);
+    ifstream file (filename, ios::binary);
+    if (file.is_open())
+    {
+        int numOfImages = 50000;
+        int rows = 32;
+        int cols = 32;
+        for(int i = 0; i < numOfImages; ++i){
+            unsigned char tplabel = 0;
+
+            file.read((char*) &tplabel, sizeof(tplabel));
+
+            vector<Mat> channels;
+
+            Mat fin_img = Mat::zeros(rows, cols, CV_8UC3);
+
+            for(int ch = 0; ch < 3; ++ch){
+
+                Mat tp = Mat::zeros(rows, cols, CV_8UC1);
+
+                for(int r = 0; r < rows; ++r){
+
+                    for(int c = 0; c < cols; ++c){
+
+                        unsigned char temp = 0;
+
+                        file.read((char*) &temp, sizeof(temp));
+
+                        tp.at<uchar>(r, c) = (int) temp;
+
+                    }
+
+                }
+
+                channels.push_back(tp);
+
+            }
+
+            merge(channels, fin_img);
+
+            batch.push_back(fin_img);
+
+            label.at<Vec2b>(0, i) = (double)tplabel;
+
+            //concatenate
+
+            int height = batch[0].rows;
+
+            int width = batch[0].cols;
+
+            Mat res = Mat::zeros(height * width * 3, batch.size(), CV_64FC1);
+
+            for(int i=0; i<batch.size(); i++){
+
+                Mat img(height, width, CV_64FC3);
+
+                batch[i].convertTo(img, CV_64FC3);
+
+                vector<Mat> chs;
+
+                split(img, chs);
+
+                for(int j = 0; j < 3; j++){
+
+                    Mat ptmat = chs[j].reshape(0, height * width);
+
+                    Rect roi = cv::Rect(i, j * ptmat.rows, ptmat.cols, ptmat.rows);
+
+                    Mat subView = res(roi);
+
+                    ptmat.copyTo(subView);
+
+                }
+
+            }
+
+            divide(res, 255.0, res);
+
+
+            cv::Mat mt1 = res;
+
+            Mat trainX = Mat::zeros(1024, 50000, CV_64FC1);
+            Mat trainY = Mat::zeros(1, 50000, CV_64FC1);
+
+            Rect roi = cv::Rect(mt1.cols * 0, 0, mt1.cols, trainX.rows);
+
+            Mat subView = trainX(roi);
+
+            mt1.copyTo(subView);
+
+            roi = cv::Rect(label.cols * 0, 0, label.cols, 1);
+
+            subView = trainY(roi);
+
+            label.copyTo(subView);
+
+
+
+        }
+    }
+}
+
+
+
+
+
 

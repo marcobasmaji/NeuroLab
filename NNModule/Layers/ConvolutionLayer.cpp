@@ -40,6 +40,8 @@ void ConvolutionLayer::forwardPass(float input[],float output[])
 }
 void ConvolutionLayer::backPropagate(float *upstreamGrad)
 {
+    clLayer->computeErrorComp(clEnv,10);
+
 }
 OpenCLLayer* ConvolutionLayer::getCLLayer()
 {

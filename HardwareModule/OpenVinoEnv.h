@@ -25,7 +25,7 @@ private:
     void createInferRequest();
     void prepareInput();
     void infer();
-    void processOutput();
+    vector<Result> processOutput();
     // for hardware Distrubution
 
 
@@ -35,6 +35,7 @@ private:
     InferenceEngine::InputsDataMap inputInfo;
     InferenceEngine::OutputsDataMap outputInfo;
     InferenceEngine::ExecutableNetwork execNetwork;
+    InferenceEngine::InferRequest inferRequest;
 
 
     //string pathToIR;
@@ -43,6 +44,9 @@ private:
     std::vector<std::string> imageNames;
     vector<Result> endResults;
     string deviceName;
+    std::vector<std::shared_ptr<unsigned char>> imagesData;
+    std::vector<std::string> validImageNames;
+    size_t batchSize;
 };
 
 #endif // OPENVINOENV_H

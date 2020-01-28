@@ -30,7 +30,7 @@ void DenseLayer::forwardPass(float input[], float output[])
 
 void DenseLayer::backPropagate(float upstreamGrad[])
 {
-
+    clLayer->computeErrorComp(clEnv,10);
 }
 
 OpenCLLayer *DenseLayer::getCLLayer()

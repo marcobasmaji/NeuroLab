@@ -15,6 +15,11 @@ public:
         path = value;
     }
 
+    void setLabelsAndProb(vector<pair<string, float> > lp)
+    {
+        labelsAndProb = lp;
+    }
+
 
 
     vector<pair<string, float> > getLabelsAndProb() const{

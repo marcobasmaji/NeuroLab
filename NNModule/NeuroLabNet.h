@@ -8,6 +8,7 @@
 #include <DataModule/Result.h>
 #include <opencv2/opencv.hpp>
 #include <CL/cl.h>
+#include <fstream>
 
 using namespace std;
 
@@ -21,8 +22,14 @@ public:
 	void executeTransferLearning();
     void updateDataSet(vector<string> dataSet);
     void trainWithCifar100();
+    vector<pair<string,float>> getLabelWithProb(float prob[]);
 private:
     vector<string> dataSet;
     OpenCLEnvironment* clEnv;
     list<Layer*> layers;
+    static bool sortBySec(const pair<int,int> &a,
+                  const pair<int,int> &b)
+    {
+        return (a.second > b.second);
+    }
 };

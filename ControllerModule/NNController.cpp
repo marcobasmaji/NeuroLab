@@ -60,3 +60,8 @@ void NNController::setHardwareDistribution(vector<string> distr)
     {
     }
 }
+
+void NNController::setCurrentNN(string currentNN)
+{
+    this->currentNN = currentNN;
+}
