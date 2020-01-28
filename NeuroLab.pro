@@ -57,7 +57,7 @@ HEADERS += \
     ControllerModule/ViewController.h \
     DataModule/Result.h \
     DataModule/Shape.h \
-    HardwareModule/OpenVinoEnv.h \
+    HardwareModule/OpenVinoEnv.hpp \
     HardwareModule/OpenCL/OpenCLEnvironment.hpp \
     HardwareModule/OpenCL/OpenCLEnvironmentCreator.hpp \
     HardwareModule/OpenCL/OpenCLLayer.hpp \
@@ -92,14 +92,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 # Libraries
 
+
 LIBS += -L$$PWD/Tools/openvino/lib/ -linference_engine
-LIBS += -L$$PWD/Tools/common/format_reader/ -lformat_reader
-LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
-LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
-LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
-LIBS += -L$$PWD/Tools/tbb/ -ltbb
-LIBS += -L$$PWD/Tools/tbb/ -ltbbmalloc
-LIBS += -L$$PWD/Tools/opencl/ -lOpenCL
+LIBS += -L$$PWD/Tools/format_reader/ -lformat_reader
+
 
 
 # Headers
@@ -111,3 +107,29 @@ INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
 
 
+unix:!macx: LIBS += -L$$PWD/../../intel/openvino/opencv/lib/ -lopencv_imgcodecs
+
+
+
+unix:!macx: LIBS += -L$$PWD/../../intel/openvino/opencv/lib/ -lopencv_core
+
+INCLUDEPATH += $$PWD/../../intel/openvino/opencv/include
+DEPENDPATH += $$PWD/../../intel/openvino/opencv/include
+
+
+
+INCLUDEPATH += $$PWD/../../intel/openvino/opencv/include
+DEPENDPATH += $$PWD/../../intel/openvino/opencv/include
+
+unix:!macx: LIBS += -L$$PWD/../../intel/openvino/opencv/lib/ -lopencv_imgproc
+
+INCLUDEPATH += $$PWD/../../intel/openvino/opencv/include
+DEPENDPATH += $$PWD/../../intel/openvino/opencv/include
+
+unix:!macx: LIBS +=  -lOpenCL
+
+INCLUDEPATH += $$PWD/Tools/opencl/include
+DEPENDPATH += $$PWD/Tools/opencl/include
+
+DISTFILES += \
+    HardwareModule/OpenCL/README.me
