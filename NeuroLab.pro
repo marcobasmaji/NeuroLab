@@ -23,6 +23,10 @@ SOURCES += \
     ControllerModule/ViewController.cpp \
     DataModule/Shape.cpp \
     HardwareModule/OpenVinoEnv.cpp \
+    HardwareModule/OpenCL/OpenCLEnvironment.cpp \
+    HardwareModule/OpenCL/OpenCLEnvironmentCreator.cpp \
+    HardwareModule/OpenCL/OpenCLLayer.cpp \
+    HardwareModule/OpenCL/ReleaseCLObjectsManager.cpp \
     NNModule/Layers/ConvolutionLayer.cpp \
     NNModule/Layers/DenseLayer.cpp \
     NNModule/Layers/Loss.cpp \
@@ -31,6 +35,12 @@ SOURCES += \
     NNModule/Layers/SoftmaxLayer.cpp \
     NNModule/NeuroLabNet.cpp \
     NNModule/PretrainedNN.cpp \
+    PredictionModule/Prediction.cpp \
+    PredictionModule/NeuroPrediction.cpp \
+    PredictionModule/LowestPowerConsumption.cpp \
+    PredictionModule/HighestPerformance.cpp \
+    PredictionModule/HighestEfficiency.cpp \
+    PredictionModule/AlexPrediction.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/WellcomePanel.cpp \
@@ -45,7 +55,11 @@ HEADERS += \
     ControllerModule/ViewController.h \
     DataModule/Result.h \
     DataModule/Shape.h \
-    HardwareModule/OpenVinoEnv.h \
+    HardwareModule/OpenVinoEnv.hpp \
+    HardwareModule/OpenCL/OpenCLEnvironment.hpp \
+    HardwareModule/OpenCL/OpenCLEnvironmentCreator.hpp \
+    HardwareModule/OpenCL/OpenCLLayer.hpp \
+    HardwareModule/OpenCL/ReleaseCLObjectsManager.hpp \
     NNModule/Layers/ConvolutionLayer.h \
     NNModule/Layers/DenseLayer.h \
     NNModule/Layers/Layer.h \
@@ -56,6 +70,12 @@ HEADERS += \
     NNModule/NeuralNet.h \
     NNModule/NeuroLabNet.h \
     NNModule/PretrainedNN.h \
+    PredictionModule/Prediction.h \
+    PredictionModule/NeuroPrediction.h \
+    PredictionModule/LowestPowerConsumption.h \
+    PredictionModule/HighestPerformance.h \
+    PredictionModule/HighestEfficiency.h \
+    PredictionModule/AlexPrediction.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/WellcomePanel.h
@@ -70,13 +90,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 # Libraries
 
+
 LIBS += -L$$PWD/Tools/openvino/lib/ -linference_engine
 LIBS += -L$$PWD/Tools/format_reader/ -lformat_reader
-LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
-LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
-LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
-unix:!macx: LIBS += -L$$PWD/tbb/ -ltbb
-unix:!macx: LIBS += -L$$PWD/tbb/ -ltbbmalloc
+
+
 
 
 # Headers
@@ -87,3 +105,30 @@ DEPENDPATH += $$PWD/Tools/openvino/include
 INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
 
+
+unix:!macx: LIBS += -L$$PWD/../../intel/openvino/opencv/lib/ -lopencv_imgcodecs
+
+
+
+unix:!macx: LIBS += -L$$PWD/../../intel/openvino/opencv/lib/ -lopencv_core
+
+INCLUDEPATH += $$PWD/../../intel/openvino/opencv/include
+DEPENDPATH += $$PWD/../../intel/openvino/opencv/include
+
+
+
+INCLUDEPATH += $$PWD/../../intel/openvino/opencv/include
+DEPENDPATH += $$PWD/../../intel/openvino/opencv/include
+
+unix:!macx: LIBS += -L$$PWD/../../intel/openvino/opencv/lib/ -lopencv_imgproc
+
+INCLUDEPATH += $$PWD/../../intel/openvino/opencv/include
+DEPENDPATH += $$PWD/../../intel/openvino/opencv/include
+
+unix:!macx: LIBS +=  -lOpenCL
+
+INCLUDEPATH += $$PWD/Tools/opencl/include
+DEPENDPATH += $$PWD/Tools/opencl/include
+
+DISTFILES += \
+    HardwareModule/OpenCL/README.me

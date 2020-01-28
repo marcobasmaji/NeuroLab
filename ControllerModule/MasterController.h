@@ -25,7 +25,7 @@ public:
     void setNNType(string nn);
     void setMode(string mode);
     vector<string> getAvailableHardware();
-    void setAvailableHardware(const list<HardwareElement> &value);
+    //void setAvailableHardware(const list<HardwareElement> &value);
     list<HardwareElement> getSelectedHardware() const;
     void setSelectedHardware(const list<HardwareElement> &value);
 

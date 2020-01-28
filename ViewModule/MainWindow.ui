@@ -76,8 +76,8 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>234</width>
-       <height>101</height>
+       <width>231</width>
+       <height>121</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -377,6 +377,15 @@
         <height>341</height>
        </rect>
       </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="showDropIndicator" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
      </widget>
     </widget>
    </widget>
@@ -510,7 +519,6 @@
   <tabstop>StopButton</tabstop>
   <tabstop>LoadButton</tabstop>
   <tabstop>DeleteButton</tabstop>
-  <tabstop>scrollArea</tabstop>
   <tabstop>AlexNet_radio_button</tabstop>
   <tabstop>Mov2_checkbox</tabstop>
   <tabstop>Mov3_checkbox</tabstop>
