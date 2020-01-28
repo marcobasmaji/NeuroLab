@@ -114,6 +114,7 @@ void MainWindow::on_LPC_radio_button_clicked()
     if(guiSettings.getNn().compare("NeuroLab") == 0){
         return;
     }
+
     guiSettings.setMode("LowestPowerConsumption");
     bool hasMovidius = false;
     uncheckAll();
@@ -177,6 +178,7 @@ void MainWindow::on_HEE_radio_button_clicked()
     if(guiSettings.getNn().compare("NeuroLab")==0){
         return;
     }
+
     guiSettings.setMode("HighestEfficiency");
     viewController->displayAvailableHardware();
     uncheckAll();
@@ -235,7 +237,7 @@ void MainWindow::on_LoadButton_clicked()
     this->viewController->updatePathList(vec);
     qDebug()<<"load"<<endl; // debug: working.
     this->guiSettings.setNrImages(filesList.size());
-    viewController->getPrediction(this->guiSettings);
+    //viewController->getPrediction(this->guiSettings);
 
 }
 
@@ -288,11 +290,12 @@ void MainWindow::on_StopButton_clicked()
 
 void MainWindow::displayResults(vector<Result> results)
 {
+
     pair<string,float> p = results.back().getLabelsAndProb().front();
     QString qstr = QString::fromStdString(p.first);
     // moving into a new results tab
     QLabel *label = new QLabel(qstr);
-    ui->tabWidget->insertTab(1,label,"result");
+    ui->tabWidget->insertTab(1,label,"Result");
     ui->tabWidget->setCurrentIndex(1);
 
 }
@@ -306,7 +309,6 @@ void MainWindow::on_SelectAllHardware_clicked()
 
 void MainWindow::on_Refresh_hardware_clicked()
 {
-
     viewController->displayAvailableHardware();
     uncheckAll();
     if(guiSettings.getMode() == "LowestPowerConsumption"){
@@ -317,7 +319,23 @@ void MainWindow::on_Refresh_hardware_clicked()
     }
 }
 
+void displayPredictionValue(double value, string valueType){
+
+}
+
+void MainWindow::displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops)
+{
+    displayPredictionValue(bandwidth, "Bandwith");
+    displayPredictionValue(flops, "Flops");
+    for(double time : timeConsumption){
+        displayPredictionValue(time, "Time Consumption");
+    }
+    for(double power : powerConsumption){
+        displayPredictionValue(power, "Power Consumption");
+    }
+}
+
 void MainWindow::on_prediction_button_clicked()
 {
-
+    viewController->getPrediction(this->guiSettings);
 }

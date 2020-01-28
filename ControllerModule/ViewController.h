@@ -28,7 +28,7 @@ public:
     void setOpMode(string mode);
     void setHardwareDist(vector<string> hardwareDist);
     list<HardwareElement> availableHardware;
-    void setAvailableHardware(const list<string> &hardwareElements);
+    void setAvailableHardware(vector<string> &hardwareElements);
     void displayAvailableHardware();
     void removeImage(string imagePath);
 
