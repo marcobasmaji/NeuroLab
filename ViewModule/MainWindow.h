@@ -58,14 +58,13 @@ private slots:
 
     void on_Refresh_hardware_clicked();
 
-
-    void on_previewArea_clicked(const QModelIndex &index);
-
     void on_previewArea_itemClicked(QListWidgetItem *item);
 
     void on_prediction_button_clicked();
 
-    void displayPredictionValues(double value, string valueType);
+    int createTab();
+
+    //void displayPredictionValues(double value, string valueType);
 
 
 

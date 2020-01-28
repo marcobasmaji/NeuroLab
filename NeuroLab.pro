@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ControllerModule/HardwareSurveillence.cpp \
     ControllerModule/ImagePareser.cpp \
     ControllerModule/MasterController.cpp \
     ControllerModule/NNController.cpp \
@@ -23,10 +24,10 @@ SOURCES += \
     ControllerModule/ViewController.cpp \
     DataModule/Shape.cpp \
     HardwareModule/OpenVinoEnv.cpp \
-    HardwareModule/OpenCL/OpenCLEnvironment.hpp \
-    HardwareModule/OpenCL/OpenCLEnvironmentCreator.hpp \
-    HardwareModule/OpenCL/OpenCLLayer.hpp \
-    HardwareModule/OpenCL/ReleaseCLObjectsManager.hpp \
+    HardwareModule/OpenCL/OpenCLEnvironment.cpp \
+    HardwareModule/OpenCL/OpenCLEnvironmentCreator.cpp \
+    HardwareModule/OpenCL/OpenCLLayer.cpp \
+    HardwareModule/OpenCL/ReleaseCLObjectsManager.cpp \
     NNModule/Layers/ConvolutionLayer.cpp \
     NNModule/Layers/DenseLayer.cpp \
     NNModule/Layers/Loss.cpp \
@@ -48,6 +49,7 @@ SOURCES += \
 
 HEADERS += \
     ControllerModule/HardwareElement.h \
+    ControllerModule/HardwareSurveillence.h \
     ControllerModule/ImagePareser.h \
     ControllerModule/MasterController.h \
     ControllerModule/NNController.h \
@@ -55,6 +57,7 @@ HEADERS += \
     ControllerModule/ViewController.h \
     DataModule/Result.h \
     DataModule/Shape.h \
+    HardwareModule/OpenVinoEnv.h \
     HardwareModule/OpenCL/OpenCLEnvironment.hpp \
     HardwareModule/OpenCL/OpenCLEnvironmentCreator.hpp \
     HardwareModule/OpenCL/OpenCLLayer.hpp \
@@ -96,6 +99,7 @@ LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
 LIBS += -L$$PWD/Tools/tbb/ -ltbb
 LIBS += -L$$PWD/Tools/tbb/ -ltbbmalloc
+LIBS += -L$$PWD/Tools/opencl/ -lOpenCL
 
 
 # Headers
@@ -105,4 +109,5 @@ DEPENDPATH += $$PWD/Tools/openvino/include
 
 INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
+
 
