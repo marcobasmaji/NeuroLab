@@ -28,7 +28,8 @@ void MasterController::classify()
 }
 void MasterController::getPrediction(const string net, const string mode, vector<string> hardware , int nrImages)
 {
-    predictionObserver.calculatePrediction(nrImages ,net, mode,hardware);
+    //DataResults predictionResults;
+    /*predictionResults = */predictionObserver.calculatePrediction(nrImages ,net, mode,hardware);
     vector<double> timeConsumption = predictionObserver.getTime();
     vector<double> powerConsumption = predictionObserver.getPower();
     double bandwidth = predictionObserver.getBandwidth();
@@ -43,7 +44,7 @@ vector<string> MasterController::getAvailableHardware()
 {
     InferenceEngine::Core core;
     return core.GetAvailableDevices();
-    //return availableHardware;
+
 }
 
 list<HardwareElement> MasterController::getSelectedHardware() const

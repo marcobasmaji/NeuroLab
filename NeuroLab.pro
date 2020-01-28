@@ -38,6 +38,12 @@ SOURCES += \
     NNModule/Layers/SoftmaxLayer.cpp \
     NNModule/NeuroLabNet.cpp \
     NNModule/PretrainedNN.cpp \
+    PredictionModule/Prediction.cpp \
+    PredictionModule/NeuroPrediction.cpp \
+    PredictionModule/LowestPowerConsumption.cpp \
+    PredictionModule/HighestPerformance.cpp \
+    PredictionModule/HighestEfficiency.cpp \
+    PredictionModule/AlexPrediction.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/WellcomePanel.cpp \
@@ -69,6 +75,12 @@ HEADERS += \
     NNModule/NeuralNet.h \
     NNModule/NeuroLabNet.h \
     NNModule/PretrainedNN.h \
+    PredictionModule/Prediction.h \
+    PredictionModule/NeuroPrediction.h \
+    PredictionModule/LowestPowerConsumption.h \
+    PredictionModule/HighestPerformance.h \
+    PredictionModule/HighestEfficiency.h \
+    PredictionModule/AlexPrediction.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/WellcomePanel.h
@@ -82,6 +94,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 # Libraries
+
 
 LIBS += -L$$PWD/Tools/openvino/lib/ -linference_engine
 LIBS += -L$$PWD/Tools/format_reader/ -lformat_reader
@@ -126,7 +139,9 @@ DISTFILES += \
     HardwareModule/OpenCL/README.me
 
 
+
 unix:!macx: LIBS += -L$$PWD/../../intel/openvino/opencv/lib/ -lopencv_highgui
 
 INCLUDEPATH += $$PWD/../../intel/openvino/opencv/include
 DEPENDPATH += $$PWD/../../intel/openvino/opencv/include
+

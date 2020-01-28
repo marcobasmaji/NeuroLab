@@ -27,7 +27,7 @@ public:
     ~MainWindow();
 
     void displayResults(vector<Result> results);
-    void displayPrediction();
+    void displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops);
     void enableCheckbox(HardwareElement checkboxName);
     void disableHWCheckboxes();
 
@@ -64,6 +64,10 @@ private slots:
     void on_previewArea_itemClicked(QListWidgetItem *item);
 
     void on_prediction_button_clicked();
+
+    void displayPredictionValues(double value, string valueType);
+
+
 
     private:
 

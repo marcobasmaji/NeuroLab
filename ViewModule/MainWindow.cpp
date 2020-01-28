@@ -114,6 +114,7 @@ void MainWindow::on_LPC_radio_button_clicked()
     if(guiSettings.getNn().compare("NeuroLab") == 0){
         return;
     }
+
     guiSettings.setMode("LowestPowerConsumption");
     bool hasMovidius = false;
     uncheckAll();
@@ -177,6 +178,7 @@ void MainWindow::on_HEE_radio_button_clicked()
     if(guiSettings.getNn().compare("NeuroLab")==0){
         return;
     }
+
     guiSettings.setMode("HighestEfficiency");
     viewController->displayAvailableHardware();
     uncheckAll();
@@ -234,8 +236,8 @@ void MainWindow::on_LoadButton_clicked()
     qDebug()<<"load in MainWindow"<<endl;
     this->viewController->updatePathList(vec);
     qDebug()<<"load"<<endl; // debug: working.
-    //this->guiSettings.setNumImages(filesList.lenght());
-    viewController->getPrediction(this->guiSettings);
+    this->guiSettings.setNrImages(filesList.size());
+    //viewController->getPrediction(this->guiSettings);
 
 }
 
@@ -247,10 +249,28 @@ void MainWindow::on_previewArea_itemClicked(QListWidgetItem *item)
 
 void MainWindow::on_DeleteButton_clicked()
 {
+    if(imageToBeRemoved == NULL){
+         //nothing to delete
+        return;
+    }
     string imagePath = imageToBeRemoved->text().toStdString();
+    //remove image path stored in ViewController
     viewController->removeImage(imagePath);
+
+    //remove image from main window
     int row = ui->previewArea->row(imageToBeRemoved);
     ui->previewArea->takeItem(row);
+
+    //decrease total nr of images stored in guiSettings
+    guiSettings.setNrImages(-1);
+
+    imageToBeRemoved = NULL;
+    ui->DeleteButton->setEnabled(false);
+
+    //if there are no more images left, gray out classify button
+    if(guiSettings.getNrImages() == 0){
+        ui->ClassifyButton->setEnabled(false);
+    }
 }
 
 void MainWindow::on_ClassifyButton_clicked()
@@ -270,11 +290,12 @@ void MainWindow::on_StopButton_clicked()
 
 void MainWindow::displayResults(vector<Result> results)
 {
+
     pair<string,float> p = results.back().getLabelsAndProb().front();
     QString qstr = QString::fromStdString(p.first);
     // moving into a new results tab
     QLabel *label = new QLabel(qstr);
-    ui->tabWidget->insertTab(1,label,"result");
+    ui->tabWidget->insertTab(1,label,"Result");
     ui->tabWidget->setCurrentIndex(1);
 
 }
@@ -288,7 +309,6 @@ void MainWindow::on_SelectAllHardware_clicked()
 
 void MainWindow::on_Refresh_hardware_clicked()
 {
-
     viewController->displayAvailableHardware();
     uncheckAll();
     if(guiSettings.getMode() == "LowestPowerConsumption"){
@@ -299,7 +319,23 @@ void MainWindow::on_Refresh_hardware_clicked()
     }
 }
 
+void MainWindow::displayPredictionValues(double value, string valueType){
+
+}
+
+void MainWindow::displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops)
+{
+    displayPredictionValues(bandwidth, "Bandwith");
+    displayPredictionValues(flops, "Flops");
+    for(double time : timeConsumption){
+        displayPredictionValues(time, "Time Consumption");
+    }
+    for(double power : powerConsumption){
+        displayPredictionValues(power, "Power Consumption");
+    }
+}
+
 void MainWindow::on_prediction_button_clicked()
 {
-
+    viewController->getPrediction(this->guiSettings);
 }
