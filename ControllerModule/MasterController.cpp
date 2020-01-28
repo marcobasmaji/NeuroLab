@@ -40,10 +40,23 @@ void MasterController::getPrediction(const string net, const string mode, vector
     viewObserver.displayPrediction(timeConsumption, powerConsumption, bandwidth, flops);
 }
 
+/*
+ *  check only cpu, fpga, movidius stick availability:
+ */
+
+
 vector<string> MasterController::getAvailableHardware()
 {
-    InferenceEngine::Core core;
-    return core.GetAvailableDevices();
+    HardwareSurveillence surv;
+    vector<string> d = surv.checkAvailableHardware();
+    //vector<string> d = checkWithOpenVino();
+    //for(string device : d){
+         //devices.push_back(device);
+    //}
+    //d.push_back("GPU");
+    return d;
+   /* InferenceEngine::Core core;
+    return core.GetAvailableDevices();*/
 
 }
 

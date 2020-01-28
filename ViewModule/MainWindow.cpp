@@ -1,9 +1,11 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include<ControllerModule/ViewController.h>
-#include<ControllerModule/HardwareElement.h>
+#include <ControllerModule/ViewController.h>
+#include <ControllerModule/HardwareElement.h>
 #include <QFileDialog>
 #include <QDebug>
+#include <QScrollArea>
+#include <QVBoxLayout>
 
 
 
@@ -286,18 +288,65 @@ void MainWindow::on_StopButton_clicked()
 {
     // maybe find a way to stop the classify() method  in here
 }
+/*QLabel *createImageLabel(QString path) {
+    QLabel *imageLabel = new QLabel();
+    QPixmap image(path);
+    imageLabel->setPixmap(image);
+    imageLabel->setScaledContents(true);
+    return imageLabel;
+}*/
 
+int MainWindow::createTab(){
+
+    QVBoxLayout *layout = new QVBoxLayout();
+    QScrollArea *scrollArea = new QScrollArea(this);
+    scrollArea->setLayout(layout);
+
+    int currentIndex = ui->tabWidget->currentIndex();
+    currentIndex++;
+    ui->tabWidget->insertTab(currentIndex, scrollArea, "Results");
+    ui->tabWidget->setCurrentIndex(currentIndex);
+
+    return currentIndex;
+}
 
 void MainWindow::displayResults(vector<Result> results)
 {
-
-    pair<string,float> p = results.back().getLabelsAndProb().front();
-    QString qstr = QString::fromStdString(p.first);
+    //pair<string,float> p = results.back().getLabelsAndProb().front();
+    //QString qstr = QString::fromStdString(p.first);
     // moving into a new results tab
-    QLabel *label = new QLabel(qstr);
-    ui->tabWidget->insertTab(1,label,"Result");
-    ui->tabWidget->setCurrentIndex(1);
+    //QLabel *label = new QLabel(qstr);
 
+    //int newTabIndex = createTab();
+    QVBoxLayout *layout = new QVBoxLayout();
+    QScrollArea *scrollArea = new QScrollArea(this);
+    scrollArea->setLayout(layout);
+
+    int currentIndex = ui->tabWidget->currentIndex();
+    currentIndex++;
+    ui->tabWidget->insertTab(currentIndex, scrollArea, "Results");
+    ui->tabWidget->setCurrentIndex(currentIndex);
+
+    for(Result result : results){
+        QString path = QString::fromStdString(result.getPath());
+        QHBoxLayout *resultLayout = new QHBoxLayout;
+        QVBoxLayout *labelsLayout = new QVBoxLayout;
+        QLabel *imageLabel = new QLabel();
+        QPixmap image(path);
+
+        pair<string,float> p = results.back().getLabelsAndProb().front();
+        QString qstr = QString::fromStdString(p.first);
+        //moving into a new results tab
+        QLabel *label = new QLabel(qstr);
+        labelsLayout->addWidget(label);
+
+        imageLabel->setPixmap(image);
+        imageLabel->setScaledContents(true);
+        resultLayout->addWidget(imageLabel);
+        resultLayout->addLayout(labelsLayout);
+        layout->addLayout(resultLayout);
+
+    }
 }
 
 void MainWindow::on_SelectAllHardware_clicked()
