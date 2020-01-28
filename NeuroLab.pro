@@ -16,18 +16,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ControllerModule/HardwareSurveillence.cpp \
     ControllerModule/ImagePareser.cpp \
     ControllerModule/MasterController.cpp \
     ControllerModule/NNController.cpp \
     ControllerModule/PredictionController.cpp \
     ControllerModule/ViewController.cpp \
     DataModule/Shape.cpp \
-    HardwareModule/OpenVinoEnv.cpp \
+    HardwareModule/OpenCL/HardwareEnvironment.cpp \
+    HardwareModule/OpenCL/HardwareType.cpp \
     HardwareModule/OpenCL/OpenCLEnvironment.cpp \
     HardwareModule/OpenCL/OpenCLEnvironmentCreator.cpp \
     HardwareModule/OpenCL/OpenCLLayer.cpp \
+    HardwareModule/OpenCL/OpenCLLayerCreator.cpp \
     HardwareModule/OpenCL/ReleaseCLObjectsManager.cpp \
+    HardwareModule/OpenVinoEnv.cpp \
     NNModule/Layers/ConvolutionLayer.cpp \
     NNModule/Layers/DenseLayer.cpp \
     NNModule/Layers/Loss.cpp \
@@ -49,7 +51,6 @@ SOURCES += \
 
 HEADERS += \
     ControllerModule/HardwareElement.h \
-    ControllerModule/HardwareSurveillence.h \
     ControllerModule/ImagePareser.h \
     ControllerModule/MasterController.h \
     ControllerModule/NNController.h \
@@ -57,11 +58,13 @@ HEADERS += \
     ControllerModule/ViewController.h \
     DataModule/Result.h \
     DataModule/Shape.h \
-    HardwareModule/OpenVinoEnv.hpp \
+    HardwareModule/OpenCL/HardwareEnvironment.hpp \
     HardwareModule/OpenCL/OpenCLEnvironment.hpp \
     HardwareModule/OpenCL/OpenCLEnvironmentCreator.hpp \
     HardwareModule/OpenCL/OpenCLLayer.hpp \
+    HardwareModule/OpenCL/OpenCLLayerCreator.hpp \
     HardwareModule/OpenCL/ReleaseCLObjectsManager.hpp \
+    HardwareModule/OpenVinoEnv.h \
     NNModule/Layers/ConvolutionLayer.h \
     NNModule/Layers/DenseLayer.h \
     NNModule/Layers/Layer.h \
@@ -95,6 +98,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 LIBS += -L$$PWD/Tools/openvino/lib/ -linference_engine
 LIBS += -L$$PWD/Tools/format_reader/ -lformat_reader
+
 
 
 
@@ -133,3 +137,10 @@ DEPENDPATH += $$PWD/Tools/opencl/include
 
 DISTFILES += \
     HardwareModule/OpenCL/README.me
+
+
+
+unix:!macx: LIBS += -L$$PWD/../../intel/openvino/opencv/lib/ -lopencv_highgui
+
+INCLUDEPATH += $$PWD/../../intel/openvino/opencv/include
+DEPENDPATH += $$PWD/../../intel/openvino/opencv/include
