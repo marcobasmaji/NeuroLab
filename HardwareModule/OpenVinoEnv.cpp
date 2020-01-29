@@ -54,7 +54,7 @@ vector<Result> OpenVinoEnv::classify() {
         output_data->setPrecision(Precision::FP32);
         output_data->setLayout(Layout::NC);
     }
-    //------------------------------------------------------------------------------------------------------
+    //----------------------------------------read input data----------------------------------------------------------
     auto inputInfoItem = *inputInfo.begin();
 
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
@@ -138,7 +138,7 @@ vector<Result> OpenVinoEnv::classify() {
                     labels.push_back(strLine);
                 }
             }
-
+        //----------------------------------save classification results------------------------------------
             ClassificationResult classificationResult(outputBlob, validImageNames,
                                                       batchSize, 10,
                                                       labels);
