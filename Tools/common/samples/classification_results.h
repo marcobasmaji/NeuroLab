@@ -107,8 +107,9 @@ public:
 
             }
             std::cout << std::endl;
-        }
         this->endResults.push_back(r);
+        }
+
 
     }
 
