@@ -95,7 +95,6 @@ void OpenVinoEnv::prepareInput()
 {
 
     // Iterate over input blobs and fill input tensors
-
     for (auto & item : inputInfo) {
         Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
         SizeVector dims = inputBlob->getTensorDesc().getDims();
@@ -171,7 +170,8 @@ vector<Result> OpenVinoEnv::processOutput()
     endResults = classificationResult.getEndResults();
 
     return endResults;
-}
+    }
+
 
 
 void OpenVinoEnv::chooseNeuralNet(string nn) {
@@ -218,6 +218,7 @@ void OpenVinoEnv::setPlatforms(vector<string> platforms)
         }
     }
 }
+
 
 
 
