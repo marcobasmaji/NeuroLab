@@ -1,12 +1,12 @@
 # NeuroLab
 
 TODOS:
-FPGA lib in openVino
-develope DataSet
-choose Loss function and train openCL layer
-choose architecture 
-save weights and biases of openCl conv and dense
-OpenCl usable platforms?
+-FPGA lib in openVino
+-develope DataSet
+-choose Loss function and train openCL layer
+-choose architecture 
+-save weights and biases of openCl conv and dense
+-OpenCl usable platforms?
 
 
 Update (Movidius): 
