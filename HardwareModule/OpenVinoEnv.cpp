@@ -43,6 +43,7 @@ vector<Result> OpenVinoEnv::classify() {
 
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
     std::vector<std::string> validImageNames = {};
+
     for (const auto & i : imageNames) {
         FormatReader::ReaderPtr reader(i.c_str());
         if (reader.get() == nullptr) {
@@ -93,8 +94,6 @@ vector<Result> OpenVinoEnv::classify() {
         }
     }
 
-
-
     inferRequest.Infer();
 
     //process output
@@ -133,6 +132,8 @@ vector<Result> OpenVinoEnv::classify() {
 
         }
     }
+
+    qDebug()<<"Nr of results in vino environm. : "<< endResults.size()<<endl;
     return endResults;
 }
 

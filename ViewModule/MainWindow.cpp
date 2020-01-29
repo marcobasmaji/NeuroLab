@@ -221,7 +221,7 @@ void MainWindow::on_LoadButton_clicked()
 
 
     for(int i = 0; i < filesList.length() && !filesList.isEmpty(); i++){
-        qDebug()<<"1 Image added to list"<<endl;
+        qDebug()<<"1 Image added to list: "<<filesList.at(i)<<endl;
         QIcon newIcon = QIcon(filesList.at(i));
         displayPreview(newIcon, filesList.at(i));
     }
@@ -231,10 +231,10 @@ void MainWindow::on_LoadButton_clicked()
     }
     // turning Qstrings into std strings
     vector<string> vec;
-    for(int i = 0;i<filesList.length();i++) {
-        vec.push_back(filesList.front().toStdString());
+    for(int i = 0; i < filesList.length(); i++) {
+        vec.push_back(filesList.at(i).toStdString());
     }
-    // loading paths in GUIhttps://www.google.com/search?client=ubuntu&channel=fs&q=qt+display+loaded+files&ie=utf-8&oe=utf-8
+
     qDebug()<<"load in MainWindow"<<endl;
     this->viewController->updatePathList(vec);
     qDebug()<<"load"<<endl; // debug: working.
@@ -313,6 +313,8 @@ int MainWindow::createTab(){
 
 void MainWindow::displayResults(vector<Result> results)
 {
+    qDebug()<<"Results size: "<<results.size()<<endl; // debug:
+
     //pair<string,float> p = results.back().getLabelsAndProb().front();
     //QString qstr = QString::fromStdString(p.first);
     // moving into a new results tab
@@ -321,6 +323,9 @@ void MainWindow::displayResults(vector<Result> results)
     //int newTabIndex = createTab();
     QVBoxLayout *layout = new QVBoxLayout();
     QScrollArea *scrollArea = new QScrollArea(this);
+
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollArea->setLayout(layout);
 
     int currentIndex = ui->tabWidget->currentIndex();
@@ -329,9 +334,12 @@ void MainWindow::displayResults(vector<Result> results)
     ui->tabWidget->setCurrentIndex(currentIndex);
 
     for(Result result : results){
+
         QString path = QString::fromStdString(result.getPath());
         QHBoxLayout *resultLayout = new QHBoxLayout;
         QVBoxLayout *labelsLayout = new QVBoxLayout;
+
+
         QLabel *imageLabel = new QLabel();
         QPixmap image(path);
 
