@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <ControllerModule/HardwareElement.h>
+#include <algorithm>
 using namespace std;
 
 class GUISettings
@@ -11,11 +12,8 @@ class GUISettings
 public:
     GUISettings();
 
-    int getNrImages() const;
-    void setNrImages(int value);
-
-    vector<string> getHardware() const;
-    void setHardware(vector<HardwareElement> hardware);
+    vector<string> getSelectedHardware() const;
+    void setSelectedHardware(vector<HardwareElement> selectedHardware);
 
     string getMode() const;
     void setMode(const string &value);
@@ -23,11 +21,20 @@ public:
     string getNn() const;
     void setNn(const string &value);
 
+    vector<string> getPaths() const;
+    void setPaths(const vector<string> &value);
+    void removePath(string value);
+
+    void clearHardware();
+
+    void unselectHardwareElement(string element);
+    void selectHardwareElement(string element);
+
 private:
     string nn;
     string mode;
-    vector<string> hardware;
-    int nrImages;
+    vector<string> selectedHardware;
+    vector<string> paths;
 };
 
 #endif // GUISETTINGS_H

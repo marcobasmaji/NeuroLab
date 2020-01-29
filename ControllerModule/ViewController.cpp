@@ -26,6 +26,7 @@ void ViewController::updatePathList(vector<string> paths)
 
 {
     qDebug()<<"load in ViewCont"<<endl;
+
     this->master->setPaths(paths);
 
 }
@@ -49,8 +50,8 @@ void ViewController::getPrediction(GUISettings settings)
 {
     string mode = settings.getMode();
     string net = settings.getNn();
-    vector<string> hardware = settings.getHardware();
-    int nrImages = settings.getNrImages();
+    vector<string> hardware = settings.getSelectedHardware();
+    int nrImages = settings.getPaths().size();
     this->master->getPrediction(net, mode, hardware, nrImages);
 }
 
@@ -66,7 +67,7 @@ void ViewController::setNeuralNet(string nn)
 
 void ViewController::setOpMode(string mode)
 {
-   // master->setMode(mode);
+   //master->setMode(mode);
 }
 
 void ViewController::setAvailableHardware(vector<string> &hardwareElements)
@@ -110,14 +111,17 @@ void ViewController::setAvailableHardware(vector<string> &hardwareElements)
 void ViewController::displayAvailableHardware()
 {
     vector<string> test;
-    //test.push_back("MYRIAD.1");
+    test.push_back("MYRIAD.1");
     //test.push_back("MYRIAD.2");
-    //test.push_back("CPU");
-    test = master->getAvailableHardware();
+    test.push_back("CPU");
+    //test = master->getAvailableHardware();
     setAvailableHardware(test);
     mainWindow->disableHWCheckboxes();
     for(HardwareElement element : availableHardware){
        mainWindow->enableCheckbox(element);
+    }
+    for(HardwareElement element : availableHardware){
+
     }
 }
 

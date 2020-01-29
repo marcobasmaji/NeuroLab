@@ -66,9 +66,29 @@ private slots:
 
     //void displayPredictionValues(double value, string valueType);
 
+    void setComboboxContent(list<HardwareElement> availableHardware);
 
+    void on_comboBox_currentTextChanged(const QString &arg1);
 
-    private:
+    void on_Mov1_checkbox_stateChanged(int arg1);
+
+    void proveSelectedHardware();
+
+    void on_Mov2_checkbox_stateChanged(int arg1);
+
+    void on_Mov3_checkbox_stateChanged(int arg1);
+
+    void on_Mov4_checkbox_stateChanged(int arg1);
+
+    void on_CPU_checkbox_stateChanged(int arg1);
+
+    void on_GPU_checkbox_stateChanged(int arg1);
+
+    void on_FPGA_checkbox_stateChanged(int arg1);
+
+    void on_comboBox_currentIndexChanged(int index);
+
+private:
 
     Ui::MainWindow *ui;
     QList<QImage> imageList;
@@ -80,5 +100,7 @@ private slots:
     GUISettings guiSettings;
     int resultsCounter;
     QListWidgetItem *imageToBeRemoved;
+    void addHardwareToCombobox(HardwareElement element);
+    void bindCheckbox(int arg, string hardwareElement, QString nameHardwareElement, int indexCombobox);
 };
 #endif // MAINWINDOW_H(imageToBeRemoved)
