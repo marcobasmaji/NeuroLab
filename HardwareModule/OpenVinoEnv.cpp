@@ -51,6 +51,7 @@ void OpenVinoEnv::configureInputAndOutput()
     inputInfoItem.second->setLayout(Layout::NCHW);
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
     std::vector<std::string> validImageNames = {};
+
     for (const auto & i : imageNames) {
         FormatReader::ReaderPtr reader(i.c_str());
         if (reader.get() == nullptr) {
