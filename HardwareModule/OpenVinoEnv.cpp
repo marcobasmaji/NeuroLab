@@ -23,8 +23,7 @@ vector<Result> OpenVinoEnv::classify() {
     qDebug()<<"classify called in openVino"<<endl; // debug: working.
     InferenceEngine::Core core;
 
-    //std::vector<std::string> imageNames = {"/home/mo/Pictures/tennis.jpg"}; // to save image names
-
+    //-------------------------------read network IR-------------------------------------------------------
     qDebug()<<"openvino called "<<endl; // debug: working.
     CNNNetReader network_reader;
     QFileInfo file1("../alexnet.xml");
@@ -35,10 +34,27 @@ vector<Result> OpenVinoEnv::classify() {
 
     auto network = network_reader.getNetwork();
     this->cnnnetwork = network;
+    //-----------------------------------------------------------------------------------------------------
+    //---------------------------prepare input and output blobs--------------------------------------------
 
     InferenceEngine::InputsDataMap input_info(network.getInputsInfo());
     this->inputInfo = input_info;
+    for (auto &item : input_info) {
+        auto input_data = item.second;
+        input_data->setPrecision(Precision::U8);
+        input_data->setLayout(Layout::NCHW);
+        input_data->getPreProcess().setResizeAlgorithm(RESIZE_BILINEAR);
+        input_data->getPreProcess().setColorFormat(ColorFormat::RGB);
+    }
 
+    InferenceEngine::OutputsDataMap output_info(network.getOutputsInfo());
+    this->outputInfo = output_info;
+    for (auto &item : output_info) {
+        auto output_data = item.second;
+        output_data->setPrecision(Precision::FP32);
+        output_data->setLayout(Layout::NC);
+    }
+    //------------------------------------------------------------------------------------------------------
     auto inputInfoItem = *inputInfo.begin();
 
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
@@ -65,14 +81,15 @@ vector<Result> OpenVinoEnv::classify() {
     size_t batchSize = network.getBatchSize();
     std::cout << "Batch size is " << std::to_string(batchSize) << std::endl;
 
-    // Load model
+    //----------------------------------------Load model------------------------------------------------
     auto executable_network = core.LoadNetwork(network, "CPU");
 
-    // create Request
+    //--------------------------------------create infer request----------------------------------------
     std::cout << "Create infer request" << std::endl;
     InferRequest inferRequest = executable_network.CreateInferRequest();
 
-    // prepare input
+    //--------------------------------------prepare input------------------------------------------------
+
     for (auto & item : inputInfo) {
         Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
         SizeVector dims = inputBlob->getTensorDesc().getDims();
@@ -93,13 +110,10 @@ vector<Result> OpenVinoEnv::classify() {
             }
         }
     }
-
+    //-----------------------------------do inference--------------------------------------------------------
     inferRequest.Infer();
 
-    //process output
-    InferenceEngine::OutputsDataMap output_info(network.getOutputsInfo());
-    this->outputInfo = output_info;
-
+    //-----------------------------------process output------------------------------------------------------
     Blob::Ptr outputBlob = inferRequest.GetBlob(outputInfo.begin()->first);
 
     for (auto &item : output_info) {
@@ -110,6 +124,7 @@ vector<Result> OpenVinoEnv::classify() {
             // output_buffer is valid as long as the lifetime of memLocker
             const float *output_buffer = memLocker.as<const float *>();
             /** output_buffer[] - accessing output blob data **/
+
             QFileInfo file2("../alexnetLabels.txt");
             std::string labelFileName = file2.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnetLabels.txt";
             std::vector<std::string> labels;
@@ -135,7 +150,8 @@ vector<Result> OpenVinoEnv::classify() {
 
     qDebug()<<"Nr of results in vino environm. : "<< endResults.size()<<endl;
     return endResults;
-}
+    }
+
 
 void OpenVinoEnv::chooseNeuralNet(string nn) {
     if(nn == ("alexnet"))
@@ -181,6 +197,7 @@ void OpenVinoEnv::setPlatforms(vector<string> platforms)
         }
     }
 }
+
 
 
 
