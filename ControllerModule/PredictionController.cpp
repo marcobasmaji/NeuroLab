@@ -1,7 +1,7 @@
 #include "PredictionController.h"
-#include "Mode.h"
-#include "AlexPrediction.h"
-#include "NeuroPrediction.h"
+#include "PredictionModule/Mode.h"
+#include "PredictionModule/AlexPrediction.h"
+#include "PredictionModule/NeuroPrediction.h"
 #include <iostream>
 /**
  * @brief basically creates the desired prediction class and acts as a 
