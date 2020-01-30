@@ -22,7 +22,7 @@ class MasterController
 public:
     MasterController();
     void setPaths(vector<string> paths);
-    void classify();
+    void classify(string nn, string mode, vector<string> selectedHardware, int nrImages);
     void getPrediction(const string net, const string mode, vector<string> hardware, int nrImages);
     void setNNType(string nn);
     void setMode(string mode);

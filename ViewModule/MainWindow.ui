@@ -114,9 +114,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>270</x>
       <y>10</y>
-      <width>721</width>
+      <width>731</width>
       <height>541</height>
      </rect>
     </property>
@@ -149,34 +149,6 @@
        <string>Classify</string>
       </property>
       <property name="checkable">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="StopButton">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>290</x>
-        <y>430</y>
-        <width>51</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Stop</string>
-      </property>
-      <property name="autoExclusive">
-       <bool>false</bool>
-      </property>
-      <property name="autoDefault">
-       <bool>false</bool>
-      </property>
-      <property name="default">
-       <bool>false</bool>
-      </property>
-      <property name="flat">
        <bool>false</bool>
       </property>
      </widget>
@@ -213,9 +185,9 @@
       <property name="geometry">
        <rect>
         <x>450</x>
-        <y>20</y>
+        <y>30</y>
         <width>251</width>
-        <height>461</height>
+        <height>451</height>
        </rect>
       </property>
       <property name="title">
@@ -234,12 +206,12 @@
         <item>
          <widget class="QLabel" name="TotalTime">
           <property name="text">
-           <string>Total time:</string>
+           <string>Total time (s):</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="Bandwith_label">
+         <widget class="QLabel" name="totalTime_label">
           <property name="text">
            <string/>
           </property>
@@ -260,12 +232,12 @@
         <item>
          <widget class="QLabel" name="TotalPower">
           <property name="text">
-           <string>Total Power:</string>
+           <string>Total Power (W):</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="FLOPS_label">
+         <widget class="QLabel" name="totalPower_label">
           <property name="text">
            <string/>
           </property>
@@ -287,19 +259,6 @@
        </property>
        <property name="text">
         <string>Calculate prediction</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>171</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Prediction statistics</string>
        </property>
       </widget>
       <widget class="QComboBox" name="comboBox">
@@ -328,7 +287,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <layout class="QHBoxLayout" name="flopsLayout">
           <item>
            <widget class="QLabel" name="flops">
             <property name="text">
@@ -336,10 +295,17 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLabel" name="flops_value">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QHBoxLayout" name="bamdwidthLayout_2">
           <item>
            <widget class="QLabel" name="bandwidth">
             <property name="text">
@@ -347,17 +313,24 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLabel" name="bandwidth_value">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QHBoxLayout" name="powerConsLayout_3">
           <item>
            <widget class="QLabel" name="powerConsumption">
             <property name="autoFillBackground">
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>POWER CONSUMPTION</string>
+             <string>POWER CONS. (W)</string>
             </property>
             <property name="scaledContents">
              <bool>false</bool>
@@ -367,14 +340,28 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLabel" name="powerCons_value">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <layout class="QHBoxLayout" name="timeLayout_4">
           <item>
            <widget class="QLabel" name="time">
             <property name="text">
-             <string>TIME</string>
+             <string>TIME (s)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="time_value">
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>
@@ -400,6 +387,19 @@
       </property>
       <property name="selectionMode">
        <enum>QAbstractItemView::NoSelection</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>10</y>
+        <width>171</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Prediction statistics</string>
       </property>
      </widget>
     </widget>
@@ -513,8 +513,8 @@
    <widget class="QLabel" name="welcomeLabel">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>20</y>
+      <x>410</x>
+      <y>120</y>
       <width>161</width>
       <height>51</height>
      </rect>
@@ -526,8 +526,8 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>70</y>
+      <x>400</x>
+      <y>190</y>
       <width>181</width>
       <height>191</height>
      </rect>
@@ -542,13 +542,16 @@
      </item>
      <item>
       <widget class="QPushButton" name="topologyMenu">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Training Menu</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_3">
+      <widget class="QPushButton" name="trainMenu">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -586,7 +589,6 @@
   <tabstop>HEE_radio_button</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>ClassifyButton</tabstop>
-  <tabstop>StopButton</tabstop>
   <tabstop>LoadButton</tabstop>
   <tabstop>DeleteButton</tabstop>
   <tabstop>AlexNet_radio_button</tabstop>

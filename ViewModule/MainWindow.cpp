@@ -14,8 +14,14 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     this->viewController = partner;
     resultsCounter = 0;
+
+    ui->tabWidget->hide();
+    ui->HardwareOptions->hide();
+    ui->NeuralNetOptions->hide();
+    ui->ModeOptions->hide();
 }
 
 MainWindow::~MainWindow()
@@ -239,7 +245,7 @@ void MainWindow::on_LoadButton_clicked()
     }
     //load in mainwindow
     this->guiSettings.setPaths(vec);
-    this->viewController->updatePathList(guiSettings.getPaths());
+    //this->viewController->updatePathList(guiSettings.getPaths());
     //viewController->getPrediction(this->guiSettings);
 
 }
@@ -266,7 +272,7 @@ void MainWindow::on_DeleteButton_clicked()
 
     //decrease total nr of images stored in guiSettings
     guiSettings.removePath(imagePath);
-    viewController->updatePathList(guiSettings.getPaths());
+    //viewController->updatePathList(guiSettings.getPaths());
 
     imageToBeRemoved = NULL;
     ui->DeleteButton->setEnabled(false);
@@ -280,24 +286,9 @@ void MainWindow::on_DeleteButton_clicked()
 void MainWindow::on_ClassifyButton_clicked()
 {
     // calling classify in GUI
-    this->viewController->handleClassifyRequest();
-
-    //resultsCounter++;
+    this->viewController->handleClassifyRequest(guiSettings);
 
 }
-
-void MainWindow::on_StopButton_clicked()
-{
-
-}
-
-/*QLabel *createImageLabel(QString path) {
-    QLabel *imageLabel = new QLabel();
-    QPixmap image(path);
-    imageLabel->setPixmap(image);
-    imageLabel->setScaledContents(true);
-    return imageLabel;
-}*/
 
 int MainWindow::createTab(){
 
@@ -394,30 +385,59 @@ void MainWindow::on_Refresh_hardware_clicked()
     }
 }
 
-void MainWindow::displayPredictionValues(double value, string valueType){
 
+void MainWindow::setPredictionValue(PredictionValues *values){
+    ui->flops_value->setText(QString::fromStdString(values->flops));
+    ui->bandwidth_value->setText(QString::fromStdString(values->bandwidth));
+    ui->powerCons_value->setText(QString::fromStdString(values->power_consumption));
+    ui->time_value->setText(QString::fromStdString(values->time));
 }
 
-void MainWindow::displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops)
+void MainWindow::displayPrediction(string totalTime, string totalPowerConsumption, PredictionValues *cpu, PredictionValues *gpu, PredictionValues *mov1,
+                                   PredictionValues *mov2, PredictionValues *mov3, PredictionValues *mov4,
+                                   PredictionValues *fpga)
 {
-    displayPredictionValues(bandwidth, "Bandwith");
-    displayPredictionValues(flops, "Flops");
-    for(double time : timeConsumption){
-        displayPredictionValues(time, "Time Consumption");
+    ui->totalTime_label->setText(QString::fromStdString(totalTime));
+    ui->totalPower_label->setText(QString::fromStdString(totalPowerConsumption));
+    if (ui->comboBox->currentText() == QString::fromStdString("Movidius 1")) {
+        setPredictionValue(mov1);
+        return;
     }
-    for(double power : powerConsumption){
-        displayPredictionValues(power, "Power Consumption");
+     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 2")) {
+        setPredictionValue(mov2);
+        return;
+     }
+     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 3")) {
+        setPredictionValue(mov3);
+        return ;
+     }
+     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 4")) {
+        setPredictionValue(mov4);
+        return;
+     }
+     if (ui->comboBox->currentText() == QString::fromStdString("CPU")) {
+        setPredictionValue(cpu);
+        return;
+     }
+     if (ui->comboBox->currentText() == QString::fromStdString("GPU")) {
+        setPredictionValue(gpu);
+        return;
     }
+     if (ui->comboBox->currentText() == QString::fromStdString("FPGA")){
+        setPredictionValue(fpga);
+        return;
+    }
+
+        ui->flops_value->clear();
+        ui->bandwidth_value->clear();
+        ui->powerCons_value->clear();
+        ui->time_value->clear();
+
 }
 
 void MainWindow::on_prediction_button_clicked()
 {
     viewController->getPrediction(this->guiSettings);
-}
-
-void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
-{
-
 }
 
 void MainWindow::setComboboxContent(list<HardwareElement> availableHardware) {
@@ -430,7 +450,7 @@ void MainWindow::addHardwareToCombobox(HardwareElement element) {
     ui->comboBox->addItem("element");
 }
 
-void MainWindow::proveSelectedHardware() {
+void MainWindow::checkSelectedHardware() {
     if (ui->Mov1_checkbox->checkState() == Qt::Checked) {
         guiSettings.selectHardwareElement("MYRIAD.1");
     }
@@ -452,6 +472,7 @@ void MainWindow::proveSelectedHardware() {
     if (ui->FPGA_checkbox->checkState() == Qt::Checked) {
         guiSettings.selectHardwareElement("FPGA");
     }
+
 }
 
 
@@ -459,9 +480,15 @@ void MainWindow::bindCheckbox(int arg, string hardwareElement, QString nameHardw
     if (arg == 2) {
         guiSettings.selectHardwareElement(hardwareElement);
         ui->comboBox->insertItem(indexCombobox, nameHardwareElement);
+        ui->prediction_button->setEnabled(true);
     } else {
+        ui->comboBox->setCurrentIndex(0);
         guiSettings.unselectHardwareElement(hardwareElement);
-        ui->comboBox->removeItem(indexCombobox);
+        int indexRemove = ui->comboBox->findText(nameHardwareElement);
+        ui->comboBox->removeItem(indexRemove);
+        if (guiSettings.getSelectedHardware().empty()) {
+            ui->prediction_button->setEnabled(false);
+        }
     }
 }
 
@@ -487,7 +514,7 @@ void MainWindow::on_Mov4_checkbox_stateChanged(int arg1)
 
 void MainWindow::on_CPU_checkbox_stateChanged(int arg1)
 {
-    bindCheckbox(arg1, "CPU", "CPU", 5);
+    bindCheckbox(arg1, "CPU", "CPU", 2);
 }
 
 void MainWindow::on_GPU_checkbox_stateChanged(int arg1)
@@ -528,4 +555,34 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
         ui->prediction_button->setEnabled(false);
         break;
     }
+}
+
+void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
+{
+    if (arg1 == "Select hardware") {
+        ui->flops_value->clear();
+        ui->bandwidth_value->clear();
+        ui->powerCons_value->clear();
+        ui->time_value->clear();
+    }
+}
+
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    if (index == 0) {
+        ui->tabWidget->hide();
+        ui->HardwareOptions->hide();
+        ui->NeuralNetOptions->hide();
+        ui->ModeOptions->hide();
+
+    } else {
+    ui->tabWidget->removeTab(index);}
+}
+
+void MainWindow::on_classificationMenu_clicked()
+{
+    ui->tabWidget->show();
+    ui->HardwareOptions->show();
+    ui->NeuralNetOptions->show();
+    ui->ModeOptions->show();
 }

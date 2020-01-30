@@ -11,9 +11,11 @@ public:
     string getPath() const{
         return path;
     }
+
     void setPath(const string &value){
         path = value;
     }
+
 
     void setLabelsAndProb(vector<pair<string, float> > lp)
     {
@@ -22,9 +24,11 @@ public:
 
 
 
+
     vector<pair<string, float> > getLabelsAndProb() const{
         return labelsAndProb;
     }
+
     void pushLabelsAndProb(const pair<string, float>  &value){
         labelsAndProb.push_back(value);
     }

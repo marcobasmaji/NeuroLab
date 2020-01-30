@@ -27,7 +27,9 @@ public:
     ~MainWindow();
 
     void displayResults(vector<Result> results);
-    void displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops);
+    void displayPrediction(string totalTime, string totalPowerConsumption, PredictionValues *cpu, PredictionValues *gpu, PredictionValues *mov1,
+                           PredictionValues *mov2, PredictionValues *mov3, PredictionValues *mov4,
+                           PredictionValues *fpga);
     void enableCheckbox(HardwareElement checkboxName);
     void disableHWCheckboxes();
 
@@ -37,8 +39,6 @@ private slots:
     void on_DeleteButton_clicked();
 
     void on_ClassifyButton_clicked();
-
-    void on_StopButton_clicked();
 
     void on_LPC_radio_button_clicked();
 
@@ -64,15 +64,13 @@ private slots:
 
     int createTab();
 
-    //void displayPredictionValues(double value, string valueType);
-
     void setComboboxContent(list<HardwareElement> availableHardware);
 
-    void on_comboBox_currentTextChanged(const QString &arg1);
+    //void on_comboBox_currentTextChanged(const QString &arg1);
 
     void on_Mov1_checkbox_stateChanged(int arg1);
 
-    void proveSelectedHardware();
+    void checkSelectedHardware();
 
     void on_Mov2_checkbox_stateChanged(int arg1);
 
@@ -88,6 +86,12 @@ private slots:
 
     void on_comboBox_currentIndexChanged(int index);
 
+    void on_comboBox_currentTextChanged(const QString &arg1);
+
+    void on_tabWidget_tabCloseRequested(int index);
+
+    void on_classificationMenu_clicked();
+
 private:
 
     Ui::MainWindow *ui;
@@ -100,6 +104,7 @@ private:
     GUISettings guiSettings;
     int resultsCounter;
     QListWidgetItem *imageToBeRemoved;
+    void setPredictionValue(PredictionValues *values);
     void addHardwareToCombobox(HardwareElement element);
     void bindCheckbox(int arg, string hardwareElement, QString nameHardwareElement, int indexCombobox);
 };

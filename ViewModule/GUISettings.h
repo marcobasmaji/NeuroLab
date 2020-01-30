@@ -1,4 +1,4 @@
-#ifndef GUISETTINGS_H
+    #ifndef GUISETTINGS_H
 #define GUISETTINGS_H
 #include <string>
 #include <iostream>
