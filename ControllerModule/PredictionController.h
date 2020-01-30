@@ -1,20 +1,17 @@
-#ifndef PREDICTIONCONTROLLER_H
-#define PREDICTIONCONTROLLER_H
-#include<string.h>
-#include <iostream>
+#pragma once
 #include <list>
 #include <vector>
-
-using namespace std;
+#include "AlexPrediction.h"
+#include "NeuroPrediction.h"
+#include "DataResults.h"
 class PredictionController
 {
 public:
-    PredictionController();
-    void calculatePrediction(int numberImg, const string net, const string mode, vector<string> hardware);
-    vector<double> getTime();
-    vector<double> getPower();
-    double getBandwidth();
-    double getFlops();
+	DataResults calculatePrediction(int numberOfImages, std::string NN, std::string Operationmode, std::vector<std::string>& availableHardware);
+	
+
+	
 };
 
-#endif // PREDICTIONCONTROLLER_H
+
+
