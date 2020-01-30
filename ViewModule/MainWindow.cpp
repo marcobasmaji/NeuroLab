@@ -235,7 +235,7 @@ void MainWindow::on_LoadButton_clicked()
         displayPreview(newIcon, filesList.at(i));
     }
 
-    if(!filesList.isEmpty()){
+    if(!filesList.isEmpty() && !guiSettings.getSelectedHardware().empty()){
         ui->ClassifyButton->setEnabled(true);
     }
     // turning Qstrings into std strings
@@ -340,6 +340,7 @@ void MainWindow::displayResults(vector<Result> results)
 
         QLabel *imageLabel = new QLabel();
         imageLabel->setMaximumWidth(200);
+        imageLabel->setMaximumHeight(200);
         QPixmap image(path);
         image.scaled(200, 200, Qt::KeepAspectRatio);
 
@@ -481,6 +482,7 @@ void MainWindow::bindCheckbox(int arg, string hardwareElement, QString nameHardw
         guiSettings.selectHardwareElement(hardwareElement);
         ui->comboBox->insertItem(indexCombobox, nameHardwareElement);
         ui->prediction_button->setEnabled(true);
+        ui->ClassifyButton->setEnabled(true);
     } else {
         ui->comboBox->setCurrentIndex(0);
         guiSettings.unselectHardwareElement(hardwareElement);
@@ -488,6 +490,7 @@ void MainWindow::bindCheckbox(int arg, string hardwareElement, QString nameHardw
         ui->comboBox->removeItem(indexRemove);
         if (guiSettings.getSelectedHardware().empty()) {
             ui->prediction_button->setEnabled(false);
+            ui->ClassifyButton->setEnabled(false);
         }
     }
 }
