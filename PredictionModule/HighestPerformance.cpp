@@ -22,9 +22,9 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 	std::string movidius4 = "Movidius4";
 	std::string FPGA = "FPGA";
 	std::string CPU = "CPU";
-	std::vector<double>polynomMovidius{ 1,2,3,4 };
-	std::vector<double>polynomCPU{ 1,2,3,4 };
-	std::vector<double>polynomFPGA{ 1,2,3,4 };
+	std::vector<double>polynomMovidius{ 0.122,0.9156 };
+	std::vector<double>polynomCPU{ -0.0004,0.1462,0.785 };
+	std::vector<double>polynomFPGA{ 0.001,0.2,0.3,0.04 };
 	int number = 0;
 	double requiredTime = 0;
 	std::string examplestring = "example";
@@ -34,36 +34,36 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 	std::vector<std::vector<Hardware>> constellations;
 	double powerConsumptionMovidius = 17;
 	HighestPerformance* hi = new HighestPerformance;
-
-	for (std::string element : hardwares) {
-		if (element.compare(movidius1) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius};
+	int desiredHardwaresize = hardwares.size();
+	for (int i = 0; i < desiredHardwaresize; i++) {
+		if (hardwares.at(i).compare(movidius1) == 0) {
+			Hardware h{ hardwares.at(i),number,requiredTime,polynomMovidius,powerConsumptionMovidius};
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 			
 		}
-		if (element.compare(movidius2) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius };
+		if (hardwares.at(i).compare(movidius2) == 0) {
+			Hardware h{ hardwares.at(i),number,requiredTime,polynomMovidius,powerConsumptionMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
-		if (element.compare(movidius3) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius };
+		if (hardwares.at(i).compare(movidius3) == 0) {
+			Hardware h{ hardwares.at(i),number,requiredTime,polynomMovidius,powerConsumptionMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
-		if (element.compare(movidius4) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius };
+		if (hardwares.at(i).compare(movidius4) == 0) {
+			Hardware h{ hardwares.at(i),number,requiredTime,polynomMovidius,powerConsumptionMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
-		if (element.compare(FPGA) == 0) {
-			Hardware h{ element,number,requiredTime,polynomFPGA,16 };
+		if (hardwares.at(i).compare(FPGA) == 0) {
+			Hardware h{ hardwares.at(i),number,requiredTime,polynomFPGA,16 };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
-		if (element.compare(CPU) == 0) {
-			Hardware h{ element,number,requiredTime,polynomCPU,27 };
+		if (hardwares.at(i).compare(CPU) == 0) {
+			Hardware h{ hardwares.at(i),number,requiredTime,polynomCPU,27 };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
@@ -79,9 +79,12 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 		});
 	int size = hardwarevector.size();
 	for (int k = 0; k < size; k++) {
+		//std::cout << k; //01
 		for (size_t j = 0; j < hardwarevector.size() + 1; j++) {
+			//std::cout << j; //010 
 			std::vector<Hardware> hardwarevec = hardwarevector;
 			for (size_t i = 0; i < hardwarevec.size() / 2; i++) {
+				
 				while (hardwarevec.at(i).requiredTime < hardwarevec.at(size - i - 1).requiredTime) {
 					hardwarevec.at(i).numberOfAssignedImages = hardwarevec.at(i).numberOfAssignedImages + badgesize;
 					hardwarevec.at(size - i - 1).numberOfAssignedImages = hardwarevec.at(size - 1 - i).numberOfAssignedImages - badgesize;
@@ -91,23 +94,33 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 					hardwarevec.at(size - i - 1).requiredTime = hi->TimeValueOfX(hardwarevec.at(size - i - 1).polynome, numberOfAssignedImagesEnd);
 
 				}
-				std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
+				std::sort(hardwarevec.begin(), hardwarevec.end(), [](Hardware& h1, Hardware& h2) {
 					return h1.requiredTime < h2.requiredTime;
 					});
 			}
-			constellations.push_back(hardwarevec);//wird der hier auch ver�ndert ?
-			for (size_t m = 0; m < hardwarevector.size()-1; m++) {
+		size_t check = 0;
+		constellations.push_back(hardwarevec);//wird der hier auch ver�ndert ?
+		if (check == hardwarevec.size() - 1) {
+			goto end;
+		}
+		else {
+			// oder hier nach geringstem produkt sortieren ?? TODO
+			for (size_t m = 0; m < hardwarevector.size() - 1; m++) {
 				hardwarevector.at(m).numberOfAssignedImages = numberOfImages / (numberOfHardwareElements - 1);
 				double numberOfAssignedImages = hardwarevector.at(m).numberOfAssignedImages;
-				hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome,numberOfAssignedImages);
+				hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome, numberOfAssignedImages);
 			}
 			std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
 				return h1.requiredTime < h2.requiredTime;
 				});
+		}
+
+			
 			hardwarevector.pop_back();
 			// am ineffizienteste muss aussoritert werden durch neue vermutete Verteilung oder auf bestehen der alten?
 		}
 	}
+end:	
 	int counterPower = 0;
 	double minPower = 0;
 	std::vector<std::pair<double,double>> powerVector;
@@ -129,7 +142,6 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 	int counter = 0;
 	int ireturn = 0;
 	double minimumTime = constellations.at(0).back().requiredTime;
-	std::cout << "sind wir hier";
 	for (auto target : constellations) {
 		if (target.back().requiredTime < minimumTime) {
 			minimumTime = target.back().requiredTime;
@@ -137,7 +149,7 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 		}
 		counter++;
 	}
-	std::cout << counter << "xD";
+	
 	/**std::vector<std::pair<std::string, int>> returnvalue;
 
 	std::cout <<"Ha"<< counter << "Ho";
@@ -170,11 +182,11 @@ HighestPerformance::HighestPerformance()
 double HighestPerformance::TimeValueOfX(std::vector<double>& polynome, double x)
 {
 	double value = 0;
-	int size = polynome.size();
-	for (size_t i = 0; i < size; i++) {
-		value = value + polynome.at(i)*pow(x, (size-i-1));
-		std::cout << value;
-
+	int i = 0;
+	for (size_t sI = 0; sI < polynome.size(); sI++) {
+		i = sI;
+		int size = polynome.size();
+		value = value + polynome.at(i) * pow(x, size - i - 1);
 	}
 	return value;
 }

@@ -1,4 +1,3 @@
-
 #pragma once
 #include<list>
 #include<iostream>
@@ -20,10 +19,10 @@ std::string HighestE = "HighestPerformance";
 std::string lowestP = "LowestPowerConsumption";
     list.push_back(CPU);
     list.push_back(Movi);
-    int numberOfImages = 5;
+    int numberOfImages = 64;
     PredictionController* n = new PredictionController;
-    DataResults d = n->calculatePredictionType(list, HighestE, numberOfImages, nn);
-    std::cout << d.TotalTime << "results" <<d.TotalPowerConsumption;
+    DataResults d = n->calculatePredictionType(list, lowestP, numberOfImages, nn);
+    std::cout << d.TotalTime << "results" <<d.Times.at(0).second<< "  " << d.Times.size()<< "HO\n" ;
     
  
 }

@@ -8,6 +8,8 @@ public:
 	std::vector<std::pair<std::string, int>> hardwareDistribution;
 	std::vector<std::pair<std::string, double>> Times;
 	std::vector<std::pair<std::string, double>> PowerConsumption;
+	//std::vector<std::pair<std::string, double>> Flops;
+	//std::vector<std::pair<std::string, double>> Bandwith;
 	double TotalPowerConsumption;
 	double TotalTime;
 	DataResults(std::vector<Hardware>& results);

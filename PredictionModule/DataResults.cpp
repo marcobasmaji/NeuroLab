@@ -6,6 +6,8 @@ DataResults::DataResults(std::vector<Hardware>& results) {
 	std::vector<std::pair<std::string, int>> hDistribution;
 	std::vector<std::pair<std::string, double>> times;
 	std::vector<std::pair<std::string, double>> pConsumption;
+	std::vector<std::pair<std::string, double>> flops;
+	std::vector<std::pair<std::string, double>> bandwith;
 	double TotalPowerConsumption = 0;
 	double TotalRequiredTime = 0;
 	
