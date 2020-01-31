@@ -51,6 +51,7 @@ void OpenVinoEnv::configureInputAndOutput()
     inputInfoItem.second->setLayout(Layout::NCHW);
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
     std::vector<std::string> validImageNames = {};
+
     for (const auto & i : imageNames) {
         FormatReader::ReaderPtr reader(i.c_str());
         if (reader.get() == nullptr) {
@@ -94,7 +95,6 @@ void OpenVinoEnv::prepareInput()
 {
 
     // Iterate over input blobs and fill input tensors
-
     for (auto & item : inputInfo) {
         Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
         SizeVector dims = inputBlob->getTensorDesc().getDims();
@@ -170,7 +170,8 @@ vector<Result> OpenVinoEnv::processOutput()
     endResults = classificationResult.getEndResults();
 
     return endResults;
-}
+    }
+
 
 
 void OpenVinoEnv::chooseNeuralNet(string nn) {
@@ -217,6 +218,7 @@ void OpenVinoEnv::setPlatforms(vector<string> platforms)
         }
     }
 }
+
 
 
 

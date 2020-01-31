@@ -1,51 +1,69 @@
 #include "GUISettings.h"
+#include <bits/stdc++.h>
+#include <iostream>
+#include <list>
 
 GUISettings::GUISettings()
 {
     //set default values:
-    this->nn = "AlexNet";
-    this->mode = "HighestPerfomance";
-    this->nrImages = 0;
+    this->nn = "ALEXNET";
+    this->mode = "HIGHEST_PERFORMANCE";
 }
 
-int GUISettings::getNrImages() const
+vector<string> GUISettings::getPaths() const{
+    return paths;
+}
+void GUISettings::setPaths(const vector<string> &newPaths){
+    if(paths.empty()){
+        paths = newPaths;
+        return;
+    }
+
+    for(string path : newPaths){
+        paths.push_back(path);
+    }
+}
+
+void GUISettings::removePath(string value){
+    std::vector<string>::iterator foundvalue = std::find(paths.begin(), paths.end(), value);
+    if (foundvalue != paths.end()){
+        paths.erase(foundvalue);
+    }
+}
+
+vector<string> GUISettings::getSelectedHardware() const
 {
-    return nrImages;
+    return selectedHardware;
 }
 
-void GUISettings::setNrImages(int value)
-{
-    nrImages += value;
-}
-
-vector<string> GUISettings::getHardware() const
-{
-    return hardware;
-}
-
-void GUISettings::setHardware(vector<HardwareElement> hardware)
+void GUISettings::setSelectedHardware(vector<HardwareElement> hardware)
 {
     for (HardwareElement hw : hardware) {
         switch(hw){
-        case MOV : this->hardware.push_back("Movidius");
+        case MOV : this->selectedHardware.push_back("MYRIAD");
             break;
-        case MOV1 : this->hardware.push_back("Movidius.1");
+        case MOV1 : this->selectedHardware.push_back("MYRIAD.1");
             break;
-        case MOV2 : this->hardware.push_back("Movidius.2");
+        case MOV2 : this->selectedHardware.push_back("MYRIAD.2");
             break;
-        case MOV3: this->hardware.push_back("Movidius.3");
+        case MOV3: this->selectedHardware.push_back("MYRIAD.3");
             break;
-        case MOV4 : this->hardware.push_back("Movidius.4");
+        case MOV4 : this->selectedHardware.push_back("MYRIAD.4");
             break;
-        case CPU : this->hardware.push_back("CPU");
+        case CPU : this->selectedHardware.push_back("CPU");
             break;
-        case GPU : this->hardware.push_back("GPU");
+        case GPU : this->selectedHardware.push_back("GPU");
             break;
-        case FPGA : this->hardware.push_back("FPGA");
+        case FPGA : this->selectedHardware.push_back("FPGA");
             break;
         }
     }
 }
+
+void GUISettings::clearHardware(){
+    selectedHardware.clear();
+}
+
 
 string GUISettings::getMode() const
 {
@@ -66,3 +84,16 @@ void GUISettings::setNn(const string &value)
 {
     nn = value;
 }
+
+void GUISettings::unselectHardwareElement(string element) {
+    auto itr = std::find(selectedHardware.begin(), selectedHardware.end(), element);
+    if (itr != selectedHardware.end()) selectedHardware.erase(itr);
+}
+
+void GUISettings::selectHardwareElement(string element) {
+    auto itr = std::find(selectedHardware.begin(), selectedHardware.end(), element);
+    if (itr == selectedHardware.end()) selectedHardware.push_back(element);
+};
+
+
+
