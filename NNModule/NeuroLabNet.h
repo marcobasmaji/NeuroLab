@@ -1,4 +1,10 @@
 #include <NNModule/NeuralNet.h>
+#include "Layers/ConvolutionLayer.h"
+#include "Layers/ReLULayer.h"
+#include "Layers/MaxPoolingLayer.h"
+#include "Layers/SoftmaxLayer.h"
+#include "Layers/DenseLayer.h"
+#include "Layers/Loss.h"
 #include <iostream>
 #include <vector>
 #include <HardwareModule/OpenCL/OpenCLEnvironment.hpp>
@@ -9,6 +15,7 @@
 #include <opencv2/opencv.hpp>
 #include <CL/cl.h>
 #include <fstream>
+#include <QDir>
 
 using namespace std;
 
@@ -21,15 +28,28 @@ public:
 	void train();
 	void executeTransferLearning();
     void updateDataSet(vector<string> dataSet);
-    void trainWithCifar100();
+    void trainWithMnist();
     vector<pair<string,float>> getLabelWithProb(float prob[]);
 private:
     vector<string> dataSet;
     OpenCLEnvironment* clEnv;
     list<Layer*> layers;
+    //Layers
+    //ConvolutionLayer* conv1;
+    //ReLULayer* relu1;
+    MaxPoolingLayer* max1;
+    //ConvolutionLayer *conv2;
+    //ReLULayer *relu2;
+    MaxPoolingLayer* max2;
+    DenseLayer* dense;
+    SoftmaxLayer* soft;
+    Loss* lossFunction;
+
     static bool sortBySec(const pair<int,int> &a,
                   const pair<int,int> &b)
     {
         return (a.second > b.second);
     }
+    float *getPixelsFromPath(string path);
+
 };

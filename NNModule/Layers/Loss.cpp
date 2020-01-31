@@ -10,18 +10,37 @@ Shape Loss::getPredictedDistributionGrad() const
     return predictedDistributionGrad;
 }
 
-float *Loss::getOutputError(float outputValues[], float targetValues[])
+float* Loss::getOutputError(float distribution[],string label)
 {
-    float* errors = (float*)malloc(10*sizeof(float));
-
-        float expectedValue = 0;
-
-        for (int i = 0; i < 10; i++) {
-            errors[i] = outputValues[i]-targetValues[i];
+    float derivative[numInputs];
+    float targetDistribution[numInputs];
+    QDir dir("/home/mo/classes");
+    QStringList files = dir.entryList(QStringList(),QDir::Dirs);
+    int i = 0;
+    for(auto &item : files) {
+        if(item.startsWith(".")){
+            continue;
         }
-        expectedValue = 1;
+        else if(item.toStdString()==label)
+        {
+            targetDistribution[i] = 1.0;
+            i++;
+        }
+        else
+        {
+            targetDistribution[i] = 0.0;
+            i++;
+        }
+    }
+    // calculate
+    float loss;
+    for (size_t j=0; j<sizeof (targetDistribution);j++)
+    {
+        // calculate loss
 
-        errors[1] = expectedValue- outputValues[1];
+        // derivative
+        derivative[j] =-(distribution[j]/(1/targetDistribution[j]));
+    }
+    return derivative;
 
-        return errors;
 }

@@ -1,9 +1,5 @@
 #include "NeuroLabNet.h"
-#include "Layers/ConvolutionLayer.h"
-#include "Layers/ReLULayer.h"
-#include "Layers/MaxPoolingLayer.h"
-#include "Layers/SoftmaxLayer.h"
-#include "Layers/DenseLayer.h"
+
 
 using namespace cv;
 
@@ -40,6 +36,7 @@ void NeuroLabNet::init() {
      SoftmaxLayer soft(clEnv,100);
      //Loss loss(100);*/
     ConvolutionLayer conv1(clEnv,32,32,3,5,5,1,1,20);
+    //this->conv1 = &conv1;
     //output is (32-5)/1 +1 = 28
     // now the non linear function
     ReLULayer relu1(clEnv,28,28,20);
@@ -107,16 +104,17 @@ vector<Result> NeuroLabNet::classify() {
                 {
                     // the function at returns an array with the length 3, whereby each field has the red, blue or green value
                     //pixels[i][j][h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
+                    // teilen durch 255.0 und umgekehrt ?
                     pixels[(i * 105 + j) * 3 + h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
                 }
             }
         }
-        layers.back()->getCLLayer()->setInputs(clEnv,pixels,105*105*3);
+        layers.front()->getCLLayer()->setInputs(clEnv,pixels,105*105*3);
         for(auto &item:layers)
         {
             item->forwardPass(pixels,pixels);
         }
-        float* prob = layers.back()->getCLLayer()->getOutputs(clEnv,10,1,100,1,(int*)100);
+        float* prob = layers.back()->getCLLayer()->getOutputs(clEnv,10,100,1,1,nullptr);
         Result result;
         result.setPath(item);
         result.setLabelsAndProb(getLabelWithProb(prob));
@@ -127,7 +125,54 @@ vector<Result> NeuroLabNet::classify() {
 }
 
 void NeuroLabNet::train() {
-    // here foward then backward
+// read image list from directory
+    string labels[100] ={};
+    QDir dir("/home/mo/classes");
+    QStringList files = dir.entryList(QStringList(),QDir::Dirs);
+    int i = 0;
+    for(auto &item : files) {
+        if(item.startsWith(".")){
+            continue;
+        }
+        labels[i] = item.toStdString();
+        i++;
+    }
+    // for each folder
+    for(auto & folder : files)
+    {
+        // test
+        cout<<folder.toStdString()<<"\n";
+        QDir dirOfOmages("/home/mo/classes/"+folder);
+        QStringList images = dir.entryList((QStringList()<<"*.jpg"<<"*.JPG",QDir::Files));
+        for(auto & image:images)
+        {
+            float *pixels = getPixelsFromPath(image.toStdString());
+            //this->conv1->forwardPass(pixels,nullptr);
+            //this->relu1->forwardPass(pixels,nullptr);
+            this->max1->forwardPass(pixels,nullptr);
+            //this->conv2->forwardPass(pixels,nullptr);
+            //this->relu2->forwardPass(pixels,nullptr);
+            this->max2->forwardPass(pixels,nullptr);
+            this->dense->forwardPass(pixels,nullptr);
+            this->soft->forwardPass(pixels,nullptr);
+            // compute error with Loss (using labels as well)
+            float * lossOutput=lossFunction->getOutputError(this->soft->getLayerOutput(),folder.toStdString());
+            // back propagate
+            this->soft->backPropagate(lossOutput);
+            this->dense->backPropagate(nullptr);
+            this->max2->backPropagate(nullptr);
+            //this->relu2->backPropagate(nullptr);
+            //this->conv2->backPropagate(nullptr);
+            //this->max1->backPropagate(nullptr);
+            //this->relu1->backPropagate(nullptr);
+            //this->conv1->backPropagate(nullptr);
+            // update weights
+            //this->dense->updateWeights();
+            //this->conv2->updateWeights();
+            //this->conv1->updateWeights();
+            // save updated weights ?TODO
+        }
+    }
 
 }
 
@@ -163,112 +208,95 @@ vector<pair<string,float>> NeuroLabNet::getLabelWithProb(float prob[])
 
 }
 
-void NeuroLabNet::trainWithCifar100()
+
+
+
+float* NeuroLabNet::getPixelsFromPath(string path)
 {
-    string filename;
-    filename = "/home/mo/Downloads/cifar-100-binary/train.bin";
-    vector<Mat> batch;
-    Mat label = Mat::zeros(1, 10000, CV_64FC1);
-    //read_batch(filename, batch, label);
-    ifstream file (filename, ios::binary);
-    if (file.is_open())
+    cv::Mat img = cv::imread(path);
+    if(img.empty())
     {
-        int numOfImages = 50000;
-        int rows = 32;
-        int cols = 32;
-        for(int i = 0; i < numOfImages; ++i){
-            unsigned char tplabel = 0;
+        cerr<<"Image is invalid";
+    }
+    if(img.channels()!=3)
+    {
+        cerr<<"Image doesn't have enough channels";
+    }
+    cv::Mat resizedImg;
+    cv::Size size(105,105);
+    // resize image
+    cv::resize(img,resizedImg,size,cv::INTER_LINEAR);
+    // a 3D array of type float to save pixel values
+    //float pixels[105][105][3]={};
+    float pixels[105*105*3];
 
-            file.read((char*) &tplabel, sizeof(tplabel));
-
-            vector<Mat> channels;
-
-            Mat fin_img = Mat::zeros(rows, cols, CV_8UC3);
-
-            for(int ch = 0; ch < 3; ++ch){
-
-                Mat tp = Mat::zeros(rows, cols, CV_8UC1);
-
-                for(int r = 0; r < rows; ++r){
-
-                    for(int c = 0; c < cols; ++c){
-
-                        unsigned char temp = 0;
-
-                        file.read((char*) &temp, sizeof(temp));
-
-                        tp.at<uchar>(r, c) = (int) temp;
-
-                    }
-
-                }
-
-                channels.push_back(tp);
-
+    for(unsigned int i =0;i<105;i++)
+    {
+        for(unsigned int j =0;j<105;j++)
+        {
+            for(unsigned int h =0;h<3;h++)
+            {
+                // the function at returns an array with the length 3, whereby each field has the red, blue or green value
+                //pixels[i][j][h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
+                pixels[(i * 105 + j) * 3 + h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
             }
-
-            merge(channels, fin_img);
-
-            batch.push_back(fin_img);
-
-            label.at<Vec2b>(0, i) = (double)tplabel;
-
-            //concatenate
-
-            int height = batch[0].rows;
-
-            int width = batch[0].cols;
-
-            Mat res = Mat::zeros(height * width * 3, batch.size(), CV_64FC1);
-
-            for(int i=0; i<batch.size(); i++){
-
-                Mat img(height, width, CV_64FC3);
-
-                batch[i].convertTo(img, CV_64FC3);
-
-                vector<Mat> chs;
-
-                split(img, chs);
-
-                for(int j = 0; j < 3; j++){
-
-                    Mat ptmat = chs[j].reshape(0, height * width);
-
-                    Rect roi = cv::Rect(i, j * ptmat.rows, ptmat.cols, ptmat.rows);
-
-                    Mat subView = res(roi);
-
-                    ptmat.copyTo(subView);
-
-                }
-
-            }
-
-            divide(res, 255.0, res);
-
-
-            cv::Mat mt1 = res;
-
-            Mat trainX = Mat::zeros(1024, 50000, CV_64FC1);
-            Mat trainY = Mat::zeros(1, 50000, CV_64FC1);
-
-            Rect roi = cv::Rect(mt1.cols * 0, 0, mt1.cols, trainX.rows);
-
-            Mat subView = trainX(roi);
-
-            mt1.copyTo(subView);
-
-            roi = cv::Rect(label.cols * 0, 0, label.cols, 1);
-
-            subView = trainY(roi);
-
-            label.copyTo(subView);
-
-
-
         }
     }
+    return pixels;
+}
+
+
+int ReverseInt (int i)
+{
+    unsigned char ch1, ch2, ch3, ch4;
+    ch1 = i & 255;
+    ch2 = (i >> 8) & 255;
+    ch3 = (i >> 16) & 255;
+    ch4 = (i >> 24) & 255;
+    return((int) ch1 << 24) + ((int)ch2 << 16) + ((int)ch3 << 8) + ch4;
+}
+
+void NeuroLabNet::trainWithMnist()
+{
+    // read Mnist
+    string filename = "/home/mo/Downloads/mNIST/t10k-labels-idx3-ubyte";
+    vector<cv::Mat> vec;
+    ifstream file (filename, ios::binary);
+        if (file.is_open())
+        {
+            int magic_number = 0;
+            int number_of_images = 0;
+            int n_rows = 0;
+            int n_cols = 0;
+            file.read((char*) &magic_number, sizeof(magic_number));
+            magic_number = ReverseInt(magic_number);
+            file.read((char*) &number_of_images,sizeof(number_of_images));
+            number_of_images = ReverseInt(number_of_images);
+            file.read((char*) &n_rows, sizeof(n_rows));
+            n_rows = ReverseInt(n_rows);
+            file.read((char*) &n_cols, sizeof(n_cols));
+            n_cols = ReverseInt(n_cols);
+            for(int i = 0; i < number_of_images; ++i)
+            {
+                cv::Mat tp = Mat::zeros(n_rows, n_cols, CV_8UC1);
+                for(int r = 0; r < n_rows; ++r)
+                {
+                    for(int c = 0; c < n_cols; ++c)
+                    {
+                        unsigned char temp = 0;
+                        file.read((char*) &temp, sizeof(temp));
+                        tp.at<uchar>(r, c) = (int) temp;
+                    }
+                }
+                vec.push_back(tp);
+            }
+        }
+
+        //cout<<vec.size()<<endl;
+        //imshow("1st", vec[5000]);
+        //waitKey();
+
+        // now train
 }
 
 

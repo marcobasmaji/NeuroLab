@@ -22,6 +22,7 @@ public:
     void forwardPass(float input[], float output[]);
     void backPropagate(float upstreamGrad[]);
     OpenCLLayer* getCLLayer();
+    void updateWeights();
 
 
 private:

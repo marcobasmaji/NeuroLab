@@ -12,21 +12,20 @@ ReLULayer::ReLULayer(OpenCLEnvironment* clEnv,
                 {
     this->clEnv = clEnv;
     OpenCLLayerCreator* clCreator = new OpenCLLayerCreator();
-    OpenCLLayer* cLrelu = clCreator->createReluLayer(clEnv,10,inputDepth,inputHeight,inputWidth);
+    OpenCLLayer* cLrelu = clCreator->createReluLayer(clEnv,16,inputDepth,inputHeight,inputWidth);
     this->clLayer= cLrelu;
 
                 }
 
 void ReLULayer::forwardPass(float input[], float output[])
 {
-    clLayer->computeForward(clEnv,10,inputDepth);
+    clLayer->computeForward(clEnv,16,inputDepth);
 
 }
 
 void ReLULayer::backPropagate(float upstreamGrad[])
 {
-
-
+    clLayer->computeErrorComp(clEnv,16);
 }
 
 OpenCLLayer* ReLULayer::getCLLayer()

@@ -43,6 +43,10 @@ void MasterController::getPrediction(const string net, const string mode, vector
 vector<string> MasterController::getAvailableHardware()
 {
     InferenceEngine::Core core;
+    for(auto &item: core.GetAvailableDevices())
+    {
+        cout<< item;
+    }
     return core.GetAvailableDevices();
 
 }

@@ -25,7 +25,7 @@ void MaxPoolingLayer::forwardPass(float input[],float output[])
 
 void MaxPoolingLayer::backPropagate(float upstreamGrad[])
 {
-
+    clLayer->computeErrorComp(clEnv,16);
 }
 
 OpenCLLayer *MaxPoolingLayer::getCLLayer()

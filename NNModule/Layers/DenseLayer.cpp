@@ -16,8 +16,8 @@ DenseLayer::DenseLayer(OpenCLEnvironment *clEnv,
                                                                 numOutputs);
     this->clLayer = cLDense;
 
-    clLayer->setWeights(clEnv,getWeights(inputHeight*inputWidth*inputDepth),inputHeight*inputWidth*inputDepth);
-    clLayer->setBiases(clEnv,getWeights(inputDepth),inputDepth);
+    clLayer->setWeights(clEnv,getWeights(inputHeight*inputWidth*inputDepth*numOutputs),inputHeight*inputWidth*inputDepth*numOutputs);
+    clLayer->setBiases(clEnv,getWeights(numOutputs),numOutputs);
     clLayer->setLearningRate(0.2);
 }
 
@@ -25,17 +25,22 @@ void DenseLayer::forwardPass(float input[], float output[])
 {
 
     //clLayer->setInputs(clEnv,input,105*105*3);
-    clLayer->computeForward(clEnv,10,inputDepth);
+    clLayer->computeForward(clEnv,16,numOutputs);
 }
 
 void DenseLayer::backPropagate(float upstreamGrad[])
 {
-    clLayer->computeErrorComp(clEnv,10);
+    clLayer->computeErrorComp(clEnv,16);
 }
 
 OpenCLLayer *DenseLayer::getCLLayer()
 {
     return clLayer;
+}
+
+void DenseLayer::updateWeights()
+{
+    clLayer->computeWeightsUpdate(clEnv,numOutputs);
 }
 
 float* DenseLayer::getWeights(int length) {
