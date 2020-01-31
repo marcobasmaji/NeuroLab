@@ -2,6 +2,7 @@
 #define VIEWCONTROLLER_H
 
 #include<ViewModule/GUISettings.h>
+#include<ViewModule/PredictionValues.h>
 #include <string>
 #include <stdio.h>
 #include <string.h>
@@ -19,13 +20,10 @@ class ViewController
 {
 public:
     ViewController(MasterController * partner);
-    void updatePathList(vector<string> paths);
-    void handleClassifyRequest();
+    void handleClassifyRequest(GUISettings settings);
     void displayResults(vector<Result>);
     void getPrediction(GUISettings settings);
-    void displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops);
-    void setNeuralNet(string nn);
-    void setOpMode(string mode);
+    void displayPrediction(double totalTime, double totalPowerConsumption, vector<pair<string,double>> timeConsumption, vector<pair<string,double>> powerConsumption, vector<pair<string,double>> flops, vector<pair<string,double>> bandwidth);
     void setHardwareDist(vector<string> hardwareDist);
     list<HardwareElement> availableHardware;
     void setAvailableHardware(vector<string> &hardwareElements);
@@ -38,6 +36,8 @@ private:
     MainWindow *mainWindow;
     //WellcomePanel panel;
     list<string> l;
+    PredictionValues *parseHardware(string hw, vector<pair<string,double>> timeConsumption, vector<pair<string,double>> powerConsumption,
+                                    vector<pair<string,double>> flops, vector<pair<string,double>> bandwidth);
 
 
 };

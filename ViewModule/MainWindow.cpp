@@ -1,9 +1,11 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include<ControllerModule/ViewController.h>
-#include<ControllerModule/HardwareElement.h>
+#include <ControllerModule/ViewController.h>
+#include <ControllerModule/HardwareElement.h>
 #include <QFileDialog>
 #include <QDebug>
+#include <QScrollArea>
+#include <QVBoxLayout>
 
 
 
@@ -15,6 +17,11 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
 
     this->viewController = partner;
     resultsCounter = 0;
+
+    ui->tabWidget->hide();
+    ui->HardwareOptions->hide();
+    ui->NeuralNetOptions->hide();
+    ui->ModeOptions->hide();
 }
 
 MainWindow::~MainWindow()
@@ -127,31 +134,31 @@ void MainWindow::on_LPC_radio_button_clicked()
             this->disableHWCheckboxes();
             //this->enableCheckbox(MOV1);
             ui->Mov1_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setHardware({MOV});
+            guiSettings.setSelectedHardware({MOV});
             break;
         case MOV1 : hasMovidius = true;
             this->disableHWCheckboxes();
             //this->enableCheckbox(MOV1);
             ui->Mov1_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setHardware({MOV1});
+            guiSettings.setSelectedHardware({MOV1});
             break;
         case MOV2 : hasMovidius = true;
             this->disableHWCheckboxes();
             //this->enableCheckbox(MOV2);
             ui->Mov2_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setHardware({MOV2});
+            guiSettings.setSelectedHardware({MOV2});
             break;
         case MOV3: hasMovidius = true;
             this->disableHWCheckboxes();
             //this->enableCheckbox(MOV3);
             ui->Mov3_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setHardware({MOV3});
+            guiSettings.setSelectedHardware({MOV3});
             break;
         case MOV4 : hasMovidius = true;
             this->disableHWCheckboxes();
             //this->enableCheckbox(MOV4);
             ui->Mov4_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setHardware({MOV4});
+            guiSettings.setSelectedHardware({MOV4});
             break;
         default:    this->disableHWCheckboxes();
             //this->enableCheckbox(CPU);
@@ -164,10 +171,10 @@ void MainWindow::on_LPC_radio_button_clicked()
 
 void MainWindow::on_HP_radio_button_clicked()
 {
-    if(guiSettings.getNn().compare("NeuroLab")==0){
+    if(guiSettings.getNn().compare("NEUROLAB")==0){
         return;
     }
-    guiSettings.setMode("HighestPerformance");
+    guiSettings.setMode("HIGHEST_EFFICIENCY");
     viewController->displayAvailableHardware();
     uncheckAll();
 
@@ -175,18 +182,18 @@ void MainWindow::on_HP_radio_button_clicked()
 
 void MainWindow::on_HEE_radio_button_clicked()
 {
-    if(guiSettings.getNn().compare("NeuroLab")==0){
+    if(guiSettings.getNn().compare("NEUROLAB")==0){
         return;
     }
 
-    guiSettings.setMode("HighestEfficiency");
+    guiSettings.setMode("HIGHEST_EFFICIENCY");
     viewController->displayAvailableHardware();
     uncheckAll();
 }
 
 void MainWindow::on_AlexNet_radio_button_clicked()
 {
-    guiSettings.setNn("AlexNet");
+    guiSettings.setNn("ALEXNET");
     setEnabledModes(true);
     viewController->displayAvailableHardware();
     uncheckAll();
@@ -194,7 +201,7 @@ void MainWindow::on_AlexNet_radio_button_clicked()
 
 void MainWindow::on_NeuroLabNet_radio_button_clicked()
 {
-    guiSettings.setNn("NeuroLab");
+    guiSettings.setNn("NEUROLAB");
     uncheckAll();
     disableHWCheckboxes();
     setEnabledModes(false);
@@ -214,29 +221,31 @@ void MainWindow::on_LoadButton_clicked()
 {
     // when load is clicked. tab names should be changed
     QStringList filesList = QFileDialog::getOpenFileNames(this,
-                                                          tr("Load Image"), "/home", tr("Image Files (*.png *.jpg *.bmp)"));
+                                                          tr("Load Image"), "/home", tr("Image Files (*.png *.jpg *.bmp *.jpeg)"));
+    if(filesList.isEmpty()){
+        return;
+    }
+
     qDebug()<<"Images Loaded"<<endl;
 
 
     for(int i = 0; i < filesList.length() && !filesList.isEmpty(); i++){
-        qDebug()<<"1 Image added to list"<<endl;
+        qDebug()<<"1 Image added to list: "<<filesList.at(i)<<endl;
         QIcon newIcon = QIcon(filesList.at(i));
         displayPreview(newIcon, filesList.at(i));
     }
 
-    if(!filesList.isEmpty()){
+    if(!filesList.isEmpty() && !guiSettings.getSelectedHardware().empty()){
         ui->ClassifyButton->setEnabled(true);
     }
     // turning Qstrings into std strings
     vector<string> vec;
-    for(int i = 0;i<filesList.length();i++) {
-        vec.push_back(filesList.front().toStdString());
+    for(int i = 0; i < filesList.length(); i++) {
+        vec.push_back(filesList.at(i).toStdString());
     }
-    // loading paths in GUIhttps://www.google.com/search?client=ubuntu&channel=fs&q=qt+display+loaded+files&ie=utf-8&oe=utf-8
-    qDebug()<<"load in MainWindow"<<endl;
-    this->viewController->updatePathList(vec);
-    qDebug()<<"load"<<endl; // debug: working.
-    this->guiSettings.setNrImages(filesList.size());
+    //load in mainwindow
+    this->guiSettings.setPaths(vec);
+    //this->viewController->updatePathList(guiSettings.getPaths());
     //viewController->getPrediction(this->guiSettings);
 
 }
@@ -255,20 +264,21 @@ void MainWindow::on_DeleteButton_clicked()
     }
     string imagePath = imageToBeRemoved->text().toStdString();
     //remove image path stored in ViewController
-    viewController->removeImage(imagePath);
+    //viewController->removeImage(imagePath);
 
     //remove image from main window
     int row = ui->previewArea->row(imageToBeRemoved);
     ui->previewArea->takeItem(row);
 
     //decrease total nr of images stored in guiSettings
-    guiSettings.setNrImages(-1);
+    guiSettings.removePath(imagePath);
+    //viewController->updatePathList(guiSettings.getPaths());
 
     imageToBeRemoved = NULL;
     ui->DeleteButton->setEnabled(false);
 
     //if there are no more images left, gray out classify button
-    if(guiSettings.getNrImages() == 0){
+    if(guiSettings.getPaths().empty()){
         ui->ClassifyButton->setEnabled(false);
     }
 }
@@ -276,66 +286,306 @@ void MainWindow::on_DeleteButton_clicked()
 void MainWindow::on_ClassifyButton_clicked()
 {
     // calling classify in GUI
-    this->viewController->handleClassifyRequest();
-
-    //resultsCounter++;
+    this->viewController->handleClassifyRequest(guiSettings);
 
 }
 
-void MainWindow::on_StopButton_clicked()
-{
-    // maybe find a way to stop the classify() method  in here
-}
+int MainWindow::createTab(){
 
+    QVBoxLayout *layout = new QVBoxLayout();
+    QScrollArea *scrollArea = new QScrollArea(this);
+    scrollArea->setLayout(layout);
+
+    int currentIndex = ui->tabWidget->currentIndex();
+    currentIndex++;
+    ui->tabWidget->insertTab(currentIndex, scrollArea, "Results");
+    ui->tabWidget->setCurrentIndex(currentIndex);
+
+    return currentIndex;
+}
 
 void MainWindow::displayResults(vector<Result> results)
 {
+    qDebug()<<"Results size: "<<results.size()<<endl; // debug:
 
-    pair<string,float> p = results.back().getLabelsAndProb().front();
-    QString qstr = QString::fromStdString(p.first);
+    //pair<string,float> p = results.back().getLabelsAndProb().front();
+    //QString qstr = QString::fromStdString(p.first);
     // moving into a new results tab
-    QLabel *label = new QLabel(qstr);
-    ui->tabWidget->insertTab(1,label,"Result");
-    ui->tabWidget->setCurrentIndex(1);
+    //QLabel *label = new QLabel(qstr);
 
+    //int newTabIndex = createTab();
+    QVBoxLayout *layout = new QVBoxLayout();
+    QScrollArea *scrollArea = new QScrollArea(this);
+
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+    QWidget *controlsRestrictorWidget = new QWidget();
+    controlsRestrictorWidget->setLayout(layout);
+    controlsRestrictorWidget->setMinimumHeight(results.size() * 200);
+
+
+    int currentIndex = ui->tabWidget->currentIndex();
+    currentIndex++;
+    ui->tabWidget->insertTab(currentIndex, scrollArea, "Results");
+    ui->tabWidget->setCurrentIndex(currentIndex);
+
+
+    for(Result result : results){
+
+        QString path = QString::fromStdString(result.getPath());
+        QHBoxLayout *resultLayout = new QHBoxLayout;
+        QVBoxLayout *labelsLayout = new QVBoxLayout;
+
+
+        QLabel *imageLabel = new QLabel();
+        imageLabel->setMaximumWidth(200);
+        imageLabel->setMaximumHeight(200);
+        QPixmap image(path);
+        image.scaled(200, 200, Qt::KeepAspectRatio);
+
+
+
+        vector<pair<string, float>> labelsAndprob = result.getLabelsAndProb();
+        for(int i = 0; i < 5; i++){
+            int probPercent = (int) (labelsAndprob[i].second * 100);
+            string prob = to_string(probPercent);
+            QString label = QString::fromStdString(labelsAndprob[i].first + ' ' + prob + '%');
+            labelsLayout->addWidget(new QLabel(label));
+        }
+
+        imageLabel->setPixmap(image);
+        imageLabel->setScaledContents(true);
+        resultLayout->addWidget(imageLabel);
+        resultLayout->addSpacing(5);
+        resultLayout->addLayout(labelsLayout);
+        layout->addLayout(resultLayout);
+        scrollArea->setWidget(controlsRestrictorWidget);
+
+    }
 }
 
 void MainWindow::on_SelectAllHardware_clicked()
 {
-    if(guiSettings.getNn() == "AlexNet"){
+    if(guiSettings.getNn() == "ALEXNET"){
         checkAll();
     }
 }
 
 void MainWindow::on_Refresh_hardware_clicked()
 {
+
     viewController->displayAvailableHardware();
+    guiSettings.clearHardware();
     uncheckAll();
-    if(guiSettings.getMode() == "LowestPowerConsumption"){
+    if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
         on_LPC_radio_button_clicked();
     }
-    if(guiSettings.getNn() == "NeuroLab"){
+    if(guiSettings.getNn() == "NEUROLAB"){
         on_NeuroLabNet_radio_button_clicked();
     }
 }
 
-void MainWindow::displayPredictionValues(double value, string valueType){
 
+void MainWindow::setPredictionValue(PredictionValues *values){
+    ui->flops_value->setText(QString::fromStdString(values->flops));
+    ui->bandwidth_value->setText(QString::fromStdString(values->bandwidth));
+    ui->powerCons_value->setText(QString::fromStdString(values->power_consumption));
+    ui->time_value->setText(QString::fromStdString(values->time));
 }
 
-void MainWindow::displayPrediction(vector<double> timeConsumption, vector<double> powerConsumption, double bandwidth, double flops)
+void MainWindow::displayPrediction(string totalTime, string totalPowerConsumption, PredictionValues *cpu, PredictionValues *gpu, PredictionValues *mov1,
+                                   PredictionValues *mov2, PredictionValues *mov3, PredictionValues *mov4,
+                                   PredictionValues *fpga)
 {
-    displayPredictionValues(bandwidth, "Bandwith");
-    displayPredictionValues(flops, "Flops");
-    for(double time : timeConsumption){
-        displayPredictionValues(time, "Time Consumption");
+    ui->totalTime_label->setText(QString::fromStdString(totalTime));
+    ui->totalPower_label->setText(QString::fromStdString(totalPowerConsumption));
+    if (ui->comboBox->currentText() == QString::fromStdString("Movidius 1")) {
+        setPredictionValue(mov1);
+        return;
     }
-    for(double power : powerConsumption){
-        displayPredictionValues(power, "Power Consumption");
+     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 2")) {
+        setPredictionValue(mov2);
+        return;
+     }
+     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 3")) {
+        setPredictionValue(mov3);
+        return ;
+     }
+     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 4")) {
+        setPredictionValue(mov4);
+        return;
+     }
+     if (ui->comboBox->currentText() == QString::fromStdString("CPU")) {
+        setPredictionValue(cpu);
+        return;
+     }
+     if (ui->comboBox->currentText() == QString::fromStdString("GPU")) {
+        setPredictionValue(gpu);
+        return;
     }
+     if (ui->comboBox->currentText() == QString::fromStdString("FPGA")){
+        setPredictionValue(fpga);
+        return;
+    }
+
+        ui->flops_value->clear();
+        ui->bandwidth_value->clear();
+        ui->powerCons_value->clear();
+        ui->time_value->clear();
+
 }
 
 void MainWindow::on_prediction_button_clicked()
 {
     viewController->getPrediction(this->guiSettings);
+}
+
+void MainWindow::setComboboxContent(list<HardwareElement> availableHardware) {
+    for (HardwareElement element : availableHardware) {
+        addHardwareToCombobox(element);
+    }
+}
+
+void MainWindow::addHardwareToCombobox(HardwareElement element) {
+    ui->comboBox->addItem("element");
+}
+
+void MainWindow::checkSelectedHardware() {
+    if (ui->Mov1_checkbox->checkState() == Qt::Checked) {
+        guiSettings.selectHardwareElement("MYRIAD.1");
+    }
+    if (ui->Mov2_checkbox->checkState() == Qt::Checked) {
+        guiSettings.selectHardwareElement("MYRIAD.2");
+    }
+    if (ui->Mov3_checkbox->checkState() == Qt::Checked) {
+        guiSettings.selectHardwareElement("MYRIAD.3");
+    }
+    if (ui->Mov4_checkbox->checkState() == Qt::Checked) {
+        guiSettings.selectHardwareElement("MYRIAD.4");
+    }
+    if (ui->CPU_checkbox->checkState() == Qt::Checked) {
+        guiSettings.selectHardwareElement("CPU");
+    }
+    if (ui->GPU_checkbox->checkState() == Qt::Checked) {
+        guiSettings.selectHardwareElement("GPU");
+    }
+    if (ui->FPGA_checkbox->checkState() == Qt::Checked) {
+        guiSettings.selectHardwareElement("FPGA");
+    }
+
+}
+
+
+void MainWindow::bindCheckbox(int arg, string hardwareElement, QString nameHardwareElement, int indexCombobox) {
+    if (arg == 2) {
+        guiSettings.selectHardwareElement(hardwareElement);
+        ui->comboBox->insertItem(indexCombobox, nameHardwareElement);
+        ui->prediction_button->setEnabled(true);
+        ui->ClassifyButton->setEnabled(true);
+    } else {
+        ui->comboBox->setCurrentIndex(0);
+        guiSettings.unselectHardwareElement(hardwareElement);
+        int indexRemove = ui->comboBox->findText(nameHardwareElement);
+        ui->comboBox->removeItem(indexRemove);
+        if (guiSettings.getSelectedHardware().empty()) {
+            ui->prediction_button->setEnabled(false);
+            ui->ClassifyButton->setEnabled(false);
+        }
+    }
+}
+
+void MainWindow::on_Mov1_checkbox_stateChanged(int arg1)
+{
+    bindCheckbox(arg1, "MYRIAD.1", "Movidius 1", 1);
+}
+
+void MainWindow::on_Mov2_checkbox_stateChanged(int arg1)
+{
+    bindCheckbox(arg1, "MYRIAD.2", "Movidius 2", 2);
+}
+
+void MainWindow::on_Mov3_checkbox_stateChanged(int arg1)
+{
+    bindCheckbox(arg1, "MYRIAD.3", "Movidius 3", 3);
+}
+
+void MainWindow::on_Mov4_checkbox_stateChanged(int arg1)
+{
+    bindCheckbox(arg1, "MYRIAD.4", "Movidius 4", 4);
+}
+
+void MainWindow::on_CPU_checkbox_stateChanged(int arg1)
+{
+    bindCheckbox(arg1, "CPU", "CPU", 2);
+}
+
+void MainWindow::on_GPU_checkbox_stateChanged(int arg1)
+{
+    bindCheckbox(arg1, "GPU", "GPU", 6);
+}
+
+void MainWindow::on_FPGA_checkbox_stateChanged(int arg1)
+{
+    bindCheckbox(arg1, "FPGA", "FPGA", 7);
+}
+
+void MainWindow::on_comboBox_currentIndexChanged(int index)
+{
+    switch (index) {
+    case 1: ;// show for mov1;
+        ui->prediction_button->setEnabled(true);
+        break;
+    case 2: ;
+        ui->prediction_button->setEnabled(true);
+        break;
+    case 3: ;
+        ui->prediction_button->setEnabled(true);
+        break;
+    case 4: ;
+        ui->prediction_button->setEnabled(true);
+        break;
+    case 5: ;
+        ui->prediction_button->setEnabled(true);
+        break;
+    case 6: ;
+        ui->prediction_button->setEnabled(true);
+        break;
+    case 7: ;
+        ui->prediction_button->setEnabled(true);
+        break;
+    default: ;
+        ui->prediction_button->setEnabled(false);
+        break;
+    }
+}
+
+void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
+{
+    if (arg1 == "Select hardware") {
+        ui->flops_value->clear();
+        ui->bandwidth_value->clear();
+        ui->powerCons_value->clear();
+        ui->time_value->clear();
+    }
+}
+
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    if (index == 0) {
+        ui->tabWidget->hide();
+        ui->HardwareOptions->hide();
+        ui->NeuralNetOptions->hide();
+        ui->ModeOptions->hide();
+
+    } else {
+    ui->tabWidget->removeTab(index);}
+}
+
+void MainWindow::on_classificationMenu_clicked()
+{
+    ui->tabWidget->show();
+    ui->HardwareOptions->show();
+    ui->NeuralNetOptions->show();
+    ui->ModeOptions->show();
 }

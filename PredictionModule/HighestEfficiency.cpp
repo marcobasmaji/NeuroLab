@@ -2,6 +2,8 @@
 #include "HighestEfficiency.h"
 #include <algorithm>
 #include <iostream>
+#include <math.h>
+
 std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
 	int badgesize = 1;
 	int numberOfHardwareElements = 0;
@@ -172,7 +174,7 @@ double HighestEfficiency::TimeValueOfX(std::vector<double>& polynome, double x)
 	for (size_t sI = 0; sI < polynome.size(); sI++) {
 		i = sI;
 		int size = polynome.size();
-		value = value + polynome.at(i)*pow(x, size-i-1);
+        value = value + polynome.at(i)*std::pow(x, size-i-1);
 	}
 	return value;
 }

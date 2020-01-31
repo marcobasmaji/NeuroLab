@@ -21,7 +21,7 @@ DataResults PredictionController::calculatePrediction(int numberOfImages,std::st
 		Mode* mode = alex->chooseMode(Operationmode);
 		std::vector<Hardware> vectorResults = (mode->distributeAndPredict(availableHardware, numberOfImages));
 		DataResults*  results = new DataResults(vectorResults);
-		delete mode;
+        //delete mode;
 		delete alex;
 		return *results;
 	}

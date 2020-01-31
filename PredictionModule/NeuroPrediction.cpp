@@ -1,5 +1,6 @@
 #include "NeuroPrediction.h"
 #include <iostream>
+#include <math.h>
 /**
  * @brief Construct a new Neuro Prediction:: Neuro Prediction object
  * 
@@ -42,7 +43,7 @@ double NeuroPrediction::TimeValueOfX(std::vector<double>& polynome, double x)
 	double value = 0;
 	for (size_t i = 0; i < polynome.size(); i++) {
 		int intOfI = i;
-		value = value + pow(polynome[polynome.size() - intOfI], x);
+        value = value + std::pow(polynome[polynome.size() - intOfI], x);
 	}
 	return value;
 }

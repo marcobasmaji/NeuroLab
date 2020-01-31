@@ -1,6 +1,8 @@
 
 #include "LowestPowerConsumption.h"
 #include <iostream>
+#include <math.h>
+
 std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<std::string>& hardware, int numberOfImages) {
 	std::vector<Hardware> list;
 	std::string examplestring = "example";

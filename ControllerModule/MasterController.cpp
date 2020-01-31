@@ -17,37 +17,51 @@ void MasterController::setPaths(vector<string> paths)
 
 }
 
-void MasterController::classify()
+void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages)
 {
     qDebug()<<"classify called in Master"<<endl; // debug: working
 
+    //-------------hier brauchen wir noch----------------------------------------------------------
+
+    //nnObserver.setCurrentNN(nn);
+    //DataResults predictionResults = predictionObserver.calculatePrediction(selectedHardware, mode, nrImages, nn);
+    //nnObserver.setDistribution(predictionResults.hDistribution);
+    //----------------------------------------------------------------------------------------------
     vector<Result> results = nnObserver.classify();
-    viewObserver.displayResults(results);
-    //results = nnObserver.getResults(); crashes
-    
+    viewObserver.displayResults(results);    
 }
 void MasterController::getPrediction(const string net, const string mode, vector<string> hardware , int nrImages)
 {
-    //DataResults predictionResults;
-    /*predictionResults = */predictionObserver.calculatePrediction(nrImages ,net, mode,hardware);
-    vector<double> timeConsumption = predictionObserver.getTime();
-    vector<double> powerConsumption = predictionObserver.getPower();
-    double bandwidth = predictionObserver.getBandwidth();
-    double flops = predictionObserver.getFlops();
     // analog for powerconsumption
-    vector<pair<string, int>> distribution;
-    nnObserver.setDistribution(distribution);
-    viewObserver.displayPrediction(timeConsumption, powerConsumption, bandwidth, flops);
+    //vector<pair<string, int>> distribution;
+    //nnObserver.setDistribution(distribution);
+    //viewObserver.displayPrediction(timeConsumption, powerConsumption, bandwidth, flops);
+
+    DataResults predictionResults = predictionObserver.calculatePrediction(nrImages, net, mode, hardware);
+
+    viewObserver.displayPrediction(predictionResults.TotalTime, predictionResults.TotalPowerConsumption, predictionResults.Times, predictionResults.PowerConsumption, predictionResults.Flops, predictionResults.Bandwidth);
 }
+
+/*
+ *  check only cpu, fpga, movidius stick availability:
+ */
+
 
 vector<string> MasterController::getAvailableHardware()
 {
-    InferenceEngine::Core core;
-    for(auto &item: core.GetAvailableDevices())
-    {
-        cout<< item;
-    }
-    return core.GetAvailableDevices();
+
+    //InferenceEngine::Core core;
+    //return core.GetAvailableDevices();
+    HardwareSurveillence surv;
+    vector<string> d = surv.checkAvailableHardware();
+    //vector<string> d = checkWithOpenVino();
+    //for(string device : d){
+         //devices.push_back(device);
+    //}
+    //d.push_back("GPU");
+    return d;
+   /* InferenceEngine::Core core;
+    return core.GetAvailableDevices();*/
 
 }
 

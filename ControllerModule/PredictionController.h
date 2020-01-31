@@ -1,9 +1,9 @@
 #pragma once
 #include <list>
 #include <vector>
-#include "AlexPrediction.h"
-#include "NeuroPrediction.h"
-#include "DataResults.h"
+#include "../PredictionModule/AlexPrediction.h"
+#include "../PredictionModule/NeuroPrediction.h"
+#include "../PredictionModule/DataResults.h"
 class PredictionController
 {
 public:
