@@ -248,7 +248,7 @@ public:
 *	@param length				The length of the weights array.
 *	@param weights				The array in which the weights should be saved.
 */
-	void getWeights(OpenCLEnvironment* openCLEnvironment, int length, float* weights);
+	float* getWeights(OpenCLEnvironment* openCLEnvironment, int length, float* weights)
 
 /**
 *	@brief						This function returns the calculated errors (gradients) of the output neurons of this layer. It is blocking and only continues if the data has been read and copied.
