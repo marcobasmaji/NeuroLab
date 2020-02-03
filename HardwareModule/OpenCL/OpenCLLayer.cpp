@@ -324,7 +324,7 @@ cl_kernel OpenCLLayer::getKernelUpdateWeights() {
 	return kernelWeightsUpdate;
 }
 
-float* OpenCLLayer::getWeights(OpenCLEnvironment* openCLEnvironment, int length, float* weights){
+float* OpenCLLayer::getWeights(OpenCLEnvironment* openCLEnvironment, int length){
 	size_t size = length;
 
 	cl_command_queue commandQueue = openclEnvironment->getCommandQueue();
