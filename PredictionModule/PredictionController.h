@@ -7,7 +7,7 @@
 class PredictionController
 {
 public:
-	DataResults calculatePredictionType(std::vector<std::string>& availableHardware,std::string Operationmode, int numberOfImages,std::string NN);
+	DataResults calculatePrediction(int numberOfImages, std::string NN, std::string Operationmode, std::vector<std::string>& availableHardware);
 	
 
 	

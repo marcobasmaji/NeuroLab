@@ -20,7 +20,7 @@ std::vector<Hardware> NeuroPrediction::distributeAndPredict(std::vector<std::str
 	std::vector<double> polynomCPU{ 1,2,3,4 };
 	std::vector<Hardware> list;
 	double powerconsumption = 1;
-	Hardware example{ cpu,0,(double)9,polynomCPU,powerconsumption };
+	Hardware example{ cpu,0,(double)9,polynomCPU,powerconsumption,0.0,0.0 };
 	for (std::string element : availableHardware) {
 		if (element.compare(cpu) == 0) {
 			example.name = cpu;

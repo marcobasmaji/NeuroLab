@@ -11,7 +11,7 @@
  * @brief 
  * 
  * @param operationmode 
- * @return Mode* a pointer of the 
+ * @return Mode* a pointer to an object that represents the operation mode
  */
 Mode* AlexPrediction::chooseMode(std::string operationmode)
 {

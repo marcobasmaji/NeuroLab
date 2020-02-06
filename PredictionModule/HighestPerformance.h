@@ -2,7 +2,10 @@
 #include "Mode.h"
 #include <vector>
 #include "Hardware.h"
-
+/**
+ * @brief .h file of the highest performance class
+ * contains the declaration of the constructors and two methdos 
+ */
 class HighestPerformance :
 	public Mode	
 {
