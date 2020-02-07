@@ -14,8 +14,8 @@
  */
 DataResults PredictionController::calculatePrediction(int numberOfImages,std::string NN, std::string Operationmode,std::vector<std::string>& availableHardware)
 {
+
     std::string alexnet = "ALEXNET";
-    std::cout << NN;
 	std::string neuronet = "neuronet";
 	if (NN.compare(alexnet) == 0) {
 		AlexPrediction *alex = new AlexPrediction;

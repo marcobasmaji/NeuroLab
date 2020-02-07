@@ -241,6 +241,13 @@ public:
 *	@return	The kernelWeightsUpdate attribute.
 */
 	cl_kernel getKernelUpdateWeights();
+	
+/**
+*	@brief					This function loads the overhanded weights to the memWeights buffer. In case this layer does not have weights i.e. the pooling layer, this function must not be called.
+*	@param openclEnvironment		The OpenCL environment which represents the hardware on that the weights of this layer should be loaded.
+*	@param length				The length of the weights array.
+*/
+	float* getWeights(OpenCLEnvironment* openCLEnvironment, int length)
 
 /**
 *	@brief						This function returns the calculated errors (gradients) of the output neurons of this layer. It is blocking and only continues if the data has been read and copied.

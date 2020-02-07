@@ -324,6 +324,15 @@ cl_kernel OpenCLLayer::getKernelUpdateWeights() {
 	return kernelWeightsUpdate;
 }
 
+float* OpenCLLayer::getWeights(OpenCLEnvironment* openCLEnvironment, int length){
+	size_t size = length;
+
+	cl_command_queue commandQueue = openclEnvironment->getCommandQueue();
+	float* weights = (float*)enqueueReadBuffer(commandQueue, size * sizeof(float), memWeights);
+
+	return weights;	
+}
+
 float* OpenCLLayer::getErrors(OpenCLEnvironment* openclEnvironment, int batchSize, int outputMaps, int outputHeight, int outputWidth, int* arrayLength) {
 	size_t size = (size_t) ((size_t)batchSize * (size_t)outputMaps * (size_t)outputHeight * (size_t)outputWidth);
 
