@@ -4,9 +4,11 @@
 #include <Tools/common/format_reader/format_reader_ptr.h>
 #include <iostream>
 #include <DataModule/Result.h>
+#include<chrono>
 
 using namespace std;
 using namespace InferenceEngine;
+using namespace std::chrono;
 
 
 class OpenVinoEnv
@@ -21,6 +23,8 @@ public:
 private:
     void readIR();
     void configureInputAndOutput();
+
+
     void loadModel();
     void createInferRequest();
     void prepareInput();

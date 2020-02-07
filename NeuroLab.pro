@@ -104,7 +104,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 # Libraries
 
 LIBS += -L$$PWD/Tools/openvino/lib/ -linference_engine
-LIBS += -L$$PWD/Tools/format_reader/ -lformat_reader
+LIBS += -L$$PWD/Tools/format_reader/lib/ -lformat_reader
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc

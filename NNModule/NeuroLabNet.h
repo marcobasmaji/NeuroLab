@@ -12,7 +12,7 @@
 #include "../HardwareModule/OpenCL/HardwareType.cpp"
 #include <DataModule/Shape.h>
 #include <DataModule/Result.h>
-#include <opencv2/opencv.hpp>
+#include "../Tools/opencv2/include/opencv.hpp"
 #include <CL/cl.h>
 #include <fstream>
 #include <QDir>

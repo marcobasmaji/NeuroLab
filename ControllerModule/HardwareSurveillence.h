@@ -2,7 +2,7 @@
 #define HARDWARESURVEILLENCE_H
 #include <string.h>
 #include <vector>
-#include <Tools/openvino/include/inference_engine.hpp>
+#include "Tools/openvino/include/inference_engine.hpp"
 #include "Tools/opencl/include/cl.h"
 
 

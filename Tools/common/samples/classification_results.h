@@ -75,11 +75,12 @@ public:
         /** Print the result iterating over each batch **/
         std::cout << std::endl << "Top " << _nTop << " results:" << std::endl << std::endl;
         // for NeuroLab
-        Result r;
+
         for (unsigned int image_id = 0; image_id < _batchSize; ++image_id) {
             std::cout << "Image " << _imageNames[image_id] << std::endl << std::endl;
 
             //for NeuroLab
+            Result r;
             r.setPath(_imageNames[image_id]);
 
             printHeader();

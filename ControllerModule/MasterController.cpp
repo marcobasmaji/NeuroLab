@@ -2,8 +2,8 @@
 #include <QApplication>
 #include <QLabel>
 #include <QDebug>
-#include <DataModule/Result.h>
-#include <Tools/openvino/include/inference_engine.hpp>
+#include "DataModule/Result.h"
+#include "Tools/openvino/include/inference_engine.hpp"
 
 MasterController::MasterController() : viewObserver(this)
 {

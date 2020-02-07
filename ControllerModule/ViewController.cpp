@@ -1,7 +1,7 @@
 #include "ViewController.h"
 #include <QApplication>
-#include<ControllerModule/MasterController.h>
-#include<QDebug>
+#include <ControllerModule/MasterController.h>
+#include <QDebug>
 #include <ViewModule/MainWindow.h>
 #include <PredictionModule/Prediction.h>
 #include <math.h>

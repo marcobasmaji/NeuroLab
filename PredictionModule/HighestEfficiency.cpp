@@ -14,7 +14,7 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 	std::string FPGA = "FPGA";
 	std::string CPU = "CPU";
 	std::vector<double>polynomMovidius{ 0.122,0.9156 };
-	std::vector<double>polynomCPU{ -0.0004,0.1462,0.785 };
+    std::vector<double>polynomCPU{ -0.00002,0.0523,0.5904};
 	std::vector<double>polynomFPGA{ 1,2,3,4 };
 	int number = 0;
 	double requiredTime = 0;

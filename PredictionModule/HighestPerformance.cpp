@@ -24,7 +24,7 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 	std::string CPU = "CPU";
 	std::string GPU = "GPU";
 	std::vector<double>polynomMovidius{ 0.122,0.9156 };
-	std::vector<double>polynomCPU{ -0.0004,0.1462,0.785 };
+    std::vector<double>polynomCPU{ -0.00002,0.0523,0.5904 };
 	std::vector<double>polynomFPGA{ 0.001,0.2,0.3,0.04 };
 	int number = 0;
 	double requiredTime = 0;

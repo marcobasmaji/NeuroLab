@@ -10,6 +10,8 @@
 #include <condition_variable>
 #include <mutex>
 #include <Tools/common/samples/classification_results.h>
+#include <chrono>
+#include <vector>
 
 
 
@@ -20,6 +22,17 @@ OpenVinoEnv::OpenVinoEnv() {
     setPlatforms({"CPU"});
 }
 vector<Result> OpenVinoEnv::classify() {
+   auto start = std::chrono::high_resolution_clock::now();
+   std::vector <std::vector<int>> matrix;
+   std::vector <int> test;
+   for(int i = 0; i < 10000; i++){
+       for(int j =0; j < 10000; j++){
+           int m = j+i;
+       }
+   }
+   auto stop = std::chrono::high_resolution_clock::now();
+   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+   std::cerr << duration.count();
     readIR();
     configureInputAndOutput();
     loadModel();
