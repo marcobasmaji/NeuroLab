@@ -1,6 +1,10 @@
 #pragma once
 #include <vector>
 #include <string>
+/**
+ * @brief declaration of the attributes of the hardware class and its constructor
+ * 
+ */
 class Hardware
 {
 public:

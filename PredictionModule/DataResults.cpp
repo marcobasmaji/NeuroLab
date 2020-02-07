@@ -1,7 +1,11 @@
 #include "DataResults.h"
 #include "Hardware.h"
 
-
+/**
+ * @brief Construct a new Data Results:: Data Results object
+ * contains all the important data that is used for the classifcation
+ * @param results a vector that represents a optimal constellation of hardware elements
+ */
 DataResults::DataResults(std::vector<Hardware>& results) {
 	std::vector<std::pair<std::string, int>> hDistribution;
 	std::vector<std::pair<std::string, double>> times;

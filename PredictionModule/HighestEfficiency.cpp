@@ -1,11 +1,18 @@
 #pragma once
 #include "HighestEfficiency.h"
+#include "../PredictionModule/Hardware.h"
 #include <algorithm>
 #include <iostream>
 #include <math.h>
-
+/**
+ * @brief Construct a new std::vector<Hardware>Highest Efficiency::distribute And Predict object main calculation method for the highest efficiency mode.
+ * The goal of this method is to make a distribution of images to hardware elments where the product of Powerconsumption / second * required time is as low as possible.
+ * @param hardwares a reference to a vector that contains the name of the hardware elements
+ * @param numberOfImages an integer containing the number of images that need to be classified
+ * @ return a vector of hardware elements that represents a optimal constellation
+ */
 std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::string>& hardwares, int numberOfImages) {
-	int badgesize = 1;
+	int badgesize = 16;
 	int numberOfHardwareElements = 0;
 	std::string movidius1 = "MYRIAD.1";
 	std::string movidius2 = "MYRIAD.2";
@@ -13,9 +20,9 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 	std::string movidius4 = "MYRIAD.4";
 	std::string FPGA = "FPGA";
 	std::string CPU = "CPU";
-	std::vector<double>polynomMovidius{ 0.122,0.9156 };
-	std::vector<double>polynomCPU{ -0.0004,0.1462,0.785 };
-	std::vector<double>polynomFPGA{ 1,2,3,4 };
+	std::vector<double>polynomCPU{ -0.0000006,0.0237,1.1126 };
+	std::vector<double> polynomFPGA{ 2,3,4,5 };
+	std::vector<double>polynomMovidius{ 0.00001, 0.0825, 7.0217 };
 	int number = 0;
 	double requiredTime = 0;
 	std::string examplestring = "example";
@@ -23,27 +30,31 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 	Hardware example{ examplestring,number,requiredTime,polynomFPGA,requiredTime,0.0,0.0 };
 	std::vector<Hardware> hardwarevector;
 	std::vector<std::vector<Hardware>> constellations;
-	double powerConsumptionMovidius = 17;
-
+	double powerConsumptionMovidius = 10;
+	double powerConsumptionCPU = 100;
+	double bandwithMovidius = 6.9;
+	double flopsMovidius = 5000000;
+	double bandwithCPU = 0.69;
+	double flopsCPU = 50000000;
 	for (std::string element : hardwares) {
 		if (element.compare(movidius1) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,0.0,0.0 };
+			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 
 		}
 		if (element.compare(movidius2) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,0.0,0.0 };
+			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (element.compare(movidius3) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,0.0,0.0 };
+			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (element.compare(movidius4) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,0.0,0.0 };
+			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
@@ -53,21 +64,13 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 			numberOfHardwareElements++;
 		}
 		if (element.compare(CPU) == 0) {
-			Hardware h{ element,number,requiredTime,polynomCPU,24,0.0,0.0 };
+			Hardware h{ element,number,requiredTime,polynomCPU,powerConsumptionCPU,flopsCPU,bandwithCPU };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 			
 		}
 	}
-	//inital distribution of images on the hardware elements
-	/*for (auto element : hardwarevector) {
-		element.numberOfAssignedImages = numberOfImages / numberOfHardwareElements;// welche Elemente sind noch nicht initialisiert(rest)
-		std::cout << element.numberOfAssignedImages << "HI";
-		double numberAssignedImages = (double)element.numberOfAssignedImages;
-		element.requiredTime = hi->TimeValueOfX(element.polynome, numberAssignedImages);
-	std::cout << element.requiredTime << "ooo " ;
-	}*/
-	//problem = infinity
+	
 	for (auto i = hardwarevector.begin(); i != hardwarevector.end(); i++) {
 		i->numberOfAssignedImages = numberOfImages / numberOfHardwareElements;
 		i->requiredTime = hi->TimeValueOfX(i->polynome, i->numberOfAssignedImages);
@@ -83,10 +86,12 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 		for (size_t sJ = 0; sJ < hardwarevector.size() + 1; sJ++) {
 		j = sJ;
 		std::vector<Hardware> hardwarevec = hardwarevector;
+		size = hardwarevector.size(); // CHANGED 
 			for (size_t sI = 0; sI < hardwarevec.size() / 2; sI++) {
 				i = sI;
+				//hier statt requiredtime quotient
 				
-				while (hardwarevec.at(i).requiredTime < hardwarevec.at(size - i - 1).requiredTime) {
+				while ((hardwarevec.at(i).requiredTime) < hardwarevec.at(size - i - 1).requiredTime) { // CHANGED
 					hardwarevec.at(i).numberOfAssignedImages = hardwarevec.at(i).numberOfAssignedImages + badgesize;
 					hardwarevec.at(size - i - 1).numberOfAssignedImages = hardwarevec.at(size - 1 - i).numberOfAssignedImages - badgesize;
 					double numberOfAssignedImages = (double)hardwarevec.at(i).numberOfAssignedImages;
@@ -96,7 +101,7 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 					
 				}
 			
-				//werden nicht gespeichert
+			
 				std::sort(hardwarevec.begin(), hardwarevec.end(), [](Hardware& h1, Hardware& h2) {
 					return h1.requiredTime < h2.requiredTime;
 					});
@@ -111,15 +116,14 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 		else {
 			for (size_t sM = 0; sM < hardwarevector.size(); sM++) {
 				m = sM;
-				
-				//hardwarevec statt hardwarevector?constellationadded0time
+				numberOfHardwareElements = hardwarevec.size(); //changed
 				hardwarevector.at(m).numberOfAssignedImages = numberOfImages / (numberOfHardwareElements - 1);
 				double numberOfAssignedImages = hardwarevector.at(m).numberOfAssignedImages;
 				hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome, numberOfAssignedImages);
 				
 			}
 			std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
-				return h1.requiredTime < h2.requiredTime;
+				return h1.requiredTime*h1.powerconsumption < h2.requiredTime*h2.powerconsumption;
 				});
 		}		
 		
@@ -151,22 +155,34 @@ end:
 	int t = 0;
 	for (size_t sT = 0; sT < powerVector.size()-1 ; sT++) {
 		t = sT;
-		if ((powerVector.at(t).first / powerVector.at(t).second) < minimumQuotient) {
+		if ((powerVector.at(t).first * powerVector.at(t).second) < minimumQuotient) {
 			minimumQuotient = (powerVector.at(t).first * powerVector.at(t).second);
 			counterPower = t;
 		}
+	}
+	if (numberOfImages % constellations.at(counterPower).size() == 0) {
+		return constellations.at(counterPower);
+	}
+	else {
+		int modulo = numberOfImages % constellations.at(counterPower).size();
+		constellations.at(counterPower).at(0).numberOfAssignedImages = constellations.at(counterPower).at(0).numberOfAssignedImages + modulo;
+		constellations.at(counterPower).at(0).requiredTime = TimeValueOfX(constellations.at(counterPower).at(0).polynome, constellations.at(counterPower).at(0).numberOfAssignedImages);
+		return constellations.at(counterPower);
 	}
 	
 	return constellations.at(counterPower);
 	
 }
-bool HighestEfficiency::sortbytime(Hardware& a, Hardware& b)
-{
-	return (a.requiredTime < b.requiredTime);
-}
 
 
 
+/**
+ * @brief calculates the time it takes the hardware elements to classify the images
+ * 
+ * @param polynome a vector containing doubles as coefficients
+ * @param x the number of images that need to be classified
+ * @return double a number that contains the calculated time in seconds
+ */
 double HighestEfficiency::TimeValueOfX(std::vector<double>& polynome, double x)
 {
 	double value = 0;
@@ -174,7 +190,7 @@ double HighestEfficiency::TimeValueOfX(std::vector<double>& polynome, double x)
 	for (size_t sI = 0; sI < polynome.size(); sI++) {
 		i = sI;
 		int size = polynome.size();
-        value = value + polynome.at(i)*std::pow(x, size-i-1);
+		value = value + polynome.at(i)*pow(x, size-i-1);
 	}
 	return value;
 }
