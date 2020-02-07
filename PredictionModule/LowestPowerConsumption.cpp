@@ -1,22 +1,30 @@
 
 #include "LowestPowerConsumption.h"
-#include <iostream>
+#include "../PredictionModule/Hardware.h"
 #include <math.h>
-
+#include <iostream>
+/**
+ * @brief Construct a new std::vector<Hardware>Lowest Power Consumption::distribute And Predict object this object is a vector containig one hardware element
+ * This hardware element is the detected one with the lowest power consumption
+ * @param hardware a reference a vector containing the names of the hardware elements as strings
+ * @param numberOfImages an integer that contains the number of images that the user wants to get classified
+ */
 std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<std::string>& hardware, int numberOfImages) {
 	std::vector<Hardware> list;
 	std::string examplestring = "example";
 	double requiredTime = 0;
-	std::vector<double>polynomCPU{ -0.0004,0.1462,0.785 };
+	std::vector<double>polynomCPU{ -0.0000006,0.0237,1.1126 };
 	std::vector<double> polynomFPGA{ 2,3,4,5 };
-	std::vector<double>polynomMovidius{ -0.0004,0.1462,0.785 };
-	Hardware example{ examplestring,numberOfImages,requiredTime,polynomFPGA,requiredTime,0.0,0.0 };
+	std::vector<double>polynomMovidius{ 0.00001, 0.0825, 7.0217 };
+	double flopsmovidius = 5000000;
+	double bandwithMovidius = 6.9;
+	Hardware example{ examplestring,numberOfImages,requiredTime,polynomFPGA,requiredTime,flopsmovidius,bandwithMovidius };
 	std::string CPU = "CPU";
 	std::string FPGA = "FPGA";
 	std::string sticks[] = { "MYRIAD.1","MYRIAD.2","MYRIAD.3","MYRIAD.4" };
 	double powerConsumptionFPGA = 0;
-	double powerConsumptionCPU = 0;
-	double powerConsumptionMovidius = 0;
+	double powerConsumptionCPU = 100;
+	double powerConsumptionMovidius = 10;
 	LowestPowerConsumption* low = new LowestPowerConsumption;
 	for (std::string movidius : sticks) {
 		for (std::string elem : hardware) {
@@ -59,11 +67,20 @@ std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<st
 		return list;
 
 }
-
+/**
+ * @brief Construct a new Lowest Power Consumption:: Lowest Power Consumption object
+ * 
+ */
 LowestPowerConsumption::LowestPowerConsumption()
 {
 }
-
+/**
+ * @brief same as in highestPerformance class 
+ * 
+ * @param polynome 
+ * @param x 
+ * @return double 
+ */
 double LowestPowerConsumption::TimeValueOfX(std::vector<double>& polynome, double x)
 {
 	double value = 0;
@@ -77,7 +94,7 @@ double LowestPowerConsumption::TimeValueOfX(std::vector<double>& polynome, doubl
 		for (size_t i = 0; i < size; i++) {
 			value = value + polynome.at(criticalsize) * pow(x, (size - i - 1));
 			valuefirstpoint = valuefirstpoint + polynome.at(criticalsizeHalf) * pow(x, (size - i - 1));
-			std::cout << value << "hi";
+			
 
 		}
 		std::pair<double, double> firstCoordinate = std::make_pair(criticalsize, value);

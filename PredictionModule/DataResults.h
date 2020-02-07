@@ -2,6 +2,10 @@
 #include<vector>
 #include <string>
 #include "Hardware.h"
+/**
+ * @brief declaration of the dataResults class contains 4 vectors and two doubles as attributes and a constructor
+ * 
+ */
 class DataResults
 {
 public:
