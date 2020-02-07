@@ -83,7 +83,7 @@ LowestPowerConsumption::LowestPowerConsumption()
  */
 double LowestPowerConsumption::TimeValueOfX(std::vector<double>& polynome, double x)
 {
-	double value = 0;
+	/**double value = 0;
 	double valuefirstpoint = 0;
 	int size = polynome.size();
 	double firstpoint = 0;
@@ -117,5 +117,14 @@ double LowestPowerConsumption::TimeValueOfX(std::vector<double>& polynome, doubl
 		}
 		return value;
 	}
+	*/
+	double value = 0;
+	int i = 0;
+	for (size_t sI = 0; sI < polynome.size(); sI++) {
+		i = sI;
+		int size = polynome.size();
+		value = value + polynome.at(i) * pow(x, size - i - 1);
+	}
+	return value;
 }
 
