@@ -13,7 +13,6 @@ public:
     HardwareSurveillence();
     vector<string> checkAvailableHardware();
 private:
-    InferenceEngine::Core core;
     vector<string> checkWithOpenVino();
     bool checkWithOpenCL();
 };

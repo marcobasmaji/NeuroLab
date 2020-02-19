@@ -52,14 +52,14 @@ vector<string> MasterController::getAvailableHardware()
 
     //InferenceEngine::Core core;
     //return core.GetAvailableDevices();
-    HardwareSurveillence surv;
-    vector<string> d = surv.checkAvailableHardware();
+     HardwareSurveillence surv;
+     vector<string> d = surv.checkAvailableHardware();
     //vector<string> d = checkWithOpenVino();
     //for(string device : d){
          //devices.push_back(device);
     //}
     //d.push_back("GPU");
-    return d;
+     return d;
    /* InferenceEngine::Core core;
     return core.GetAvailableDevices();*/
 

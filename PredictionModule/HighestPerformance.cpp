@@ -1,6 +1,5 @@
 #pragma once
 #include "HighestPerformance.h"
-#include "hardware.h" 
 #include "../PredictionModule/Hardware.h"
 #include<list>
 #include<math.h>
@@ -24,13 +23,8 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 	std::string FPGA = "FPGA";
 	std::string CPU = "CPU";
 	std::string GPU = "GPU";
-<<<<<<< HEAD
-	std::vector<double>polynomMovidius{ 0.122,0.9156 };
-    std::vector<double>polynomCPU{ -0.00002,0.0523,0.5904 };
-=======
 	std::vector<double>polynomMovidius{0.00001, 0.0825, 7.0217 }; // //  0.087,6.904 linear
 	std::vector<double>polynomCPU{ -0.0000006,0.0237,1.1126 };// // 0.0222, 1.2587
->>>>>>> f34129b989cdf14fe4cf3fd334b9c9a2b9ffa71a
 	std::vector<double>polynomFPGA{ 0.001,0.2,0.3,0.04 };
 	int number = 0;
 	double requiredTime = 0;

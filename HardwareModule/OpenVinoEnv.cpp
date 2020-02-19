@@ -19,7 +19,7 @@ using namespace InferenceEngine;
 
 OpenVinoEnv::OpenVinoEnv() {
     chooseNeuralNet("alexnet");
-    setPlatforms({"CPU"});
+    setPlatforms({"HETERO:CPU,MYRIAD"});
 }
 vector<Result> OpenVinoEnv::classify() {
    auto start = std::chrono::high_resolution_clock::now();

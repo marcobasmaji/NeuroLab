@@ -5,6 +5,7 @@ HardwareSurveillence::HardwareSurveillence(){
 }
 //checks only CPU, FPGA and Movidius stick availability
 vector<string> HardwareSurveillence::checkWithOpenVino(){
+    InferenceEngine::Core core;
     return core.GetAvailableDevices();
 }
 

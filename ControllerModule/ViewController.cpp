@@ -26,7 +26,6 @@ ViewController::ViewController(MasterController* partner)
 
 void ViewController::removeImage(string imagePath){
     qDebug()<<"remove image "<<endl;
-    //this->master->
 }
 
 void ViewController::handleClassifyRequest(GUISettings settings)
@@ -120,28 +119,24 @@ void ViewController::displayPrediction(double totalTime, double totalPowerConsum
 
 }
 
+void ViewController::setAvailableMovidius(int movidiusCounter) {
+    switch (movidiusCounter) {
+    case 1: availableHardware.push_back(MOV1); break;
+    case 2: availableHardware.push_back(MOV2); break;
+    case 3: availableHardware.push_back(MOV3); break;
+    case 4: availableHardware.push_back(MOV4); break;
+    }
+}
+
 
 void ViewController::setAvailableHardware(vector<string> &hardwareElements)
 {
     availableHardware.clear();
+    int movidiusCounter = 0;
     for(string hardware : hardwareElements){
-        if(hardware.compare("MYRIAD") == 0){
-            availableHardware.push_back(MOV);
-        }
-        if(hardware.compare("MYRIAD.1") == 0){
-
-            availableHardware.push_back(MOV1);
-        }
-
-        if(hardware.compare("MYRIAD.2") == 0){
-            availableHardware.push_back(MOV2);
-        }
-        if(hardware.compare("MYRIAD.3") == 0){
-            availableHardware.push_back(MOV3);
-        }
-
-        if(hardware.compare("MYRIAD.4") == 0){
-            availableHardware.push_back(MOV4);
+        if(hardware.find("MYRIAD") != std::string::npos) {
+            movidiusCounter++;
+            setAvailableMovidius(movidiusCounter);
         }
 
         if(hardware.compare("CPU") == 0){
@@ -162,9 +157,6 @@ void ViewController::setAvailableHardware(vector<string> &hardwareElements)
 void ViewController::displayAvailableHardware()
 {
     vector<string> test;
-    //test.push_back("MYRIAD.1");
-    //test.push_back("MYRIAD.2");
-    //test.push_back("CPU");
     test = master->getAvailableHardware();
     setAvailableHardware(test);
     mainWindow->disableHWCheckboxes();

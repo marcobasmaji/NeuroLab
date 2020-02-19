@@ -122,48 +122,43 @@ void MainWindow::on_LPC_radio_button_clicked()
         return;
     }
 
-    guiSettings.setMode("LowestPowerConsumption");
+    guiSettings.setMode("LOWEST_POWER_CONSUMPTION");
     bool hasMovidius = false;
     uncheckAll();
     for (HardwareElement hw : viewController->availableHardware) {
-        if(hasMovidius){
-            break;
-        }
+
         switch(hw){
-        case MOV : hasMovidius = true;
-            this->disableHWCheckboxes();
-            //this->enableCheckbox(MOV1);
-            ui->Mov1_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setSelectedHardware({MOV});
-            break;
         case MOV1 : hasMovidius = true;
             this->disableHWCheckboxes();
-            //this->enableCheckbox(MOV1);
+            this->uncheckAll();
             ui->Mov1_checkbox->setCheckState(Qt::Checked);
             guiSettings.setSelectedHardware({MOV1});
             break;
         case MOV2 : hasMovidius = true;
             this->disableHWCheckboxes();
-            //this->enableCheckbox(MOV2);
+            this->uncheckAll();
             ui->Mov2_checkbox->setCheckState(Qt::Checked);
             guiSettings.setSelectedHardware({MOV2});
             break;
         case MOV3: hasMovidius = true;
             this->disableHWCheckboxes();
-            //this->enableCheckbox(MOV3);
+            this->uncheckAll();
             ui->Mov3_checkbox->setCheckState(Qt::Checked);
             guiSettings.setSelectedHardware({MOV3});
             break;
         case MOV4 : hasMovidius = true;
             this->disableHWCheckboxes();
-            //this->enableCheckbox(MOV4);
+            this->uncheckAll();
             ui->Mov4_checkbox->setCheckState(Qt::Checked);
             guiSettings.setSelectedHardware({MOV4});
             break;
         default:    this->disableHWCheckboxes();
-            //this->enableCheckbox(CPU);
+            this->uncheckAll();
             ui->CPU_checkbox->setCheckState(Qt::Checked);
 
+        }
+        if(hasMovidius){
+            break;
         }
     }
 }
@@ -174,7 +169,7 @@ void MainWindow::on_HP_radio_button_clicked()
     if(guiSettings.getNn().compare("NEUROLAB")==0){
         return;
     }
-    guiSettings.setMode("HIGHEST_EFFICIENCY");
+    guiSettings.setMode("HIGHEST_PERFOMANCE");
     viewController->displayAvailableHardware();
     uncheckAll();
 
@@ -197,6 +192,9 @@ void MainWindow::on_AlexNet_radio_button_clicked()
     setEnabledModes(true);
     viewController->displayAvailableHardware();
     uncheckAll();
+    if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
+        on_LPC_radio_button_clicked();
+    }
 }
 
 void MainWindow::on_NeuroLabNet_radio_button_clicked()
@@ -205,6 +203,7 @@ void MainWindow::on_NeuroLabNet_radio_button_clicked()
     uncheckAll();
     disableHWCheckboxes();
     setEnabledModes(false);
+
     ui->CPU_checkbox->setCheckState(Qt::Checked);
 
 }
@@ -245,8 +244,6 @@ void MainWindow::on_LoadButton_clicked()
     }
     //load in mainwindow
     this->guiSettings.setPaths(vec);
-    //this->viewController->updatePathList(guiSettings.getPaths());
-    //viewController->getPrediction(this->guiSettings);
 
 }
 
@@ -263,8 +260,6 @@ void MainWindow::on_DeleteButton_clicked()
         return;
     }
     string imagePath = imageToBeRemoved->text().toStdString();
-    //remove image path stored in ViewController
-    //viewController->removeImage(imagePath);
 
     //remove image from main window
     int row = ui->previewArea->row(imageToBeRemoved);
@@ -272,7 +267,6 @@ void MainWindow::on_DeleteButton_clicked()
 
     //decrease total nr of images stored in guiSettings
     guiSettings.removePath(imagePath);
-    //viewController->updatePathList(guiSettings.getPaths());
 
     imageToBeRemoved = NULL;
     ui->DeleteButton->setEnabled(false);
@@ -308,22 +302,11 @@ void MainWindow::displayResults(vector<Result> results)
 {
     qDebug()<<"Results size: "<<results.size()<<endl; // debug:
 
-    //pair<string,float> p = results.back().getLabelsAndProb().front();
-    //QString qstr = QString::fromStdString(p.first);
-    // moving into a new results tab
-    //QLabel *label = new QLabel(qstr);
-
-    //int newTabIndex = createTab();
     QVBoxLayout *layout = new QVBoxLayout();
     QScrollArea *scrollArea = new QScrollArea(this);
 
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
-    QWidget *controlsRestrictorWidget = new QWidget();
-    controlsRestrictorWidget->setLayout(layout);
-    controlsRestrictorWidget->setMinimumHeight(results.size() * 200);
-
 
     int currentIndex = ui->tabWidget->currentIndex();
     currentIndex++;
@@ -339,12 +322,9 @@ void MainWindow::displayResults(vector<Result> results)
 
 
         QLabel *imageLabel = new QLabel();
-        imageLabel->setMaximumWidth(200);
-        imageLabel->setMaximumHeight(200);
+        imageLabel->setFixedSize(400,200);
         QPixmap image(path);
-        image.scaled(200, 200, Qt::KeepAspectRatio);
-
-
+        QPixmap scaledImage = image.scaledToHeight(200);
 
         vector<pair<string, float>> labelsAndprob = result.getLabelsAndProb();
         for(int i = 0; i < 5; i++){
@@ -354,12 +334,21 @@ void MainWindow::displayResults(vector<Result> results)
             labelsLayout->addWidget(new QLabel(label));
         }
 
-        imageLabel->setPixmap(image);
-        imageLabel->setScaledContents(true);
+        imageLabel->setPixmap(scaledImage);
         resultLayout->addWidget(imageLabel);
-        resultLayout->addSpacing(5);
         resultLayout->addLayout(labelsLayout);
         layout->addLayout(resultLayout);
+
+        QWidget * horizontalLineWidget = new QWidget;
+        horizontalLineWidget->setFixedHeight(2);
+        horizontalLineWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        horizontalLineWidget->setStyleSheet(QString("background-color: #c0c0c0;"));
+        layout->addWidget(horizontalLineWidget);
+
+        QWidget *controlsRestrictorWidget = new QWidget();
+        controlsRestrictorWidget->setLayout(layout);
+        controlsRestrictorWidget->setMinimumHeight(results.size() * 210);
+        controlsRestrictorWidget->setMaximumWidth(1000);
         scrollArea->setWidget(controlsRestrictorWidget);
 
     }

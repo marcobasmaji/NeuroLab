@@ -33,7 +33,7 @@ std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<st
 				example.polynome = polynomMovidius;
 				example.numberOfAssignedImages = numberOfImages;
 				example.requiredTime = low->TimeValueOfX(example.polynome,example.numberOfAssignedImages);
-				example.powerconsumption = example.requiredTime*powerConsumptionMovidius;
+                example.powerconsumption = powerConsumptionMovidius;
 				list.push_back(example);
 				return list;
 			}
@@ -45,7 +45,7 @@ std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<st
 			example.name = element;
 				example.polynome = polynomCPU;
 				example.requiredTime = low->TimeValueOfX(example.polynome,example.numberOfAssignedImages);
-				example.powerconsumption = example.requiredTime*powerConsumptionCPU;
+                example.powerconsumption = powerConsumptionCPU;
 				list.push_back(example);
 				return list;
 		}
@@ -55,7 +55,7 @@ std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<st
 			example.name = elem;
 				example.polynome = polynomFPGA;
 				example.requiredTime = low->TimeValueOfX(example.polynome,example.numberOfAssignedImages);
-				example.powerconsumption = example.requiredTime*powerConsumptionFPGA;
+                example.powerconsumption = powerConsumptionFPGA;
 				list.push_back(example);
 				return list;
 		}

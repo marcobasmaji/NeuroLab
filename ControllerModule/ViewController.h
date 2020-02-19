@@ -40,6 +40,7 @@ private:
                                     vector<pair<string,double>> flops, vector<pair<string,double>> bandwidth);
 
 
+    void setAvailableMovidius(int movidiusCounter);
 };
 
 #endif // VIEWCONTROLLER_H

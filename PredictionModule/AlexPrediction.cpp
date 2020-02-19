@@ -15,9 +15,9 @@
  */
 Mode* AlexPrediction::chooseMode(std::string operationmode)
 {
-	std::string lowestPowerconsumption = "LowestPowerConsumption";
-	std::string highestefficiency = "HighestEfficiency";
-	std::string highestPerformance = "HighestPerformance";
+    std::string lowestPowerconsumption = "LOWEST_POWER_CONSUMPTION";
+    std::string highestefficiency = "HIGHEST_EFFICIENCY";
+    std::string highestPerformance = "HIGHEST_PERFORMANCE";
 	if (operationmode.compare(lowestPowerconsumption) == 0) {
 		LowestPowerConsumption* l = new LowestPowerConsumption();
 		return l;
