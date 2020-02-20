@@ -5,11 +5,6 @@ Loss::Loss(size_t numInputs) : numInputs(numInputs)
 
 }
 
-Shape Loss::getPredictedDistributionGrad() const
-{
-    return predictedDistributionGrad;
-}
-
 float* Loss::getOutputError(float distribution[],string label)
 {
     float derivative[numInputs];
@@ -33,13 +28,17 @@ float* Loss::getOutputError(float distribution[],string label)
         }
     }
     // calculate
-    float loss;
+    float loss = 0;
+    for(unsigned int i=0;i<sizeof (targetDistribution);i++)
+    {
+        loss += targetDistribution[i]*std::log(distribution[i]);
+    }
+    // save loss in case needed
+    this->loss = -loss;
     for (size_t j=0; j<sizeof (targetDistribution);j++)
     {
-        // calculate loss
-
         // derivative
-        derivative[j] =-(distribution[j]/(1/targetDistribution[j]));
+        derivative[j] =-(targetDistribution[j]/distribution[j]);
     }
     return derivative;
 

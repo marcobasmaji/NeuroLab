@@ -31,14 +31,14 @@ ConvolutionLayer::ConvolutionLayer(
 
 }
 
-void ConvolutionLayer::forwardPass(float input[],float output[])
+void ConvolutionLayer::forwardPass()
 {
 
         //lLayer->setInputs(clEnv,input,inputHeight*inputWidth*inputDepth);
         clLayer->computeForward(clEnv,16,numFilters);
 
 }
-void ConvolutionLayer::backPropagate(float *upstreamGrad)
+void ConvolutionLayer::backPropagate()
 {
     clLayer->computeErrorComp(clEnv,16);
 }

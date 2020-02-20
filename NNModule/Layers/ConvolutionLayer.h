@@ -1,7 +1,6 @@
 #ifndef COVOLUTIONLAYER_H
 #define COVOLUTIONLAYER_H
 #include <iostream>
-#include <DataModule/Shape.h>
 #include <HardwareModule/OpenCL/OpenCLEnvironment.hpp>
 #include <HardwareModule/OpenCL/OpenCLLayer.hpp>
 #include <HardwareModule/OpenCL/OpenCLLayerCreator.hpp>
@@ -19,8 +18,8 @@ public:
                      size_t horizontalStride,
                      size_t verticalStride,
                      size_t numFilters);
-    void forwardPass(float input[], float output[]);
-    void backPropagate(float upstreamGrad[]);
+    void forwardPass();
+    void backPropagate();
     OpenCLLayer* getCLLayer();
     void updateWeights();
 
@@ -36,14 +35,6 @@ private:
     size_t horizontalStride;
     size_t verticalStride;
     size_t numFilters;
-
-    Shape filters;
-    Shape input;
-    Shape output;
-    Shape gradInput;
-    Shape accumulatedGradInput;
-    Shape gradFilters;
-    Shape accumulatedGradFilters;
 
     float* getWeights(int length);
     float getRandom();
