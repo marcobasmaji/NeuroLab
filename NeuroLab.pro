@@ -50,7 +50,8 @@ SOURCES += \
     PredictionModule/AlexPrediction.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
-    ViewModule/WellcomePanel.cpp \
+    ViewModule/TopologyPanel.cpp \
+    ViewModule/TrainingPanel.cpp \
     main.cpp
 
 HEADERS += \
@@ -91,10 +92,13 @@ HEADERS += \
     PredictionModule/AlexPrediction.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
-    ViewModule/WellcomePanel.h
+    ViewModule/TopologyPanel.h \
+    ViewModule/TrainingPanel.h
 
 FORMS += \
-    ViewModule/MainWindow.ui
+    ViewModule/MainWindow.ui \
+    ViewModule/TopologyPanel.ui \
+    ViewModule/TrainingPanel.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -108,8 +112,8 @@ LIBS += -L$$PWD/Tools/format_reader/lib/ -lformat_reader
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
-LIBS += -L$$PWD/Tools/tbb/lib -ltbb
-LIBS += -L$$PWD/Tools/tbb/lib -ltbbmalloc
+LIBS += -L$$PWD/Tools/tbb -ltbb
+LIBS += -L$$PWD/Tools/tbb -ltbbmalloc
 LIBS += -L$$PWD/Tools/opencl/ -lOpenCL
 
 
