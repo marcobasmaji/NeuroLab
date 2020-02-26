@@ -1,4 +1,7 @@
-#include <gtest/gtest.h>
-#include <gmock/gmock-matchers.h>
+#include "Tests/TestsExample/TestExample.hpp"
 
-using namespace testing;
+TEST(t1, t2)
+{
+    EXPECT_EQ(0, 0);
+    ASSERT_THAT(0, Eq(0));
+}
