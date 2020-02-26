@@ -1,3 +1,5 @@
+include(gtest_dependency.pri)
+
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -48,6 +50,7 @@ SOURCES += \
     PredictionModule/HighestPerformance.cpp \
     PredictionModule/HighestEfficiency.cpp \
     PredictionModule/AlexPrediction.cpp \
+    Tests/TestStarter.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/TopologyPanel.cpp \
@@ -89,7 +92,8 @@ HEADERS += \
     PredictionModule/LowestPowerConsumption.h \
     PredictionModule/HighestPerformance.h \
     PredictionModule/HighestEfficiency.h \
-    PredictionModule/AlexPrediction.h \
+    PredictionModule/AlexPrediction.h \    
+    Tests/TestStarter.hpp \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/TopologyPanel.h \
