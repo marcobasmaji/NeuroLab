@@ -1,7 +1,7 @@
 #include "TestStarter.hpp"
 
 //include here all the test files, don't change any other lines
-#include "Tests/TestsOpenCL/TestExample.hpp"
+#include "Tests/TestsExample/TestExample.hpp"
 
 
 
