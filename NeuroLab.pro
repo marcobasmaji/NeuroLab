@@ -51,6 +51,7 @@ SOURCES += \
     PredictionModule/HighestEfficiency.cpp \
     PredictionModule/AlexPrediction.cpp \
     Tests/TestStarter.cpp \
+    Tests/TestsExample/TestExample.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/TopologyPanel.cpp \
@@ -94,6 +95,7 @@ HEADERS += \
     PredictionModule/HighestEfficiency.h \
     PredictionModule/AlexPrediction.h \    
     Tests/TestStarter.hpp \
+    Tests/TestsExample/TestExample.hpp \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/TopologyPanel.h \
