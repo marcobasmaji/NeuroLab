@@ -50,8 +50,8 @@ private slots:
 
     void on_NeuroLabNet_radio_button_clicked();
 
-    void checkAll();
-    void uncheckAll();
+    void setCheckedAll(bool checked);
+
     void setEnabledModes(bool value);
 
     void on_SelectAllHardware_clicked();
@@ -84,13 +84,17 @@ private slots:
 
     void on_FPGA_checkbox_stateChanged(int arg1);
 
-    void on_comboBox_currentIndexChanged(int index);
+    //void on_comboBox_currentIndexChanged(int index);
 
     void on_comboBox_currentTextChanged(const QString &arg1);
 
     void on_tabWidget_tabCloseRequested(int index);
 
     void on_classificationMenu_clicked();
+
+    //void on_radioButton_clicked(bool checked);
+
+    void on_GoogleNet_radio_button_clicked();
 
 private:
 
@@ -107,5 +111,7 @@ private:
     void setPredictionValue(PredictionValues *values);
     void addHardwareToCombobox(HardwareElement element);
     void bindCheckbox(int arg, string hardwareElement, QString nameHardwareElement, int indexCombobox);
+    void enableClassifyIfPossible();
+    void showHwNotUsedMessage(PredictionValues* predictionValues);
 };
 #endif // MAINWINDOW_H(imageToBeRemoved)
