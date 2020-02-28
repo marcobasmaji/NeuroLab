@@ -13,6 +13,12 @@ public:
     string bandwidth;
     string totalTime;
     string totalPowerConsumption;
+    bool usedInDistribution() {
+        if (this->power_consumption != "") {
+            return true;
+        }
+        return false;
+    };
 
 };
 
