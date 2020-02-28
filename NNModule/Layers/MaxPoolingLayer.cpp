@@ -18,12 +18,12 @@ MaxPoolingLayer::MaxPoolingLayer(OpenCLEnvironment* clEnv,
 
 }
 
-void MaxPoolingLayer::forwardPass(float input[],float output[])
+void MaxPoolingLayer::forwardPass()
 {
     clLayer->computeForward(clEnv,10,inputDepth);
 }
 
-void MaxPoolingLayer::backPropagate(float upstreamGrad[])
+void MaxPoolingLayer::backPropagate()
 {
     clLayer->computeErrorComp(clEnv,16);
 }

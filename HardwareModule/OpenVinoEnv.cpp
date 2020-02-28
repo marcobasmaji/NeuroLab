@@ -15,7 +15,7 @@
 
 
 
-using namespace InferenceEngine;
+
 
 OpenVinoEnv::OpenVinoEnv() {
     chooseNeuralNet("alexnet");
@@ -46,7 +46,7 @@ vector<Result> OpenVinoEnv::classify() {
 
 void OpenVinoEnv::readIR()
 {
-    CNNNetReader network_reader;
+    InferenceEngine::CNNNetReader network_reader;
     QString s = QString::fromStdString(structurePath);
     QFileInfo file1("../"+s);
 
@@ -60,8 +60,8 @@ void OpenVinoEnv::configureInputAndOutput()
     this->inputInfo = input_info;
     auto inputInfoItem = *inputInfo.begin();
 
-    inputInfoItem.second->setPrecision(Precision::U8);
-    inputInfoItem.second->setLayout(Layout::NCHW);
+    inputInfoItem.second->setPrecision(InferenceEngine::Precision::U8);
+    inputInfoItem.second->setLayout(InferenceEngine::Layout::NCHW);
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
     std::vector<std::string> validImageNames = {};
 
@@ -100,7 +100,7 @@ void OpenVinoEnv::loadModel()
 
 void OpenVinoEnv::createInferRequest()
 {
-   InferRequest inferRequest = this->execNetwork.CreateInferRequest();
+   InferenceEngine::InferRequest inferRequest = this->execNetwork.CreateInferRequest();
    this->inferRequest = inferRequest;
 }
 
@@ -109,13 +109,13 @@ void OpenVinoEnv::prepareInput()
 
     // Iterate over input blobs and fill input tensors
     for (auto & item : inputInfo) {
-        Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
-        SizeVector dims = inputBlob->getTensorDesc().getDims();
+        InferenceEngine::Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
+        InferenceEngine::SizeVector dims = inputBlob->getTensorDesc().getDims();
         /** Fill input tensor with images. First b channel, then g and r channels **/
         size_t num_channels = dims[1];
         size_t image_size = dims[3] * dims[2];
 
-        auto data = inputBlob->buffer().as<PrecisionTrait<Precision::U8>::value_type *>();
+        auto data = inputBlob->buffer().as<InferenceEngine::PrecisionTrait<InferenceEngine::Precision::U8>::value_type *>();
         /** Iterate over all input images **/
         for (size_t image_id = 0; image_id < imagesData.size(); ++image_id) {
             /** Iterate over all pixel in image (b,g,r) **/
@@ -159,7 +159,7 @@ vector<Result> OpenVinoEnv::processOutput()
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
 
-    Blob::Ptr outputBlob = inferRequest.GetBlob(output_info.begin()->first);
+    InferenceEngine::Blob::Ptr outputBlob = inferRequest.GetBlob(output_info.begin()->first);
 
 
     QFileInfo file2("../alexnetLabels.txt");

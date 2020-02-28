@@ -2,7 +2,6 @@
 #define SOFTMAXLAYER_H
 
 #include <iostream>
-#include <DataModule/Shape.h>
 #include <HardwareModule/OpenCL/OpenCLEnvironment.hpp>
 #include <HardwareModule/OpenCL/OpenCLLayer.hpp>
 #include <HardwareModule/OpenCL/OpenCLLayerCreator.hpp>
@@ -13,9 +12,8 @@ class SoftmaxLayer : public Layer
 public:
     SoftmaxLayer(OpenCLEnvironment* clEnv,
 size_t numInputs);
-    void forwardPass(float input[], float output[]);
-    void backPropagate(float upstreamGrad[]);
-    Shape getInputGrad();
+    void forwardPass();
+    void backPropagate();
     OpenCLLayer *getCLLayer();
     float* getLayerOutput();
 
@@ -23,11 +21,6 @@ private:
     OpenCLEnvironment* clEnv;
     OpenCLLayer* clLayer;
     size_t numInputs;
-    Shape input;
-    //Shape output;
-
-    Shape inputGrad;
-
 };
 
 #endif // SOFTMAXLAYER_H

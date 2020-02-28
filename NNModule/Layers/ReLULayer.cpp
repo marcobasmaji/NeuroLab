@@ -17,13 +17,13 @@ ReLULayer::ReLULayer(OpenCLEnvironment* clEnv,
 
                 }
 
-void ReLULayer::forwardPass(float input[], float output[])
+void ReLULayer::forwardPass()
 {
     clLayer->computeForward(clEnv,16,inputDepth);
 
 }
 
-void ReLULayer::backPropagate(float upstreamGrad[])
+void ReLULayer::backPropagate()
 {
     clLayer->computeErrorComp(clEnv,16);
 }
@@ -31,9 +31,4 @@ void ReLULayer::backPropagate(float upstreamGrad[])
 OpenCLLayer* ReLULayer::getCLLayer()
 {
     return clLayer;
-}
-
-Shape ReLULayer::getInputGrad()
-{
-    return InputGrad;
 }

@@ -2,7 +2,6 @@
 #define LOSS_H
 
 #include <iostream>
-#include <DataModule/Shape.h>
 #include "Layer.h"
 #include <math.h>
 #include <QApplication>
@@ -10,21 +9,15 @@
 
 using namespace std;
 
-class Loss : public Layer
+class Loss
 {
 public:
     Loss(size_t numInputs);
-    Shape getPredictedDistributionGrad() const;
     float *getOutputError(float distribution[],string label);
 
 private:
     size_t numInputs;
-    Shape predictedDistribution;
-    Shape actualDistribution;
-
-    double loss;
-
-    Shape predictedDistributionGrad;
+    float loss;
 };
 
 #endif // LOSS_H

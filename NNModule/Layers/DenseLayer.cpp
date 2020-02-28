@@ -21,14 +21,14 @@ DenseLayer::DenseLayer(OpenCLEnvironment *clEnv,
     clLayer->setLearningRate(0.2);
 }
 
-void DenseLayer::forwardPass(float input[], float output[])
+void DenseLayer::forwardPass()
 {
 
     //clLayer->setInputs(clEnv,input,105*105*3);
     clLayer->computeForward(clEnv,16,numOutputs);
 }
 
-void DenseLayer::backPropagate(float upstreamGrad[])
+void DenseLayer::backPropagate()
 {
     clLayer->computeErrorComp(clEnv,16);
 }

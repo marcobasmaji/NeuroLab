@@ -64,10 +64,9 @@ cl_kernel OpenCLLayerCreator::createKernel(cl_program program, const char* funct
     return kernel;
 }
 string OpenCLLayerCreator::loadFile(const char *path) {
-	ifstream in(path);
+    ifstream in(path);
 	string contents((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
-
-	return contents;
+    return contents;
 }
 cl_program OpenCLLayerCreator::createProgram(cl_context context, cl_device_id device, const char* dirKernel) {
     cl_int error;
@@ -375,6 +374,7 @@ OpenCLLayer* OpenCLLayerCreator::createConvLayer(OpenCLEnvironment* openCLEnviro
     cl_int3 outputDim = { outputMaps, outputHeight, outputWidth };
     cl_int2 kernelDim = { kernelHeight, kernelWidth};
     cl_int2 strideDim = { strideHeight, strideWidth };
+
 
     setKernelArg(feedforwardKernel, 0, sizeof(cl_mem), &memInputs);
     setKernelArg(feedforwardKernel, 1, sizeof(cl_mem), &memOutputs);

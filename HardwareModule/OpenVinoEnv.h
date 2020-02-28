@@ -7,7 +7,7 @@
 #include<chrono>
 
 using namespace std;
-using namespace InferenceEngine;
+
 using namespace std::chrono;
 
 

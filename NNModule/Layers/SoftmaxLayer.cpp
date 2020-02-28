@@ -9,19 +9,15 @@ SoftmaxLayer::SoftmaxLayer(OpenCLEnvironment* clEnv,
     this->clLayer = cLconv;
 }
 
-void SoftmaxLayer::forwardPass(float input[],float output[])
+void SoftmaxLayer::forwardPass()
 {
      clLayer->computeForward(clEnv,16,numInputs);
 }
-void SoftmaxLayer::backPropagate(float upstreamGrad[])
+void SoftmaxLayer::backPropagate()
 {
     // upstream ist ergebnis von Loss
     //clLayer->setOutputErrors(clEnv,upstreamGrad,numInputs);
     clLayer->computeErrorComp(clEnv,10);
-}
-Shape SoftmaxLayer::getInputGrad()
-{
-    return inputGrad;
 }
 
 OpenCLLayer *SoftmaxLayer::getCLLayer()
@@ -30,5 +26,5 @@ OpenCLLayer *SoftmaxLayer::getCLLayer()
 }
 float* SoftmaxLayer::getLayerOutput()
 {
-    return clLayer->getOutputs(clEnv,16,numInputs,1,1,nullptr);
+    return clLayer->getOutputs(clEnv,16,numInputs,1,1,NULL);
 }

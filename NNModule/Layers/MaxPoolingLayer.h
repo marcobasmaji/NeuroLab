@@ -2,7 +2,6 @@
 #define MAXPOOLINGLAYER_H
 
 #include <iostream>
-#include <DataModule/Shape.h>
 #include <HardwareModule/OpenCL/OpenCLEnvironment.hpp>
 #include <HardwareModule/OpenCL/OpenCLLayer.hpp>
 #include <HardwareModule/OpenCL/OpenCLLayerCreator.hpp>
@@ -19,8 +18,8 @@ public:
                     size_t poolingWindowWidth,
                     size_t verticalStride,
                     size_t horizontalStride);
-    void forwardPass(float input[], float output[]);
-    void backPropagate(float upstreamGrad[]);
+    void forwardPass();
+    void backPropagate();
 
 
     OpenCLLayer* getCLLayer();
@@ -35,11 +34,6 @@ private:
     size_t poolingWindowWidth;
     size_t verticalStride;
     size_t horizontalStride;
-
-    Shape input;
-    Shape output;
-
-    Shape gradientWrtInput;
 
 };
 
