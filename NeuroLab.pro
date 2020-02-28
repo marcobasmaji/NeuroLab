@@ -121,5 +121,11 @@ DEPENDPATH += $$PWD/Tools/openvino/include
 INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
 
-DISTFILES += \
-    HardwareModule/OpenCL/README.me
+RESOURCES += \
+    HardwareModule/OpenCL/README.me \
+    HardwareModule/OpenCL/kernels/Conv.cl \
+    HardwareModule/OpenCL/kernels/Dense.cl \
+    HardwareModule/OpenCL/kernels/MaxPool.cl \
+    HardwareModule/OpenCL/kernels/Pad.cl \
+    HardwareModule/OpenCL/kernels/Relu.cl \
+    HardwareModule/OpenCL/kernels/Softmax.cl

@@ -10,7 +10,7 @@ NeuroLabNet::NeuroLabNet(){
     OpenCLEnvironmentCreator* clCreator = new OpenCLEnvironmentCreator();
     OpenCLEnvironment* env = clCreator->createOpenCLEnvironment(HardwareType::CPU);
     clEnv = env;
-
+    init();
 }
 
 void NeuroLabNet::init() {
@@ -81,11 +81,7 @@ vector<Result> NeuroLabNet::classify() {
             }
         }
         this->conv1->getCLLayer()->setInputs(clEnv,pixels,82*82*3);
-        //layers.front()->getCLLayer()->setInputs(clEnv,pixels,82*82*3);
-        /*for(auto &item:layers)
-        {
-            item->forwardPass(pixels,pixels);
-        }*/
+        // start forward passing
         this->conv1->forwardPass();
         this->relu1->forwardPass();
         this->max1->forwardPass();
@@ -106,9 +102,10 @@ vector<Result> NeuroLabNet::classify() {
 
 void NeuroLabNet::train() {
     // read image list from directory
-    string labels[100] ={};
-    QDir dir("/home/mo/classes");
+    QDir dir("/home/mo/dataset");
     QStringList files = dir.entryList(QStringList(),QDir::Dirs);
+    string labels[files.size()-2];
+
     int i = 0;
     for(auto &item : files) {
         if(item.startsWith(".")){
@@ -121,26 +118,33 @@ void NeuroLabNet::train() {
     unsigned int labelCount = 0;
     for(auto & folder : files)
     {
+        if(folder.startsWith(".")){
+            continue;
+        }
         labelCount++;
         qDebug()<<"#### Training with label "<< folder.toUpper() << endl;
-        // test
-        cout<<folder.toStdString()<<"\n";
-        QDir dirOfOmages("/home/mo/classes/"+folder);
-        QStringList images = dir.entryList((QStringList()<<"*.jpg"<<"*.JPG",QDir::Files));
+        QDir dirOfOmages("/home/mo/dataset/"+folder);
+        QStringList images = dirOfOmages.entryList((QStringList()<<"*.jpg"<<"*.JPG",QDir::Files));
         unsigned int count = 0;
         for(auto & image:images)
         {
+            if(image.startsWith(".")){
+                continue;
+            }
             count++;
             qDebug()<<"Training with image Nr. "<< count << endl;
+            qDebug()<< dirOfOmages.absolutePath() << image << endl;
             // get pixels from path
-            cv::Mat img = cv::imread(image.toStdString());
+            cv::Mat img = cv::imread(dirOfOmages.absolutePath().toStdString() +"/"+ image.toStdString());
             if(img.empty())
             {
-                cerr<<"Image is invalid";
+                cerr<<"Image is invalid"<<endl;
+                continue;
             }
             if(img.channels()!=3)
             {
-                cerr<<"Image doesn't have enough channels";
+                cerr<<"Image doesn't have enough channels"<<endl;
+                continue;
             }
             cv::Mat resizedImg;
             cv::Size size(82,82);
@@ -158,11 +162,18 @@ void NeuroLabNet::train() {
                     {
                         // the function at returns an array with the length 3, whereby each field has the red, blue or green value
                         //pixels[i][j][h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
-                        pixels[(i * 105 + j) * 3 + h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
+                        pixels[(i * 82 + j) * 3 + h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
                     }
                 }
             }
-            this->conv1->getCLLayer()->setInputs(clEnv,pixels,82*82*3);
+
+
+            qDebug() << "reached 1" << endl;
+            this->conv1->get()->setInputs(clEnv,pixels,82*82*3);
+
+
+
+            qDebug() << "reached 2" << endl;
             this->conv1->forwardPass();
             this->relu1->forwardPass();
             this->max1->forwardPass();
@@ -171,8 +182,11 @@ void NeuroLabNet::train() {
             this->max2->forwardPass();
             this->dense->forwardPass();
             this->soft->forwardPass();
+            qDebug() << "reached 3" << endl;
             // compute error with Loss (using labels as well)
             float * lossOutput=lossFunction->getOutputError(this->soft->getLayerOutput(),folder.toStdString());
+            qDebug() << "reached 4" << endl;
+
             // back propagate
             this->soft->getCLLayer()->setOutputErrors(clEnv,lossOutput,6);
             this->soft->backPropagate();
@@ -187,15 +201,17 @@ void NeuroLabNet::train() {
             this->dense->updateWeights();
             this->conv2->updateWeights();
             this->conv1->updateWeights();
-            // save updated weights ?TODO
-            float* weightsConv1;
-            this->conv1->getCLLayer()->getWeights(clEnv,10);
-            this->conv2->getCLLayer()->getWeights(clEnv,10);
-            this->dense->getCLLayer()->getWeights(clEnv,10);
+
 
         }
     }
     qDebug()<<"Saving weights and biases"<< endl;
+
+    float* conv1Weights = this->conv1->getCLLayer()->getWeights(clEnv,10);
+    ofstream outfile("conv1Weights");
+    float* conv2Weights = this->conv2->getCLLayer()->getWeights(clEnv,10);
+    float* denseWeights = this->dense->getCLLayer()->getWeights(clEnv,10);
+    // now save the file according to algo bon biance
 
 }
 

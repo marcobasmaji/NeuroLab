@@ -22,6 +22,7 @@ public:
     void backPropagate();
     OpenCLLayer* getCLLayer();
     void updateWeights();
+    OpenCLLayer* get();
 
 
 private:

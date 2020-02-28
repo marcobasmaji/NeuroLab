@@ -1,4 +1,5 @@
 #include "ConvolutionLayer.h"
+#include <QDebug>
 
 ConvolutionLayer::ConvolutionLayer(
         OpenCLEnvironment* clEnv,
@@ -19,6 +20,7 @@ ConvolutionLayer::ConvolutionLayer(
       verticalStride(verticalStride),
       numFilters(numFilters)
 {
+
     this->clEnv = clEnv;
     OpenCLLayerCreator* openCLLayerCreator = new OpenCLLayerCreator();
     OpenCLLayer* cLconv = openCLLayerCreator->createConvLayer(clEnv,16,inputDepth,inputHeight,
@@ -43,6 +45,12 @@ void ConvolutionLayer::backPropagate()
     clLayer->computeErrorComp(clEnv,16);
 }
 OpenCLLayer* ConvolutionLayer::getCLLayer()
+{
+
+    qDebug() << clLayer << endl;
+    return clLayer;
+}
+OpenCLLayer* ConvolutionLayer::get()
 {
     return clLayer;
 }

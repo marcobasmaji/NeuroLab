@@ -26,5 +26,5 @@ OpenCLLayer *SoftmaxLayer::getCLLayer()
 }
 float* SoftmaxLayer::getLayerOutput()
 {
-    return clLayer->getOutputs(clEnv,16,numInputs,1,1,nullptr);
+    return clLayer->getOutputs(clEnv,16,numInputs,1,1,NULL);
 }

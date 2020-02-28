@@ -33,15 +33,15 @@ private:
     vector<string> dataSet;
     OpenCLEnvironment* clEnv;
     //Layers
-    ConvolutionLayer* conv1;
-    ReLULayer* relu1;
-    MaxPoolingLayer* max1;
-    ConvolutionLayer *conv2;
-    ReLULayer *relu2;
-    MaxPoolingLayer* max2;
-    DenseLayer* dense;
-    SoftmaxLayer* soft;
-    Loss* lossFunction;
+    ConvolutionLayer* conv1=nullptr;
+    ReLULayer* relu1=nullptr;
+    MaxPoolingLayer* max1=nullptr;
+    ConvolutionLayer *conv2=nullptr;
+    ReLULayer *relu2=nullptr;
+    MaxPoolingLayer* max2=nullptr;
+    DenseLayer* dense=nullptr;
+    SoftmaxLayer* soft=nullptr;
+    Loss* lossFunction=nullptr;
 
     static bool sortBySec(const pair<int,int> &a,
                   const pair<int,int> &b)

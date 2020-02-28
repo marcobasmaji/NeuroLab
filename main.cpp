@@ -6,12 +6,12 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  MasterController masterController;
+   MasterController masterController;
 
    //NeuroLabNet nn;
-   //nn.trainWithMnist();
+   //nn.train();
 
-
+    return 0;
 }
 
 

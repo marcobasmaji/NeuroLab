@@ -1,4 +1,5 @@
 #include "Loss.h"
+#include <QtDebug>
 
 Loss::Loss(size_t numInputs) : numInputs(numInputs)
 {
@@ -7,6 +8,8 @@ Loss::Loss(size_t numInputs) : numInputs(numInputs)
 
 float* Loss::getOutputError(float distribution[],string label)
 {
+    qDebug() << "reached 4" << endl;
+
     float derivative[numInputs];
     float targetDistribution[numInputs];
     QDir dir("/home/mo/classes");
@@ -27,6 +30,7 @@ float* Loss::getOutputError(float distribution[],string label)
             i++;
         }
     }
+
     // calculate
     float loss = 0;
     for(unsigned int i=0;i<sizeof (targetDistribution);i++)
