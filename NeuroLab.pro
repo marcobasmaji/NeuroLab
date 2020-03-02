@@ -23,6 +23,7 @@ SOURCES += \
     ControllerModule/PredictionController.cpp \
     ControllerModule/ViewController.cpp \
     DataModule/Shape.cpp \
+    DataModule/WeightsAndBiasesCreator.cpp \
     HardwareModule/OpenCL/HardwareEnvironment.cpp \
     HardwareModule/OpenCL/HardwareType.cpp \
     HardwareModule/OpenCL/OpenCLLayerCreator.cpp \
@@ -64,6 +65,7 @@ HEADERS += \
     ControllerModule/ViewController.h \
     DataModule/Result.h \
     DataModule/Shape.h \
+    DataModule/WeightsAndBiasesCreator.h \
     HardwareModule/OpenCL/HardwareEnvironment.hpp \
     HardwareModule/OpenCL/OpenCLLayerCreator.hpp \
     HardwareModule/OpenVinoEnv.h \
