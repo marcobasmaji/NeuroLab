@@ -5,8 +5,8 @@
 
 class Layer {
 public:
-    virtual void forwardPass(float input[],float output[]) = 0;
-    virtual void backPropagate(float upstreamGrad[]) = 0;
+    virtual void forwardPass() = 0;
+    virtual void backPropagate() = 0;
     virtual OpenCLLayer* getCLLayer()=0;
 };
 

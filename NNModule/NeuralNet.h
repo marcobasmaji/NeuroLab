@@ -22,15 +22,12 @@ public:
     }*/
 
 protected:
-    //Loss lossFunction;
 	unsigned int netID;
-    //DataSet dataSet;
 	double loss;
 	double cumulativeLoss;
 	double learningRate;
 	unsigned int epochs;
 	unsigned int batchSize;
-    //list<pair<DataElement,string>> results;
 
 
 };

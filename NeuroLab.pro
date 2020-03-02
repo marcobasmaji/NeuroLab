@@ -51,7 +51,8 @@ SOURCES += \
     PredictionModule/AlexPrediction.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
-    ViewModule/WellcomePanel.cpp \
+    ViewModule/TopologyPanel.cpp \
+    ViewModule/TrainingPanel.cpp \
     main.cpp
 
 HEADERS += \
@@ -90,13 +91,16 @@ HEADERS += \
     PredictionModule/LowestPowerConsumption.h \
     PredictionModule/HighestPerformance.h \
     PredictionModule/HighestEfficiency.h \
-    PredictionModule/AlexPrediction.h \
+    PredictionModule/AlexPrediction.h \    
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
-    ViewModule/WellcomePanel.h
+    ViewModule/TopologyPanel.h \
+    ViewModule/TrainingPanel.h
 
 FORMS += \
-    ViewModule/MainWindow.ui
+    ViewModule/MainWindow.ui \
+    ViewModule/TopologyPanel.ui \
+    ViewModule/TrainingPanel.ui \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -110,8 +114,8 @@ LIBS += -L$$PWD/Tools/format_reader/lib/ -lformat_reader
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
-LIBS += -L$$PWD/Tools/tbb/lib -ltbb
-LIBS += -L$$PWD/Tools/tbb/lib -ltbbmalloc
+LIBS += -L$$PWD/Tools/tbb -ltbb
+LIBS += -L$$PWD/Tools/tbb -ltbbmalloc
 LIBS += -L$$PWD/Tools/opencl/ -lOpenCL
 
 
@@ -123,5 +127,11 @@ DEPENDPATH += $$PWD/Tools/openvino/include
 INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
 
-DISTFILES += \
-    HardwareModule/OpenCL/README.me
+RESOURCES += \
+    HardwareModule/OpenCL/README.me \
+    HardwareModule/OpenCL/kernels/Conv.cl \
+    HardwareModule/OpenCL/kernels/Dense.cl \
+    HardwareModule/OpenCL/kernels/MaxPool.cl \
+    HardwareModule/OpenCL/kernels/Pad.cl \
+    HardwareModule/OpenCL/kernels/Relu.cl \
+    HardwareModule/OpenCL/kernels/Softmax.cl

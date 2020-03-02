@@ -49,8 +49,18 @@ __kernel void errorComp(__global float* errorInputs, __global const float* error
 	int inputMaps=outputDim.x;
 	int inputHeight=outputDim.y;
 	int inputWidth=outputDim.z;
-		
+	
+	//
 	for(int map=0;map<inputMaps;map++){
+		for(int y=0;y<inputHeight;y++){
+			for(int x=0;x<inputWidth;x++){
+				int id=calculateArrayID(inputMaps, inputHeight, inputWidth, batch, map, y, x);
+				errorInputs[id]=errorOutputs[id];
+			}
+		}
+	}
+	
+	/*for(int map=0;map<inputMaps;map++){
 		for(int y=0;y<inputHeight;y++){
 			for(int x=0;x<inputWidth;x++){
 				int id=calculateArrayID(inputMaps, inputHeight, inputWidth, batch, map, y, x);
@@ -72,7 +82,7 @@ __kernel void errorComp(__global float* errorInputs, __global const float* error
 				errorInputs[id]=(a-b)*errorOutputs[id];
 			}
 		}
-	}
+	}*/
 }
 
 /*

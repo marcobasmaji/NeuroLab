@@ -23,7 +23,7 @@
       <x>1</x>
       <y>1</y>
       <width>261</width>
-      <height>101</height>
+      <height>121</height>
      </rect>
     </property>
     <property name="title">
@@ -35,7 +35,7 @@
        <x>20</x>
        <y>30</y>
        <width>146</width>
-       <height>62</height>
+       <height>95</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -46,6 +46,13 @@
         </property>
         <property name="checked">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="GoogleNet_radio_button">
+        <property name="text">
+         <string>GoogleNet</string>
         </property>
        </widget>
       </item>
@@ -63,9 +70,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>102</y>
+      <y>120</y>
       <width>261</width>
-      <height>151</height>
+      <height>141</height>
      </rect>
     </property>
     <property name="title">
@@ -76,7 +83,7 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>231</width>
+       <width>234</width>
        <height>121</height>
       </rect>
      </property>
@@ -140,7 +147,7 @@
       <property name="geometry">
        <rect>
         <x>350</x>
-        <y>400</y>
+        <y>410</y>
         <width>81</width>
         <height>81</height>
        </rect>
@@ -187,7 +194,7 @@
         <x>450</x>
         <y>30</y>
         <width>251</width>
-        <height>451</height>
+        <height>461</height>
        </rect>
       </property>
       <property name="title">
@@ -252,7 +259,7 @@
        <property name="geometry">
         <rect>
          <x>100</x>
-         <y>400</y>
+         <y>410</y>
          <width>141</width>
          <height>51</height>
         </rect>
@@ -280,7 +287,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>150</y>
+         <y>170</y>
          <width>231</width>
          <height>241</height>
         </rect>
@@ -369,6 +376,22 @@
         </item>
        </layout>
       </widget>
+      <widget class="QLabel" name="hardwareNotUsed_label">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>140</y>
+         <width>231</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+      </widget>
      </widget>
      <widget class="QListWidget" name="previewArea">
       <property name="geometry">
@@ -408,9 +431,9 @@
     <property name="geometry">
      <rect>
       <x>1</x>
-      <y>249</y>
+      <y>259</y>
       <width>261</width>
-      <height>301</height>
+      <height>291</height>
      </rect>
     </property>
     <property name="title">
@@ -468,16 +491,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="GPU_checkbox">
+       <widget class="QCheckBox" name="FPGA_checkbox">
         <property name="text">
-         <string>GPU</string>
+         <string>FPGA</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="FPGA_checkbox">
+       <widget class="QCheckBox" name="GPU_checkbox">
         <property name="text">
-         <string>FPGA</string>
+         <string>GPU</string>
         </property>
        </widget>
       </item>
@@ -528,7 +551,7 @@
      <rect>
       <x>400</x>
       <y>190</y>
-      <width>181</width>
+      <width>207</width>
       <height>191</height>
      </rect>
     </property>
@@ -575,7 +598,7 @@
      <x>0</x>
      <y>0</y>
      <width>1020</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
@@ -596,7 +619,6 @@
   <tabstop>Mov3_checkbox</tabstop>
   <tabstop>Mov4_checkbox</tabstop>
   <tabstop>CPU_checkbox</tabstop>
-  <tabstop>GPU_checkbox</tabstop>
   <tabstop>FPGA_checkbox</tabstop>
  </tabstops>
  <resources/>

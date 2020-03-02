@@ -10,9 +10,8 @@
 #include <HardwareModule/OpenCL/OpenCLEnvironment.hpp>
 #include <HardwareModule/OpenCL/OpenCLEnvironmentCreator.hpp>
 #include "../HardwareModule/OpenCL/HardwareType.cpp"
-#include <DataModule/Shape.h>
 #include <DataModule/Result.h>
-#include "../Tools/opencv2/include/opencv.hpp"
+#include <opencv2/opencv.hpp>
 #include <CL/cl.h>
 #include <fstream>
 #include <QDir>
@@ -33,23 +32,21 @@ public:
 private:
     vector<string> dataSet;
     OpenCLEnvironment* clEnv;
-    list<Layer*> layers;
     //Layers
-    //ConvolutionLayer* conv1;
-    //ReLULayer* relu1;
-    MaxPoolingLayer* max1;
-    //ConvolutionLayer *conv2;
-    //ReLULayer *relu2;
-    MaxPoolingLayer* max2;
-    DenseLayer* dense;
-    SoftmaxLayer* soft;
-    Loss* lossFunction;
+    ConvolutionLayer* conv1=nullptr;
+    ReLULayer* relu1=nullptr;
+    MaxPoolingLayer* max1=nullptr;
+    ConvolutionLayer *conv2=nullptr;
+    ReLULayer *relu2=nullptr;
+    MaxPoolingLayer* max2=nullptr;
+    DenseLayer* dense=nullptr;
+    SoftmaxLayer* soft=nullptr;
+    Loss* lossFunction=nullptr;
 
     static bool sortBySec(const pair<int,int> &a,
                   const pair<int,int> &b)
     {
         return (a.second > b.second);
     }
-    float *getPixelsFromPath(string path);
 
 };
