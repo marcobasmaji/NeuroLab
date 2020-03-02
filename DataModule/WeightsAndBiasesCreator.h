@@ -28,8 +28,31 @@ private:
 
 public:
     WeightsAndBiasesCreator(int outputMaps, int inputMaps, int kernelHeight, int kernelWidth, int seed);
-    void createWeightsFile(string fileName);
-    void createBiasFile(string fileName);
+    WeightsAndBiasesCreator();
+
+    /*
+     * @brief used to create first weights file
+     * @param fileName name of the new file
+     * @param dir the selected directory
+    */
+    string createWeightsFile(string fileName, string dir);
+
+    /*
+     * @brief used to create first weights file
+     * @param fileName name of the new file
+     * @param weights the weights in matrix form
+     * @param size the size of each row
+    */
+    void updateWeightsFile(string filePath, vector<vector<float>> weights, int size);
+
+    /*
+     * @brief used to create first weights file
+     * @param fileName name of the new file
+     * @param weights the list of weights values for one-dimensional tensor
+    */
+    void updateWeightsFile(string filePath, vector<float> weights);
+
+    void createBiasFile(string fileName, string dir);
     void updateWeights();
     void updateBias();
 };

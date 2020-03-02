@@ -23,6 +23,7 @@ SOURCES += \
     ControllerModule/PredictionController.cpp \
     ControllerModule/ViewController.cpp \
     DataModule/Shape.cpp \
+    DataModule/WeightsAndBiasesCreator.cpp \
     HardwareModule/OpenCL/HardwareEnvironment.cpp \
     HardwareModule/OpenCL/HardwareType.cpp \
     HardwareModule/OpenCL/OpenCLLayerCreator.cpp \
@@ -63,6 +64,7 @@ HEADERS += \
     ControllerModule/ViewController.h \
     DataModule/Result.h \
     DataModule/Shape.h \
+    DataModule/WeightsAndBiasesCreator.h \
     HardwareModule/OpenCL/HardwareEnvironment.hpp \
     HardwareModule/OpenCL/OpenCLLayerCreator.hpp \
     HardwareModule/OpenVinoEnv.h \
@@ -108,8 +110,8 @@ LIBS += -L$$PWD/Tools/format_reader/lib/ -lformat_reader
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
-LIBS += -L$$PWD/Tools/tbb/ -ltbb
-LIBS += -L$$PWD/Tools/tbb/ -ltbbmalloc
+LIBS += -L$$PWD/Tools/tbb/lib -ltbb
+LIBS += -L$$PWD/Tools/tbb/lib -ltbbmalloc
 LIBS += -L$$PWD/Tools/opencl/ -lOpenCL
 
 
