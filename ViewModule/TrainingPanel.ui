@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
-    <height>285</height>
+    <width>492</width>
+    <height>349</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Training</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="welcome_label">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>40</y>
+      <y>10</y>
       <width>191</width>
       <height>41</height>
      </rect>
@@ -27,72 +27,111 @@
      <string>Train NeuroLab!</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="dataset_label">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>110</y>
-      <width>241</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Your data set here</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>298</x>
-      <y>110</y>
-      <width>61</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Load </string>
-    </property>
-   </widget>
-   <widget class="QProgressBar" name="progressBar">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>150</y>
-      <width>321</width>
+      <y>100</y>
+      <width>111</width>
       <height>31</height>
      </rect>
     </property>
-    <property name="value">
-     <number>24</number>
+    <property name="text">
+     <string>Data set</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="train">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>200</y>
-      <width>89</width>
-      <height>25</height>
+      <x>360</x>
+      <y>270</y>
+      <width>121</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="text">
      <string>Train</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="success_label">
     <property name="enabled">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>200</y>
-      <width>221</width>
+      <x>100</x>
+      <y>290</y>
+      <width>251</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>Done! Try out YOUR NeuroLab.</string>
+     <string>Training successfully finished!</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="weights_label">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>150</y>
+      <width>151</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Weights directory</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="select_weights_button">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>150</y>
+      <width>61</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Select</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="dataset_dir_label">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>100</y>
+      <width>211</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="weights_dir_label">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>150</y>
+      <width>211</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="load_data_set_dir">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>100</y>
+      <width>61</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Load</string>
     </property>
    </widget>
   </widget>

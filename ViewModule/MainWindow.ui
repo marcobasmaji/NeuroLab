@@ -17,6 +17,9 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <widget class="QGroupBox" name="NeuralNetOptions">
     <property name="geometry">
      <rect>
@@ -121,7 +124,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>280</x>
       <y>10</y>
       <width>731</width>
       <height>541</height>
@@ -564,22 +567,22 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="trainMenu">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>Train Neural Network</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="topologyMenu">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="text">
-        <string>Training Menu</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="trainMenu">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>View Network Topology</string>
+        <string>See Topology</string>
        </property>
       </widget>
      </item>

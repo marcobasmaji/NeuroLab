@@ -12,6 +12,7 @@
 #include <ControllerModule/HardwareElement.h>
 #include <string>
 #include <QListWidgetItem>
+#include "TrainingPanel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -95,6 +96,8 @@ private slots:
     //void on_radioButton_clicked(bool checked);
 
     void on_GoogleNet_radio_button_clicked();
+
+    void on_trainMenu_clicked();
 
 private:
 

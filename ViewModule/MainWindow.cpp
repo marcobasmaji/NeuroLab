@@ -614,3 +614,10 @@ void MainWindow::enableClassifyIfPossible() {
         ui->ClassifyButton->setEnabled(false);
     }
 }
+
+void MainWindow::on_trainMenu_clicked()
+{
+
+    TrainingPanel *trPanel = new TrainingPanel(this, this->guiSettings);
+    trPanel->show();
+}
