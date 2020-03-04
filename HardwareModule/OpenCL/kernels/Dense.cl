@@ -31,7 +31,7 @@ __kernel void feedforward(__global const float* inputs, __global float* outputs,
 	}
 	
 	float bias=biases[outputNeuron];
-	outputs[outputNeuron]=sum+bias;
+	outputs[outputNeuron+outputNeurons*batch]=sum+bias;
 }
 
 __kernel void errorComp(__global float* errorInput, __global const float* errorOutput, __global const float* inputs, __global const float* weights, const int3 inputDim, const int outputNeurons) {
