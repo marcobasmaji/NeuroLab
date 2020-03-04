@@ -153,16 +153,16 @@ void OpenCLLayer::executeKernel(cl_command_queue commandQueue, cl_kernel kernel,
 }
 
 void OpenCLLayer::releaseResources() {
-	releaseCLObjectsManager->releaseMemObject(memInputs);
-	releaseCLObjectsManager->releaseMemObject(memOutputs);
-	if(memBiases!=nullptr)  releaseCLObjectsManager->releaseMemObject(memBiases);
-	if(memWeights!=nullptr)  releaseCLObjectsManager->releaseMemObject(memWeights);
-	releaseCLObjectsManager->releaseMemObject(memErrorInputs);
-	releaseCLObjectsManager->releaseMemObject(memErrorOutputs);
+    if(memInputs!=nullptr)          releaseCLObjectsManager->releaseMemObject(memInputs);
+    if(memOutputs!=nullptr)         releaseCLObjectsManager->releaseMemObject(memOutputs);
+    if(memBiases!=nullptr)          releaseCLObjectsManager->releaseMemObject(memBiases);
+    if(memWeights!=nullptr)         releaseCLObjectsManager->releaseMemObject(memWeights);
+    if(memErrorInputs!=nullptr)     releaseCLObjectsManager->releaseMemObject(memErrorInputs);
+    if(memErrorOutputs!=nullptr)    releaseCLObjectsManager->releaseMemObject(memErrorOutputs);
 
 	releaseCLObjectsManager->releaseKernel(kernelFeedforward);
 	releaseCLObjectsManager->releaseKernel(kernelErrorComp);
-	if(kernelWeightsUpdate!=nullptr)  releaseCLObjectsManager->releaseKernel(kernelWeightsUpdate);
+    if(kernelWeightsUpdate!=nullptr)  releaseCLObjectsManager->releaseKernel(kernelWeightsUpdate);
 
 	releaseCLObjectsManager->releaseProgram(program);
 }
