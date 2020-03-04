@@ -2,12 +2,20 @@
 #define WELCOMEPANEL_H
 #include "ui_TrainingPanel.h"
 #include <QMainWindow>
+#include "GUISettings.h"
 
 class TrainingPanel : public QMainWindow
 {
 public:
-    explicit TrainingPanel(QWidget *parent);
+    explicit TrainingPanel(QWidget *parent, GUISettings guiSettings);
     Ui::TrainingPanel *ui;
+private slots:
+
+
+    void on_load_data_set_dir_clicked();
+
+private:
+    GUISettings guiSettings;
 };
 
 #endif // WELCOMEPANEL_H

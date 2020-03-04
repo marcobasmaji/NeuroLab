@@ -30,11 +30,15 @@ public:
     void unselectHardwareElement(string element);
     void selectHardwareElement(string element);
 
+    void setDataSetDirectory(string dir);
+
 private:
     string nn;
     string mode;
     vector<string> selectedHardware;
     vector<string> paths;
+
+    string dataSetDirectory;
 };
 
 #endif // GUISETTINGS_H
