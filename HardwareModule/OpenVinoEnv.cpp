@@ -15,29 +15,17 @@
 
 
 
-
+using namespace InferenceEngine;
 
 OpenVinoEnv::OpenVinoEnv() {
     chooseNeuralNet("alexnet");
-    setPlatforms({"HETERO:CPU,MYRIAD"});
 }
 vector<Result> OpenVinoEnv::classify() {
-   auto start = std::chrono::high_resolution_clock::now();
-   std::vector <std::vector<int>> matrix;
-   std::vector <int> test;
-   for(int i = 0; i < 10000; i++){
-       for(int j =0; j < 10000; j++){
-           int m = j+i;
-       }
-   }
-   auto stop = std::chrono::high_resolution_clock::now();
-   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-   std::cerr << duration.count();
     readIR();
     configureInputAndOutput();
     loadModel();
-    createInferRequest();
-    prepareInput();
+    // createInferRequest();
+    //prepareInput();
     infer();
     vector<Result> results = processOutput();
     return results;
@@ -46,7 +34,7 @@ vector<Result> OpenVinoEnv::classify() {
 
 void OpenVinoEnv::readIR()
 {
-    InferenceEngine::CNNNetReader network_reader;
+    CNNNetReader network_reader;
     QString s = QString::fromStdString(structurePath);
     QFileInfo file1("../"+s);
 
@@ -60,8 +48,8 @@ void OpenVinoEnv::configureInputAndOutput()
     this->inputInfo = input_info;
     auto inputInfoItem = *inputInfo.begin();
 
-    inputInfoItem.second->setPrecision(InferenceEngine::Precision::U8);
-    inputInfoItem.second->setLayout(InferenceEngine::Layout::NCHW);
+    inputInfoItem.second->setPrecision(Precision::U8);
+    inputInfoItem.second->setLayout(Layout::NCHW);
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
     std::vector<std::string> validImageNames = {};
 
@@ -94,28 +82,60 @@ void OpenVinoEnv::configureInputAndOutput()
 
 void OpenVinoEnv::loadModel()
 {
-    auto executable_network = core.LoadNetwork(cnnnetwork, deviceName);
-    this->execNetwork = executable_network;
+    size_t count = 0;
+    for(auto &i : this->distribution)
+    {
+        InferenceEngine::ExecutableNetwork en = core.LoadNetwork(cnnnetwork,i.first);
+        InferRequest inferRequest = en.CreateInferRequest();
+        for (auto & item : inputInfo) {
+
+            Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
+            SizeVector dims = inputBlob->getTensorDesc().getDims();
+            /** Fill input tensor with images. First b channel, then g and r channels **/
+            size_t num_channels = dims[1];
+            size_t image_size = dims[3] * dims[2];
+
+            auto data = inputBlob->buffer().as<PrecisionTrait<Precision::U8>::value_type *>();
+            /** Iterate over all input images **/
+            for (int image_id = count; image_id < i.second; ++image_id) {
+                count ++;
+                /** Iterate over all pixel in image (b,g,r) **/
+                for (size_t pid = 0; pid < image_size; pid++) {
+                    /** Iterate over all channels **/
+                    for (size_t ch = 0; ch < num_channels; ++ch) {
+                        /**          [images stride + channels stride + pixel id ] all in bytes            **/
+                        data[image_id * image_size * num_channels + ch * image_size + pid] = imagesData.at(image_id).get()[pid*num_channels + ch];
+                    }
+                }
+            }
+        }
+        requests.push_back(inferRequest);
+
+    }
+    qDebug()<<"hier ok"<<endl;
 }
 
 void OpenVinoEnv::createInferRequest()
 {
-   InferenceEngine::InferRequest inferRequest = this->execNetwork.CreateInferRequest();
-   this->inferRequest = inferRequest;
+    for(auto &item : this->execNetworks)
+    {
+        this->requests.push_back(item.CreateInferRequest());
+    }
+    InferRequest inferRequest = this->execNetwork.CreateInferRequest();
+    this->inferRequest = inferRequest;
 }
 
 void OpenVinoEnv::prepareInput()
 {
-
     // Iterate over input blobs and fill input tensors
     for (auto & item : inputInfo) {
-        InferenceEngine::Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
-        InferenceEngine::SizeVector dims = inputBlob->getTensorDesc().getDims();
+        Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
+        SizeVector dims = inputBlob->getTensorDesc().getDims();
         /** Fill input tensor with images. First b channel, then g and r channels **/
         size_t num_channels = dims[1];
         size_t image_size = dims[3] * dims[2];
 
-        auto data = inputBlob->buffer().as<InferenceEngine::PrecisionTrait<InferenceEngine::Precision::U8>::value_type *>();
+        auto data = inputBlob->buffer().as<PrecisionTrait<Precision::U8>::value_type *>();
         /** Iterate over all input images **/
         for (size_t image_id = 0; image_id < imagesData.size(); ++image_id) {
             /** Iterate over all pixel in image (b,g,r) **/
@@ -128,30 +148,38 @@ void OpenVinoEnv::prepareInput()
             }
         }
     }
-
 }
 
 void OpenVinoEnv::infer()
 {
-    size_t numIterations = 10;
-    size_t curIteration = 0;
+    //get total number of images
+    size_t numOfHardware = distribution.size();
+    size_t currentIterations = 0;
     std::condition_variable condVar;
+    for(auto &item : requests)
+    {
+        item.SetCompletionCallback([&] {
+            currentIterations++;
+            qDebug() << currentIterations<< endl;
 
-    inferRequest.SetCompletionCallback(
-                [&] {
-        curIteration++;
-        if (curIteration < numIterations) {
-            /* here a user can read output containing inference results and put new input
-                               to repeat async request again */
-            inferRequest.StartAsync();
-        } else {
-            /* continue sample execution after last Asynchronous inference request execution */
-            condVar.notify_one();
-        }
-    });
+            if (currentIterations == numOfHardware) {
+                condVar.notify_one();
+            }
+        });
 
-    inferRequest.Infer();
+    }
+    int i= 1;
+    for(auto &item : requests)
+    {
+        qDebug() << "Hi im request nr"  << i++<< endl;
 
+        item.StartAsync();
+    }
+
+    std::mutex mutex;
+    std::unique_lock<std::mutex> lock(mutex);
+    condVar.wait(lock, [&]{ return currentIterations == numOfHardware; });
+    qDebug()<<"hier auch"<<endl;
 }
 
 vector<Result> OpenVinoEnv::processOutput()
@@ -159,7 +187,7 @@ vector<Result> OpenVinoEnv::processOutput()
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
 
-    InferenceEngine::Blob::Ptr outputBlob = inferRequest.GetBlob(output_info.begin()->first);
+    Blob::Ptr outputBlob = this->requests.back().GetBlob(output_info.begin()->first);
 
 
     QFileInfo file2("../alexnetLabels.txt");
@@ -171,7 +199,6 @@ vector<Result> OpenVinoEnv::processOutput()
     if (inputFile.is_open()) {
         std::string strLine;
         while (std::getline(inputFile, strLine)) {
-            //  trim(strLine);
             labels.push_back(strLine);
         }
     }
@@ -183,7 +210,7 @@ vector<Result> OpenVinoEnv::processOutput()
     endResults = classificationResult.getEndResults();
 
     return endResults;
-    }
+}
 
 
 
@@ -212,23 +239,18 @@ void OpenVinoEnv::setImageNames(std::vector<std::string> imageNames)
     //cout <<imageNames.back();
 }
 
-void OpenVinoEnv::setPlatforms(vector<string> platforms)
+void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
 {
     if(platforms.size()<1)
     {
         cerr << "No hardware was chosen";
     }
-    else if(platforms.size() == 1)
-    {
-        this->deviceName = platforms.back();
-    }
     else
     {
-        this->deviceName="HETERO:";
-        for(auto &item:platforms)
-        {
-            this->deviceName += item;
-        }
+        pair<string,int> a = {"CPU",3};
+        pair<string,int> b = {"CPU",3};
+        vector<pair<string, int> > platforms1 = {a,b};
+        this->distribution = platforms1;
     }
 }
 
