@@ -155,6 +155,8 @@ void OpenCLLayer::executeKernel(cl_command_queue commandQueue, cl_kernel kernel,
 void OpenCLLayer::releaseResources() {
     if(memInputs!=nullptr)          releaseCLObjectsManager->releaseMemObject(memInputs);
     if(memOutputs!=nullptr)         releaseCLObjectsManager->releaseMemObject(memOutputs);
+    memOutputs=nullptr;
+    memInputs=nullptr;
     if(memBiases!=nullptr)          releaseCLObjectsManager->releaseMemObject(memBiases);
     if(memWeights!=nullptr)         releaseCLObjectsManager->releaseMemObject(memWeights);
     if(memErrorInputs!=nullptr)     releaseCLObjectsManager->releaseMemObject(memErrorInputs);
