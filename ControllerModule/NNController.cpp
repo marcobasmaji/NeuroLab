@@ -40,25 +40,13 @@ void NNController::setPathList(vector<string> list)
 
 void NNController::setDistribution(vector<pair<string, int> > distribution) {
 
+    this->pnn.setPlatforms(distribution);
+
 }
 
 void NNController::setHardwareDistribution(vector<string> distr)
 {
-    if(currentNN == "ALEXNET")
-    {
-        pnn.setHardwareDistribution(distr);
-    }
-    else if(currentNN == "GOOGLENET")
-    {
-        pnn.setHardwareDistribution(distr);
-    }
-    else if(currentNN == "NEUROLABNET")
-    {
-        // can we run our net on other platforms than CPU ?
-    }
-    else
-    {
-    }
+
 }
 
 void NNController::setCurrentNN(string currentNN)

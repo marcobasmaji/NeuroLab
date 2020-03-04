@@ -91,7 +91,7 @@ HEADERS += \
     PredictionModule/LowestPowerConsumption.h \
     PredictionModule/HighestPerformance.h \
     PredictionModule/HighestEfficiency.h \
-    PredictionModule/AlexPrediction.h \    
+    PredictionModule/AlexPrediction.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/TopologyPanel.h \

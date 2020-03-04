@@ -5,9 +5,9 @@
 #include <iostream>
 #include <DataModule/Result.h>
 #include<chrono>
+#include <condition_variable>
 
 using namespace std;
-
 using namespace std::chrono;
 
 
@@ -18,7 +18,7 @@ public:
     vector<Result> classify();
     void chooseNeuralNet(string nn);
     void setImageNames(std::vector<std::string> imageNames);
-    void setPlatforms(vector<string>);
+    void setDistribution(vector<pair<string, int> >);
 
 private:
     void readIR();
@@ -51,6 +51,10 @@ private:
     std::vector<std::shared_ptr<unsigned char>> imagesData;
     std::vector<std::string> validImageNames;
     size_t batchSize;
+    vector<InferenceEngine::ExecutableNetwork> execNetworks;
+    vector<string> devices;
+    vector<InferenceEngine::InferRequest> requests;
+    vector<pair<string, int> > distribution;
 };
 
 #endif // OPENVINOENV_H
