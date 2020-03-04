@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-#define TEST_PROJECT    //comment this line out to start the tests
+//#define TEST_PROJECT    //comment this line out to start the tests
 
 #ifdef TEST_PROJECT
 #include "Tests/TestStarter.hpp"

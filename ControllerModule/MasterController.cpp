@@ -23,9 +23,9 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
 
     //-------------hier brauchen wir noch----------------------------------------------------------
 
-    //nnObserver.setCurrentNN(nn);
-    //DataResults predictionResults = predictionObserver.calculatePrediction(selectedHardware, mode, nrImages, nn);
-    //nnObserver.setDistribution(predictionResults.hDistribution);
+    nnObserver.setCurrentNN(nn);
+    DataResults predictionResults = predictionObserver.calculatePrediction(nrImages,nn,mode,selectedHardware);
+    nnObserver.setDistribution(predictionResults.hardwareDistribution);
     //----------------------------------------------------------------------------------------------
     vector<Result> results = nnObserver.classify();
     viewObserver.displayResults(results);    

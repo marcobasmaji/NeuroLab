@@ -152,34 +152,13 @@ void OpenVinoEnv::prepareInput()
 
 void OpenVinoEnv::infer()
 {
-    //get total number of images
-    size_t numOfHardware = distribution.size();
-    size_t currentIterations = 0;
-    std::condition_variable condVar;
-    for(auto &item : requests)
-    {
-        item.SetCompletionCallback([&] {
-            currentIterations++;
-            qDebug() << currentIterations<< endl;
-
-            if (currentIterations == numOfHardware) {
-                condVar.notify_one();
-            }
-        });
-
-    }
     int i= 1;
     for(auto &item : requests)
     {
         qDebug() << "Hi im request nr"  << i++<< endl;
 
-        item.StartAsync();
+        item.Infer();
     }
-
-    std::mutex mutex;
-    std::unique_lock<std::mutex> lock(mutex);
-    condVar.wait(lock, [&]{ return currentIterations == numOfHardware; });
-    qDebug()<<"hier auch"<<endl;
 }
 
 vector<Result> OpenVinoEnv::processOutput()
@@ -241,16 +220,53 @@ void OpenVinoEnv::setImageNames(std::vector<std::string> imageNames)
 
 void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
 {
-    if(platforms.size()<1)
+    if(platforms.size() ==1)
     {
-        cerr << "No hardware was chosen";
+        distribution.push_back(platforms.back());
     }
     else
     {
-        pair<string,int> a = {"CPU",3};
-        pair<string,int> b = {"CPU",3};
-        vector<pair<string, int> > platforms1 = {a,b};
-        this->distribution = platforms1;
+        unsigned int size = platforms.size();
+        for(unsigned int h = 0; h<size-1;h++)
+        {
+            // Turning the distribution into hardware combinations
+            int min = platforms.front().second;
+            for(auto &platfrom: platforms)
+            {
+                if(platfrom.second <= min)
+                {
+                    min = platfrom.second;
+                }
+            }
+            cerr << min<< endl;
+
+            // create MULTI PLUGIN
+            string s = "MULTI:";
+            unsigned int i = 0;
+            for(auto &platform : platforms)
+            {
+                s = s + platform.first + (i<platforms.size()-1 ? "," : "");
+                i++;
+            }
+            distribution.push_back({s,min*platforms.size()});
+            int j =0;
+            for(auto &platfrom: platforms)
+            {
+                if(platfrom.second == min)
+                {
+                    platforms.erase(platforms.begin() + j);
+                    cerr << platfrom.first<< "ssssss"<< endl;
+
+                } else {
+                    platfrom.second -=min;
+
+                }
+                j++;
+            }
+
+        }
+        // push back last plugin without MULTI
+        distribution.push_back(platforms.back());
     }
 }
 
