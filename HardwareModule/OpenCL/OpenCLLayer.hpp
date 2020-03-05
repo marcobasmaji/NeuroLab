@@ -259,7 +259,19 @@ public:
 *	@param arrayLength			This attribute is set equals to the length of the return array. Its memory has to be reserved by the caller.
 *	@return						The error (gradients) data of the output neurons of this layer.
 */
-	float* getErrors(OpenCLEnvironment* openCLEnvironment, int batchSize, int outputMaps, int outputHeight, int outputWidth, int* arrayLength);
+    float* getErrorOutputs(OpenCLEnvironment* openCLEnvironment, int batchSize, int outputMaps, int outputHeight, int outputWidth, int* arrayLength);
+
+    /**
+    *	@brief						This function returns the calculated errors (gradients) of the output neurons of this layer. It is blocking and only continues if the data has been read and copied.
+    *	@param openclEnvironment	The OpenCLEnvironment that stands for the hardware this layer is initialized on and the data is stored.
+    *	@param batchSize			The batch size of the output data.
+    *	@param inputMaps			The input maps of the input layer.
+    *	@param inputHeight			The input height of the input layer.
+    *	@param inputWidth			The input width of the output layer.
+    *	@param arrayLength			This attribute is set equals to the length of the return array. Its memory has to be reserved by the caller.
+    *	@return						The error (gradients) data of the input neurons of this layer.
+    */
+        float* getErrorInputs(OpenCLEnvironment* openCLEnvironment, int batchSize, int inputMaps, int inputHeight, int inputWidth, int* arrayLength);
 	
 /**
 *	@brief						This function reads the outputs of this layer. It is blocking and only continues if the data has been read and copied.
