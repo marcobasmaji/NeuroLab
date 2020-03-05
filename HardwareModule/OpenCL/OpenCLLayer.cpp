@@ -155,8 +155,6 @@ void OpenCLLayer::executeKernel(cl_command_queue commandQueue, cl_kernel kernel,
 void OpenCLLayer::releaseResources() {
     if(memInputs!=nullptr)          releaseCLObjectsManager->releaseMemObject(memInputs);
     if(memOutputs!=nullptr)         releaseCLObjectsManager->releaseMemObject(memOutputs);
-    memOutputs=nullptr;
-    memInputs=nullptr;
     if(memBiases!=nullptr)          releaseCLObjectsManager->releaseMemObject(memBiases);
     if(memWeights!=nullptr)         releaseCLObjectsManager->releaseMemObject(memWeights);
     if(memErrorInputs!=nullptr)     releaseCLObjectsManager->releaseMemObject(memErrorInputs);
@@ -175,7 +173,7 @@ void OpenCLLayer::setMemInputs(cl_mem memInputs) {
 		releaseCLObjectsManager->releaseMemObject(this->memInputs);
 	}
 
-    this->memInputs = memInputs;
+	this->memInputs = memInputs;
 }
 void OpenCLLayer::setMemOutputs(cl_mem memOutputs) {
 	if (this->memOutputs) {
@@ -216,7 +214,7 @@ void OpenCLLayer::setMemErrorOutputs(cl_mem memErrorOutputs) {
 void OpenCLLayer::setFeedforwardKernel(cl_kernel kernelFeedforward) {
 	if (this->kernelFeedforward) {
 		releaseCLObjectsManager->releaseKernel(this->kernelFeedforward);
-    }
+	}
 
 	this->kernelFeedforward = kernelFeedforward;
 }
@@ -243,10 +241,10 @@ void OpenCLLayer::setProgram(cl_program program) {
 }
 
 void OpenCLLayer::setInputs(OpenCLEnvironment* openclEnvironment, float *inputs, int length) {
-    size_t size = length * sizeof(float);
-    cl_command_queue commandQueue = openclEnvironment->getCommandQueue();
+	size_t size = length * sizeof(float);
+	cl_command_queue commandQueue = openclEnvironment->getCommandQueue();
 
-    enqueueWriteBuffer(commandQueue, memInputs, size, (void*) inputs);
+	enqueueWriteBuffer(commandQueue, memInputs, size, (void*) inputs);
 }
 void OpenCLLayer::setWeights(OpenCLEnvironment* openclEnvironment, float *weights, int length) {
 
@@ -335,22 +333,28 @@ float* OpenCLLayer::getWeights(OpenCLEnvironment* openCLEnvironment, int length)
 	return weights;	
 }
 
-float* OpenCLLayer::getErrors(OpenCLEnvironment* openclEnvironment, int batchSize, int outputMaps, int outputHeight, int outputWidth, int* arrayLength) {
+float* OpenCLLayer::getErrorOutputs(OpenCLEnvironment* openclEnvironment, int batchSize, int outputMaps, int outputHeight, int outputWidth, int* arrayLength) {
 	size_t size = (size_t) ((size_t)batchSize * (size_t)outputMaps * (size_t)outputHeight * (size_t)outputWidth);
 
 	cl_command_queue commandQueue = openclEnvironment->getCommandQueue();
-	float* outputs = (float*)enqueueReadBuffer(commandQueue, size * sizeof(float), memErrorOutputs);
+    float* errorOutputs = (float*)enqueueReadBuffer(commandQueue, size * sizeof(float), memErrorOutputs);
 
-	return outputs;
+    return errorOutputs;
+}
+
+float* OpenCLLayer::getErrorInputs(OpenCLEnvironment* openclEnvironment, int batchSize, int inputMaps, int inputHeight, int inputWidth, int* arrayLength) {
+    size_t size = (size_t) ((size_t)batchSize * (size_t)inputMaps * (size_t)inputHeight * (size_t)inputWidth);
+
+    cl_command_queue commandQueue = openclEnvironment->getCommandQueue();
+    float* errorInputs = (float*)enqueueReadBuffer(commandQueue, size * sizeof(float), memErrorInputs);
+
+    return errorInputs;
 }
 float* OpenCLLayer::getOutputs(OpenCLEnvironment* openclEnvironment, int batchSize, int outputMaps, int outputHeight, int outputWidth, int* arrayLength){
 	size_t size = (size_t)((size_t)batchSize * (size_t)outputMaps * (size_t)outputHeight * (size_t)outputWidth);
 
 	cl_command_queue commandQueue = openclEnvironment->getCommandQueue();
 	float* outputs = (float*) enqueueReadBuffer(commandQueue, size*sizeof(float), memOutputs);
-    cerr<<"reached 1!!!"<<endl;
-
-
 
 	return outputs;
 }
