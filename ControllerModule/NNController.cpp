@@ -13,11 +13,13 @@ vector<Result> NNController::classify()
 
     if(currentNN == "ALEXNET")
     {
+        pnn.setNerualNet("ALEXNET");
         pnn.setImagePaths(pathList);
         return pnn.classify();
     }
     else if(currentNN == "GOOGLENET")
     {
+        pnn.setNerualNet("GOOGLENET");
         pnn.setImagePaths(pathList);
         return pnn.classify();
     }

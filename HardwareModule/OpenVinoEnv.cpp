@@ -18,12 +18,12 @@
 using namespace InferenceEngine;
 
 OpenVinoEnv::OpenVinoEnv() {
-    chooseNeuralNet("alexnet");
+    chooseNeuralNet("ALEXNET");
 }
 vector<Result> OpenVinoEnv::classify() {
     readIR();
     configureInputAndOutput();
-    loadModel();
+    CreateRequestsWithInput();
     // createInferRequest();
     //prepareInput();
     infer();
@@ -52,7 +52,7 @@ void OpenVinoEnv::configureInputAndOutput()
     inputInfoItem.second->setLayout(Layout::NCHW);
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
     std::vector<std::string> validImageNames = {};
-
+    cerr << "size of image Names is " << imageNames.size() << endl;
     for (const auto & i : imageNames) {
         FormatReader::ReaderPtr reader(i.c_str());
         if (reader.get() == nullptr) {
@@ -78,9 +78,10 @@ void OpenVinoEnv::configureInputAndOutput()
     this->batchSize = batchSize;
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
+    cerr << "valid images size is " << validImageNames.size() << endl;
 }
 
-void OpenVinoEnv::loadModel()
+void OpenVinoEnv::CreateRequestsWithInput()
 {
     size_t count = 0;
     for(auto &i : this->distribution)
@@ -112,42 +113,7 @@ void OpenVinoEnv::loadModel()
         requests.push_back(inferRequest);
 
     }
-    qDebug()<<"hier ok"<<endl;
-}
-
-void OpenVinoEnv::createInferRequest()
-{
-    for(auto &item : this->execNetworks)
-    {
-        this->requests.push_back(item.CreateInferRequest());
-    }
-    InferRequest inferRequest = this->execNetwork.CreateInferRequest();
-    this->inferRequest = inferRequest;
-}
-
-void OpenVinoEnv::prepareInput()
-{
-    // Iterate over input blobs and fill input tensors
-    for (auto & item : inputInfo) {
-        Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
-        SizeVector dims = inputBlob->getTensorDesc().getDims();
-        /** Fill input tensor with images. First b channel, then g and r channels **/
-        size_t num_channels = dims[1];
-        size_t image_size = dims[3] * dims[2];
-
-        auto data = inputBlob->buffer().as<PrecisionTrait<Precision::U8>::value_type *>();
-        /** Iterate over all input images **/
-        for (size_t image_id = 0; image_id < imagesData.size(); ++image_id) {
-            /** Iterate over all pixel in image (b,g,r) **/
-            for (size_t pid = 0; pid < image_size; pid++) {
-                /** Iterate over all channels **/
-                for (size_t ch = 0; ch < num_channels; ++ch) {
-                    /**          [images stride + channels stride + pixel id ] all in bytes            **/
-                    data[image_id * image_size * num_channels + ch * image_size + pid] = imagesData.at(image_id).get()[pid*num_channels + ch];
-                }
-            }
-        }
-    }
+    cerr << "There are " << requests.size() << " requests" << endl;
 }
 
 void OpenVinoEnv::infer()
@@ -163,16 +129,12 @@ void OpenVinoEnv::infer()
 
 vector<Result> OpenVinoEnv::processOutput()
 {
+    this->endResults.clear();
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
-
-    Blob::Ptr outputBlob = this->requests.back().GetBlob(output_info.begin()->first);
-
-
     QFileInfo file2("../alexnetLabels.txt");
     std::string labelFileName = file2.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnetLabels.txt";
     std::vector<std::string> labels;
-
     std::ifstream inputFile;
     inputFile.open(labelFileName, std::ios::in);
     if (inputFile.is_open()) {
@@ -181,12 +143,27 @@ vector<Result> OpenVinoEnv::processOutput()
             labels.push_back(strLine);
         }
     }
+    for(auto &reqeust : this->requests)
+    {
+        Blob::Ptr outputBlob = reqeust.GetBlob(output_info.begin()->first);
 
-    ClassificationResult classificationResult(outputBlob, validImageNames,
-                                              batchSize, 10,
-                                              labels);
-    classificationResult.print();
-    endResults = classificationResult.getEndResults();
+
+        ClassificationResult classificationResult(outputBlob, validImageNames,
+                                                  batchSize, 10,
+                                                  labels);
+        classificationResult.print();
+        vector<Result> r = classificationResult.getEndResults();
+        for(auto & item : r)
+        {
+            endResults.push_back(item);
+        }
+    }
+    cerr << "classified with " << this->structurePath << endl;
+    cerr << "Printing out each Hardware combination with its number of images" << endl;
+    for(auto &i:this->distribution)
+    {
+        cerr<< i.first << "  " << i.second << endl;
+    }
 
     return endResults;
 }
@@ -194,12 +171,12 @@ vector<Result> OpenVinoEnv::processOutput()
 
 
 void OpenVinoEnv::chooseNeuralNet(string nn) {
-    if(nn == ("alexnet"))
+    if(nn == ("ALEXNET"))
     {
         this->structurePath = "alexnet.xml";
         this->weightsPath = "alexnet.bin";
     }
-    else if(nn == "googlenet")
+    else if(nn == "GOOGLENET")
     {
         this->structurePath = "googlenet.xml";
         this->weightsPath = "googlenet.bin";
@@ -215,11 +192,12 @@ void OpenVinoEnv::chooseNeuralNet(string nn) {
 void OpenVinoEnv::setImageNames(std::vector<std::string> imageNames)
 {
     this->imageNames = imageNames;
-    //cout <<imageNames.back();
 }
 
 void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
 {
+    this->distribution.clear();
+    this->requests.clear();
     if(platforms.size() ==1)
     {
         distribution.push_back(platforms.back());
