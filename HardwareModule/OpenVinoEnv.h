@@ -23,26 +23,14 @@ public:
 private:
     void readIR();
     void configureInputAndOutput();
-
-
-    void loadModel();
-    void createInferRequest();
-    void prepareInput();
+    void CreateRequestsWithInput();
     void infer();
     vector<Result> processOutput();
-    // for hardware Distrubution
-
 
     InferenceEngine::Core core;
-    InferenceEngine::InferencePlugin plugin;
     InferenceEngine::CNNNetwork cnnnetwork;
     InferenceEngine::InputsDataMap inputInfo;
     InferenceEngine::OutputsDataMap outputInfo;
-    InferenceEngine::ExecutableNetwork execNetwork;
-    InferenceEngine::InferRequest inferRequest;
-
-
-    //string pathToIR;
     string structurePath;
     string weightsPath;
     std::vector<std::string> imageNames;
@@ -51,8 +39,6 @@ private:
     std::vector<std::shared_ptr<unsigned char>> imagesData;
     std::vector<std::string> validImageNames;
     size_t batchSize;
-    vector<InferenceEngine::ExecutableNetwork> execNetworks;
-    vector<string> devices;
     vector<InferenceEngine::InferRequest> requests;
     vector<pair<string, int> > distribution;
 };
