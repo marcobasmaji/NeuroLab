@@ -249,6 +249,8 @@ public:
 */
     float* getWeights(OpenCLEnvironment* openCLEnvironment, int length);
 
+    float* getBiases(OpenCLEnvironment* openCLEnvironment, int length);
+
 /**
 *	@brief						This function returns the calculated errors (gradients) of the output neurons of this layer. It is blocking and only continues if the data has been read and copied.
 *	@param openclEnvironment	The OpenCLEnvironment that stands for the hardware this layer is initialized on and the data is stored.

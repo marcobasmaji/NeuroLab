@@ -333,6 +333,15 @@ float* OpenCLLayer::getWeights(OpenCLEnvironment* openCLEnvironment, int length)
 	return weights;	
 }
 
+float* OpenCLLayer::getBiases(OpenCLEnvironment* openCLEnvironment, int length){
+    size_t size = length;
+
+    cl_command_queue commandQueue = openCLEnvironment->getCommandQueue();
+    float* biases = (float*)enqueueReadBuffer(commandQueue, size * sizeof(float), memBiases);
+
+    return biases;
+}
+
 float* OpenCLLayer::getErrorOutputs(OpenCLEnvironment* openclEnvironment, int batchSize, int outputMaps, int outputHeight, int outputWidth, int* arrayLength) {
 	size_t size = (size_t) ((size_t)batchSize * (size_t)outputMaps * (size_t)outputHeight * (size_t)outputWidth);
 
