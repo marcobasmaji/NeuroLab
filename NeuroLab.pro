@@ -49,6 +49,16 @@ SOURCES += \
     PredictionModule/HighestPerformance.cpp \
     PredictionModule/HighestEfficiency.cpp \
     PredictionModule/AlexPrediction.cpp \
+    Tests/TestStarter.cpp \
+    Tests/TestsExample/TestExample.cpp \
+    Tests/TestsOpenCL/TestMaxPooling.cpp \
+    Tests/TestsOpenCL/ManuelTestData.cpp \
+    Tests/TestsOpenCL/TestConvolutional.cpp \
+    Tests/TestsOpenCL/TestDense.cpp \
+    Tests/TestsOpenCL/TestPadding.cpp \
+    Tests/TestsOpenCL/TestRelu.cpp \
+    Tests/TestsOpenCL/TestSoftmax.cpp \
+    Tests/TestsOpenCL/Util.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/TopologyPanel.cpp \
@@ -92,6 +102,16 @@ HEADERS += \
     PredictionModule/HighestPerformance.h \
     PredictionModule/HighestEfficiency.h \
     PredictionModule/AlexPrediction.h \
+    Tests/TestStarter.hpp \
+    Tests/TestsExample/TestExample.hpp \
+    Tests/TestsOpenCL/TestMaxPooling.hpp \
+    Tests/TestsOpenCL/ManuelTestData.hpp \
+    Tests/TestsOpenCL/TestConvolutional.hpp \
+    Tests/TestsOpenCL/TestDense.hpp \
+    Tests/TestsOpenCL/TestPadding.hpp \
+    Tests/TestsOpenCL/TestRelu.hpp \
+    Tests/TestsOpenCL/TestSoftmax.hpp \
+    Tests/TestsOpenCL/Util.hpp \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/TopologyPanel.h \
