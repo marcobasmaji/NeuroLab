@@ -147,6 +147,11 @@ DEPENDPATH += $$PWD/Tools/openvino/include
 INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
 
+INCLUDEPATH += $$PWD/Tools/opennn
+DEPENDPATH += $$PWD/Tools/opennn
+
+INCLUDEPATH += Tools/opennn/eigen
+
 RESOURCES += \
     HardwareModule/OpenCL/README.me \
     HardwareModule/OpenCL/kernels/Conv.cl \
@@ -155,3 +160,18 @@ RESOURCES += \
     HardwareModule/OpenCL/kernels/Pad.cl \
     HardwareModule/OpenCL/kernels/Relu.cl \
     HardwareModule/OpenCL/kernels/Softmax.cl
+
+# OpenMP library
+
+win32:!win32-g++{
+QMAKE_CXXFLAGS += -openmp
+QMAKE_LFLAGS  += -openmp
+}
+
+unix:!macx{
+QMAKE_CXXFLAGS+= -fopenmp
+QMAKE_LFLAGS += -fopenmp
+
+QMAKE_CXXFLAGS+= -std=c++11
+QMAKE_LFLAGS += -std=c++11
+}
