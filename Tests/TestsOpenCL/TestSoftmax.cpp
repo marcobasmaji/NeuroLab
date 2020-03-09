@@ -19,7 +19,7 @@ void TestSoftmax::createRandomSoftmaxLayerCont(SoftmaxLayerCont* softmaxLayerCon
     int maxNeurons=SOFTMAX_LAYER_MAX_NEURONS;
     int maxBatchSize=SOFTMAX_LAYER_MAX_BATCH_SIZE;
 
-    int neurons=util->getRandomIntValue(1,maxNeurons);
+    int neurons=util->getRandomIntValue(2,maxNeurons);  //2, due to opennn restrictions
     int batchSize=util->getRandomIntValue(1,maxBatchSize);
 
     int length=batchSize*neurons;
