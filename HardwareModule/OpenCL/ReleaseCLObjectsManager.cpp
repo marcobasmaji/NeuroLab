@@ -59,7 +59,7 @@ void ReleaseCLObjectsManager::releaseMemObject(cl_mem mem) {
 	cl_int error = clReleaseMemObject(mem);
 
 	if (error == CL_INVALID_MEM_OBJECT) {
-		cerr << "Error in releaseMemObject (CL_INVALID_MEM_OBJECT)." << endl;
+        //cerr << "Error in releaseMemObject (CL_INVALID_MEM_OBJECT)." << endl;
 	}
 	else if (error != CL_SUCCESS) {
 		cerr << "Error in releaseMemObject. Error is not specified!" << endl;
