@@ -9,7 +9,7 @@
 
 using namespace std;
 
-#define TEST_CASES 30;
+#define TEST_CASES 100;
 
 //Dense Layer
 #define DENSE_LAYER_MAX_BATCH_SIZE 10;
