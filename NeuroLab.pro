@@ -136,8 +136,8 @@ LIBS += -L$$PWD/Tools/format_reader/lib/ -lformat_reader
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
-LIBS += -L$$PWD/Tools/tbb -ltbb
-LIBS += -L$$PWD/Tools/tbb -ltbbmalloc
+LIBS += -L$$PWD/Tools/tbb/lib -ltbb
+LIBS += -L$$PWD/Tools/tbb/lib -ltbbmalloc
 LIBS += -L$$PWD/Tools/opencl/ -lOpenCL
 
 
