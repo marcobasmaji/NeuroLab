@@ -45,9 +45,12 @@ class TestConvolutional{
 public:
     Util* util=new Util();
 
+    void parseStructure(ConvLayerCont* convLayerCont, string content);
+
     void createRandomConvLayerCont(ConvLayerCont* convLayer);
     void createConvLayerOpennn(ConvLayerCont* convLayerCont, ConvolutionalLayer* convLayerOpennn);
 
     int testFeedForward();
     int testErrorComp();
+    int testWeightsUpdate();
 };
