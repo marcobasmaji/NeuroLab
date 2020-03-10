@@ -1,3 +1,5 @@
+include(gtest_dependency.pri)
+
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -49,6 +51,16 @@ SOURCES += \
     PredictionModule/HighestPerformance.cpp \
     PredictionModule/HighestEfficiency.cpp \
     PredictionModule/AlexPrediction.cpp \
+    Tests/TestStarter.cpp \
+    Tests/TestsExample/TestExample.cpp \
+    Tests/TestsOpenCL/TestMaxPooling.cpp \
+    Tests/TestsOpenCL/ManuelTestData.cpp \
+    Tests/TestsOpenCL/TestConvolutional.cpp \
+    Tests/TestsOpenCL/TestDense.cpp \
+    Tests/TestsOpenCL/TestPadding.cpp \
+    Tests/TestsOpenCL/TestRelu.cpp \
+    Tests/TestsOpenCL/TestSoftmax.cpp \
+    Tests/TestsOpenCL/Util.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/TopologyPanel.cpp \
@@ -91,7 +103,17 @@ HEADERS += \
     PredictionModule/LowestPowerConsumption.h \
     PredictionModule/HighestPerformance.h \
     PredictionModule/HighestEfficiency.h \
-    PredictionModule/AlexPrediction.h \    
+    PredictionModule/AlexPrediction.h \
+    Tests/TestStarter.hpp \
+    Tests/TestsExample/TestExample.hpp \
+    Tests/TestsOpenCL/TestMaxPooling.hpp \
+    Tests/TestsOpenCL/ManuelTestData.hpp \
+    Tests/TestsOpenCL/TestConvolutional.hpp \
+    Tests/TestsOpenCL/TestDense.hpp \
+    Tests/TestsOpenCL/TestPadding.hpp \
+    Tests/TestsOpenCL/TestRelu.hpp \
+    Tests/TestsOpenCL/TestSoftmax.hpp \
+    Tests/TestsOpenCL/Util.hpp \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/TopologyPanel.h \
@@ -114,9 +136,13 @@ LIBS += -L$$PWD/Tools/format_reader/lib/ -lformat_reader
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_core
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
-LIBS += -L$$PWD/Tools/tbb -ltbb
-LIBS += -L$$PWD/Tools/tbb -ltbbmalloc
+LIBS += -L$$PWD/Tools/tbb/lib -ltbb
+LIBS += -L$$PWD/Tools/tbb/lib -ltbbmalloc
 LIBS += -L$$PWD/Tools/opencl/ -lOpenCL
+LIBS += -L$$PWD/Tools/opennn/lib/ -lopennn
+LIBS += -L$$PWD/Tools/openvino/lib/intel64/ -lHeteroPlugin
+LIBS += -L$$PWD/Tools/openvino/lib/intel64/ -lMKLDNNPlugin
+LIBS += -L$$PWD/Tools/openvino/lib/intel64/ -lmyriadPlugin
 
 
 # Headers
@@ -127,6 +153,11 @@ DEPENDPATH += $$PWD/Tools/openvino/include
 INCLUDEPATH += $$PWD/Tools/opencv2/include
 DEPENDPATH += $$PWD/Tools/opencv2/include
 
+INCLUDEPATH += $$PWD/Tools/opennn
+DEPENDPATH += $$PWD/Tools/opennn
+
+INCLUDEPATH += Tools/opennn/eigen
+
 RESOURCES += \
     HardwareModule/OpenCL/README.me \
     HardwareModule/OpenCL/kernels/Conv.cl \
@@ -135,3 +166,18 @@ RESOURCES += \
     HardwareModule/OpenCL/kernels/Pad.cl \
     HardwareModule/OpenCL/kernels/Relu.cl \
     HardwareModule/OpenCL/kernels/Softmax.cl
+
+# OpenMP library
+
+win32:!win32-g++{
+QMAKE_CXXFLAGS += -openmp
+QMAKE_LFLAGS  += -openmp
+}
+
+unix:!macx{
+QMAKE_CXXFLAGS+= -fopenmp
+QMAKE_LFLAGS += -fopenmp
+
+QMAKE_CXXFLAGS+= -std=c++11
+QMAKE_LFLAGS += -std=c++11
+}

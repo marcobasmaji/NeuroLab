@@ -15,29 +15,17 @@
 
 
 
-
+using namespace InferenceEngine;
 
 OpenVinoEnv::OpenVinoEnv() {
-    chooseNeuralNet("alexnet");
-    setPlatforms({"HETERO:CPU,MYRIAD"});
+    chooseNeuralNet("ALEXNET");
 }
 vector<Result> OpenVinoEnv::classify() {
-   auto start = std::chrono::high_resolution_clock::now();
-   std::vector <std::vector<int>> matrix;
-   std::vector <int> test;
-   for(int i = 0; i < 10000; i++){
-       for(int j =0; j < 10000; j++){
-           int m = j+i;
-       }
-   }
-   auto stop = std::chrono::high_resolution_clock::now();
-   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
-   std::cerr << duration.count();
     readIR();
     configureInputAndOutput();
-    loadModel();
-    createInferRequest();
-    prepareInput();
+    CreateRequestsWithInput();
+    // createInferRequest();
+    //prepareInput();
     infer();
     vector<Result> results = processOutput();
     return results;
@@ -46,7 +34,7 @@ vector<Result> OpenVinoEnv::classify() {
 
 void OpenVinoEnv::readIR()
 {
-    InferenceEngine::CNNNetReader network_reader;
+    CNNNetReader network_reader;
     QString s = QString::fromStdString(structurePath);
     QFileInfo file1("../"+s);
 
@@ -60,11 +48,11 @@ void OpenVinoEnv::configureInputAndOutput()
     this->inputInfo = input_info;
     auto inputInfoItem = *inputInfo.begin();
 
-    inputInfoItem.second->setPrecision(InferenceEngine::Precision::U8);
-    inputInfoItem.second->setLayout(InferenceEngine::Layout::NCHW);
+    inputInfoItem.second->setPrecision(Precision::U8);
+    inputInfoItem.second->setLayout(Layout::NCHW);
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
     std::vector<std::string> validImageNames = {};
-
+    cerr << "size of image Names is " << imageNames.size() << endl;
     for (const auto & i : imageNames) {
         FormatReader::ReaderPtr reader(i.c_str());
         if (reader.get() == nullptr) {
@@ -90,110 +78,105 @@ void OpenVinoEnv::configureInputAndOutput()
     this->batchSize = batchSize;
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
+    cerr << "valid images size is " << validImageNames.size() << endl;
 }
 
-void OpenVinoEnv::loadModel()
+void OpenVinoEnv::CreateRequestsWithInput()
 {
-    auto executable_network = core.LoadNetwork(cnnnetwork, deviceName);
-    this->execNetwork = executable_network;
-}
+    size_t count = 0;
+    for(auto &i : this->distribution)
+    {
+        InferenceEngine::ExecutableNetwork en = core.LoadNetwork(cnnnetwork,i.first);
+        InferRequest inferRequest = en.CreateInferRequest();
+        for (auto & item : inputInfo) {
 
-void OpenVinoEnv::createInferRequest()
-{
-   InferenceEngine::InferRequest inferRequest = this->execNetwork.CreateInferRequest();
-   this->inferRequest = inferRequest;
-}
+            Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
+            SizeVector dims = inputBlob->getTensorDesc().getDims();
+            /** Fill input tensor with images. First b channel, then g and r channels **/
+            size_t num_channels = dims[1];
+            size_t image_size = dims[3] * dims[2];
 
-void OpenVinoEnv::prepareInput()
-{
-
-    // Iterate over input blobs and fill input tensors
-    for (auto & item : inputInfo) {
-        InferenceEngine::Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
-        InferenceEngine::SizeVector dims = inputBlob->getTensorDesc().getDims();
-        /** Fill input tensor with images. First b channel, then g and r channels **/
-        size_t num_channels = dims[1];
-        size_t image_size = dims[3] * dims[2];
-
-        auto data = inputBlob->buffer().as<InferenceEngine::PrecisionTrait<InferenceEngine::Precision::U8>::value_type *>();
-        /** Iterate over all input images **/
-        for (size_t image_id = 0; image_id < imagesData.size(); ++image_id) {
-            /** Iterate over all pixel in image (b,g,r) **/
-            for (size_t pid = 0; pid < image_size; pid++) {
-                /** Iterate over all channels **/
-                for (size_t ch = 0; ch < num_channels; ++ch) {
-                    /**          [images stride + channels stride + pixel id ] all in bytes            **/
-                    data[image_id * image_size * num_channels + ch * image_size + pid] = imagesData.at(image_id).get()[pid*num_channels + ch];
+            auto data = inputBlob->buffer().as<PrecisionTrait<Precision::U8>::value_type *>();
+            /** Iterate over all input images **/
+            for (int image_id = count; image_id < i.second; ++image_id) {
+                count ++;
+                /** Iterate over all pixel in image (b,g,r) **/
+                for (size_t pid = 0; pid < image_size; pid++) {
+                    /** Iterate over all channels **/
+                    for (size_t ch = 0; ch < num_channels; ++ch) {
+                        /**          [images stride + channels stride + pixel id ] all in bytes            **/
+                        data[image_id * image_size * num_channels + ch * image_size + pid] = imagesData.at(image_id).get()[pid*num_channels + ch];
+                    }
                 }
             }
         }
-    }
+        requests.push_back(inferRequest);
 
+    }
+    cerr << "There are " << requests.size() << " requests" << endl;
 }
 
 void OpenVinoEnv::infer()
 {
-    size_t numIterations = 10;
-    size_t curIteration = 0;
-    std::condition_variable condVar;
+    int i= 1;
+    for(auto &item : requests)
+    {
+        qDebug() << "Hi im request nr"  << i++<< endl;
 
-    inferRequest.SetCompletionCallback(
-                [&] {
-        curIteration++;
-        if (curIteration < numIterations) {
-            /* here a user can read output containing inference results and put new input
-                               to repeat async request again */
-            inferRequest.StartAsync();
-        } else {
-            /* continue sample execution after last Asynchronous inference request execution */
-            condVar.notify_one();
-        }
-    });
-
-    inferRequest.Infer();
-
+        item.Infer();
+    }
 }
 
 vector<Result> OpenVinoEnv::processOutput()
 {
+    this->endResults.clear();
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
-
-    InferenceEngine::Blob::Ptr outputBlob = inferRequest.GetBlob(output_info.begin()->first);
-
-
     QFileInfo file2("../alexnetLabels.txt");
     std::string labelFileName = file2.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnetLabels.txt";
     std::vector<std::string> labels;
-
     std::ifstream inputFile;
     inputFile.open(labelFileName, std::ios::in);
     if (inputFile.is_open()) {
         std::string strLine;
         while (std::getline(inputFile, strLine)) {
-            //  trim(strLine);
             labels.push_back(strLine);
         }
     }
+    for(auto &reqeust : this->requests)
+    {
+        Blob::Ptr outputBlob = reqeust.GetBlob(output_info.begin()->first);
 
-    ClassificationResult classificationResult(outputBlob, validImageNames,
-                                              batchSize, 10,
-                                              labels);
-    classificationResult.print();
-    endResults = classificationResult.getEndResults();
+
+        ClassificationResult classificationResult(outputBlob, validImageNames,
+                                                  batchSize, 10,
+                                                  labels);
+        classificationResult.print();
+        vector<Result> r = classificationResult.getEndResults();
+        for(auto & item : r)
+        {
+            endResults.push_back(item);
+        }
+    }
+    cerr << "classified with " << this->structurePath << endl;
+    cerr << "Printing out each Hardware combination with its number of images" << endl;
+    for(auto &i:this->distribution)
+    {
+        cerr<< i.first << "  " << i.second << endl;
+    }
 
     return endResults;
-    }
+}
 
 
 
 void OpenVinoEnv::chooseNeuralNet(string nn) {
-    if(nn == ("alexnet"))
+    if(nn == ("ALEXNET"))
     {
         this->structurePath = "alexnet.xml";
         this->weightsPath = "alexnet.bin";
     }
-    else if(nn == "googlenet")
+    else if(nn == "GOOGLENET")
     {
         this->structurePath = "googlenet.xml";
         this->weightsPath = "googlenet.bin";
@@ -209,26 +192,59 @@ void OpenVinoEnv::chooseNeuralNet(string nn) {
 void OpenVinoEnv::setImageNames(std::vector<std::string> imageNames)
 {
     this->imageNames = imageNames;
-    //cout <<imageNames.back();
 }
 
-void OpenVinoEnv::setPlatforms(vector<string> platforms)
+void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
 {
-    if(platforms.size()<1)
+    this->distribution.clear();
+    this->requests.clear();
+    if(platforms.size() ==1)
     {
-        cerr << "No hardware was chosen";
-    }
-    else if(platforms.size() == 1)
-    {
-        this->deviceName = platforms.back();
+        distribution.push_back(platforms.back());
     }
     else
     {
-        this->deviceName="HETERO:";
-        for(auto &item:platforms)
+        unsigned int size = platforms.size();
+        for(unsigned int h = 0; h<size-1;h++)
         {
-            this->deviceName += item;
+            // Turning the distribution into hardware combinations
+            int min = platforms.front().second;
+            for(auto &platfrom: platforms)
+            {
+                if(platfrom.second <= min)
+                {
+                    min = platfrom.second;
+                }
+            }
+            cerr << min<< endl;
+
+            // create MULTI PLUGIN
+            string s = "MULTI:";
+            unsigned int i = 0;
+            for(auto &platform : platforms)
+            {
+                s = s + platform.first + (i<platforms.size()-1 ? "," : "");
+                i++;
+            }
+            distribution.push_back({s,min*platforms.size()});
+            int j =0;
+            for(auto &platfrom: platforms)
+            {
+                if(platfrom.second == min)
+                {
+                    platforms.erase(platforms.begin() + j);
+                    cerr << platfrom.first<< "ssssss"<< endl;
+
+                } else {
+                    platfrom.second -=min;
+
+                }
+                j++;
+            }
+
         }
+        // push back last plugin without MULTI
+        distribution.push_back(platforms.back());
     }
 }
 
