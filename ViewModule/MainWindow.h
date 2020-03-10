@@ -99,6 +99,14 @@ private slots:
 
     void on_trainMenu_clicked();
 
+    void on_load_dataset_button_clicked();
+
+    void on_select_weights_button_clicked();
+
+    void on_train_button_clicked();
+
+    void on_train_tab_widget_tabCloseRequested(int index);
+
 private:
 
     Ui::MainWindow *ui;

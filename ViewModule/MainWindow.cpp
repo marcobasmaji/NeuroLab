@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     ui->NeuralNetOptions->hide();
     ui->ModeOptions->hide();
     ui->GPU_checkbox->hide();
+    ui->train_tab_widget->hide();
+
 }
 
 MainWindow::~MainWindow()
@@ -40,29 +42,36 @@ void MainWindow::setCheckedAll(bool checked){
     }
     for (HardwareElement hw : viewController->availableHardware) {
         switch(hw){
-        case MOV : on_Mov1_checkbox_stateChanged(flag);
-            ui->Mov1_checkbox->setCheckState(state);
+        case MOV : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Checked) {
+                //on_Mov1_checkbox_stateChanged(flag);
+            ui->Mov1_checkbox->setCheckState(state);}
             break;
-        case MOV1 : on_Mov1_checkbox_stateChanged(flag);
-            ui->Mov1_checkbox->setCheckState(state);
+        case MOV1 : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Checked) {
+            ui->Mov1_checkbox->setCheckState(state);}
             break;
-        case MOV2 : on_Mov2_checkbox_stateChanged(flag);
-            ui->Mov2_checkbox->setCheckState(state);
+        case MOV2 : if (ui->Mov2_checkbox->checkState() != Qt::CheckState::Checked) {
+                //on_Mov2_checkbox_stateChanged(flag);
+            ui->Mov2_checkbox->setCheckState(state);}
             break;
-        case MOV3 : on_Mov3_checkbox_stateChanged(flag);
-            ui->Mov3_checkbox->setCheckState(state);
+        case MOV3 : if (ui->Mov3_checkbox->checkState() != Qt::CheckState::Checked) {
+                //on_Mov3_checkbox_stateChanged(flag);
+            ui->Mov3_checkbox->setCheckState(state);}
             break;
-        case MOV4 : on_Mov4_checkbox_stateChanged(flag);
-            ui->Mov4_checkbox->setCheckState(state);
+        case MOV4 : if (ui->Mov4_checkbox->checkState() != Qt::CheckState::Checked) {
+                //on_Mov4_checkbox_stateChanged(flag);
+            ui->Mov4_checkbox->setCheckState(state);}
             break;
-        case CPU : on_CPU_checkbox_stateChanged(flag);
-            ui->CPU_checkbox->setCheckState(state);
+        case CPU : if (ui->CPU_checkbox->checkState() != Qt::CheckState::Checked) {
+                //on_CPU_checkbox_stateChanged(flag);
+            ui->CPU_checkbox->setCheckState(state);}
             break;
-        case GPU : on_GPU_checkbox_stateChanged(flag);
-            ui->GPU_checkbox->setCheckState(state);
+        case GPU : if (ui->GPU_checkbox->checkState() != Qt::CheckState::Checked) {
+                //on_GPU_checkbox_stateChanged(flag);
+            ui->GPU_checkbox->setCheckState(state);}
             break;
-        case FPGA : on_FPGA_checkbox_stateChanged(flag);
-            ui->FPGA_checkbox->setCheckState(state);
+        case FPGA : if (ui->FPGA_checkbox->checkState() != Qt::CheckState::Checked) {
+                //on_FPGA_checkbox_stateChanged(flag);
+            ui->FPGA_checkbox->setCheckState(state);}
             break;
         }
     }
@@ -439,7 +448,7 @@ void MainWindow::displayPrediction(string totalTime, string totalPowerConsumptio
 
 void MainWindow::showHwNotUsedMessage(PredictionValues* predictionValues) {
     if (! predictionValues->usedInDistribution()) {
-        ui->hardwareNotUsed_label->setText("This hardware is not used for the cassification");
+        ui->hardwareNotUsed_label->setText("This hardware is not used for the classification");
 
         QFont font = ui->hardwareNotUsed_label->font();
         font.setPointSize(6);
@@ -618,6 +627,37 @@ void MainWindow::enableClassifyIfPossible() {
 void MainWindow::on_trainMenu_clicked()
 {
 
-    TrainingPanel *trPanel = new TrainingPanel(this, this->guiSettings);
-    trPanel->show();
+    ui->train_tab_widget->show();
+}
+
+void MainWindow::on_load_dataset_button_clicked()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Load Dataset"),
+                                                         "/home",
+                                                         QFileDialog::ShowDirsOnly
+                                                         | QFileDialog::DontResolveSymlinks);
+    ui->dataset_path_label->setText(dir);
+    //guiSettings.setDataSetDirectory(dir.toStdString());
+}
+
+void MainWindow::on_select_weights_button_clicked()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Select weights folder"),
+                                                         "/home",
+                                                         QFileDialog::ShowDirsOnly
+                                                         | QFileDialog::DontResolveSymlinks);
+    ui->weights_path_label->setText(dir);
+    guiSettings.setWeightsDirectory(dir.toStdString());
+
+}
+
+void MainWindow::on_train_button_clicked()
+{
+    //master train
+
+}
+
+void MainWindow::on_train_tab_widget_tabCloseRequested(int index)
+{
+    ui->train_tab_widget->hide();
 }

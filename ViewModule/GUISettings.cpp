@@ -93,6 +93,21 @@ void GUISettings::unselectHardwareElement(string element) {
 void GUISettings::selectHardwareElement(string element) {
     auto itr = std::find(selectedHardware.begin(), selectedHardware.end(), element);
     if (itr == selectedHardware.end()) selectedHardware.push_back(element);
+}
+
+string GUISettings::getWeightsDirectory() const
+{
+    return weightsDirectory;
+}
+
+void GUISettings::setWeightsDirectory(const string dir)
+{
+    weightsDirectory = dir;
+}
+
+string GUISettings::getDataSetDirectory() const
+{
+    return dataSetDirectory;
 };
 
 

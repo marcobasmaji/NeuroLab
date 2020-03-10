@@ -14,6 +14,8 @@ private slots:
 
     void on_load_data_set_dir_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     GUISettings guiSettings;
 };
