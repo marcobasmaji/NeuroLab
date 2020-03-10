@@ -124,7 +124,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>270</x>
       <y>10</y>
       <width>731</width>
       <height>541</height>
@@ -588,12 +588,138 @@
      </item>
     </layout>
    </widget>
+   <widget class="QTabWidget" name="train_tab_widget">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>10</y>
+      <width>871</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::NoContextMenu</enum>
+    </property>
+    <property name="tabsClosable">
+     <bool>true</bool>
+    </property>
+    <widget class="QWidget" name="train_tab">
+     <attribute name="title">
+      <string>Train your Neural Network</string>
+     </attribute>
+     <widget class="QPushButton" name="load_dataset_button">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>100</y>
+        <width>106</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Load</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="select_weights_button">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>170</y>
+        <width>106</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Select</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="train_button">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>370</y>
+        <width>141</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Train</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="dataset_path_label">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>100</y>
+        <width>471</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="weights_path_label">
+      <property name="geometry">
+       <rect>
+        <x>380</x>
+        <y>170</y>
+        <width>471</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>100</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Load Data set</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>170</y>
+        <width>211</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Select Weights directory</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="train_success_label">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>410</y>
+        <width>431</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+   </widget>
    <zorder>NeuralNetOptions</zorder>
    <zorder>ModeOptions</zorder>
    <zorder>HardwareOptions</zorder>
    <zorder>welcomeLabel</zorder>
    <zorder>verticalLayoutWidget</zorder>
    <zorder>tabWidget</zorder>
+   <zorder>train_tab_widget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

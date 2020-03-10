@@ -1,6 +1,6 @@
 #include "TrainingPanel.h"
 #include <QFileDialog>
-
+#include <QDebug>
 TrainingPanel::TrainingPanel(QWidget *parent, GUISettings guiSet)
     : QMainWindow(parent)
     , ui(new Ui::TrainingPanel)
@@ -18,4 +18,9 @@ void TrainingPanel::on_load_data_set_dir_clicked()
     if(filesList.isEmpty()){
         return;
     }
+}
+
+void TrainingPanel::on_pushButton_clicked()
+{
+    qDebug()<<"endlich auf gerufen"<<endl;
 }
