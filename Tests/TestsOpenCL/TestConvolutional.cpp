@@ -9,7 +9,7 @@
 
 using namespace std;
 
-#define TEST_CASES 100;
+#define TEST_CASES 10;
 
 //Convolutional Layer
 #define CONVOlUTIONAL_LAYER_MAX_BATCH_SIZE 10;

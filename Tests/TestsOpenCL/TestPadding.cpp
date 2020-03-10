@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define TEST_CASES 100;
+#define TEST_CASES 10;
 
 //Pooling Layer
 #define PADDING_LAYER_MAX_BATCH_SIZE 10;
