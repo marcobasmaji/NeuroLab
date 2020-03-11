@@ -51,7 +51,6 @@ private slots:
 
     void on_NeuroLabNet_radio_button_clicked();
 
-    void setCheckedAll(bool checked);
 
     void setEnabledModes(bool value);
 
@@ -65,13 +64,10 @@ private slots:
 
     int createTab();
 
-    void setComboboxContent(list<HardwareElement> availableHardware);
-
     //void on_comboBox_currentTextChanged(const QString &arg1);
 
     void on_Mov1_checkbox_stateChanged(int arg1);
 
-    void checkSelectedHardware();
 
     void on_Mov2_checkbox_stateChanged(int arg1);
 
@@ -124,5 +120,10 @@ private:
     void bindCheckbox(int arg, string hardwareElement, QString nameHardwareElement, int indexCombobox);
     void enableClassifyIfPossible();
     void showHwNotUsedMessage(PredictionValues* predictionValues);
+
+    void setComboboxContent(list<HardwareElement> availableHardware);
+    void checkSelectedHardware();
+    void uncheckAllHardware();
+    void selectAllHardware();
 };
 #endif // MAINWINDOW_H(imageToBeRemoved)

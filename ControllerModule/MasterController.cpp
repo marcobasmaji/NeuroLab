@@ -32,6 +32,12 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
     vector<Result> results = nnObserver.classify();
     viewObserver.displayResults(results);    
 }
+
+void MasterController::train(string weightsDir, string dataSetDir){
+    //---------------this is needed----------
+    //nnObserver.train(weightsDir,dataSetDir);
+    //----------------------
+}
 void MasterController::getPrediction(const string net, const string mode, vector<string> hardware , int nrImages)
 {
     // analog for powerconsumption

@@ -61,6 +61,7 @@ SOURCES += \
     Tests/TestsOpenCL/TestRelu.cpp \
     Tests/TestsOpenCL/TestSoftmax.cpp \
     Tests/TestsOpenCL/Util.cpp \
+    Tests/TestsView/GuiSettingsTest.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/TopologyPanel.cpp \
@@ -114,6 +115,7 @@ HEADERS += \
     Tests/TestsOpenCL/TestRelu.hpp \
     Tests/TestsOpenCL/TestSoftmax.hpp \
     Tests/TestsOpenCL/Util.hpp \
+    Tests/TestsView/GuiSettingsTest.hpp \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/TopologyPanel.h \
@@ -165,7 +167,8 @@ RESOURCES += \
     HardwareModule/OpenCL/kernels/MaxPool.cl \
     HardwareModule/OpenCL/kernels/Pad.cl \
     HardwareModule/OpenCL/kernels/Relu.cl \
-    HardwareModule/OpenCL/kernels/Softmax.cl
+    HardwareModule/OpenCL/kernels/Softmax.cl \
+    ViewModule/welcome_panel.png
 
 # OpenMP library
 

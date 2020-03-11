@@ -17,6 +17,7 @@ ViewController::ViewController(MasterController* partner)
     this->master= partner;
     mainWindow = new MainWindow(nullptr,this);
     mainWindow->setWindowTitle("NeuroLab");
+    mainWindow->setFixedSize(1020, 615 );
     this->displayAvailableHardware();
     mainWindow->show();
 
@@ -165,4 +166,15 @@ void ViewController::displayAvailableHardware()
     }
 }
 
+void ViewController::train(string weightsDir, string dataSetDir){
+   //
+   //mainWindow->showInProgress();
+   //
+
+    master->train(weightsDir, dataSetDir);
+
+   //
+   //mainWindow->showFinished();
+   //
+}
 
