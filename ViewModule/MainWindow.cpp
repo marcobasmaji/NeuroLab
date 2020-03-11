@@ -413,6 +413,7 @@ void MainWindow::on_Refresh_hardware_clicked()
     uncheckAllHardware();
     guiSettings.clearHardware();
     viewController->displayAvailableHardware();
+    ui->hardwareNotUsed_label->clear();
 
     if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
         on_LPC_radio_button_clicked();
@@ -590,36 +591,6 @@ void MainWindow::on_FPGA_checkbox_stateChanged(int arg1)
     bindCheckbox(arg1, "FPGA", "FPGA", 7);
 }
 
-//void MainWindow::on_comboBox_currentIndexChanged(int index)
-//{
-//    switch (index) {
-//    case 1: ;// show for mov1;
-//        ui->prediction_button->setEnabled(true);
-//        break;
-//    case 2: ;
-//        ui->prediction_button->setEnabled(true);
-//        break;
-//    case 3: ;
-//        ui->prediction_button->setEnabled(true);
-//        break;
-//    case 4: ;
-//        ui->prediction_button->setEnabled(true);
-//        break;
-//    case 5: ;
-//        ui->prediction_button->setEnabled(true);
-//        break;
-//    case 6: ;
-//        ui->prediction_button->setEnabled(true);
-//        break;
-//    case 7: ;
-//        ui->prediction_button->setEnabled(true);
-//        break;
-//    default: ;
-//        ui->prediction_button->setEnabled(false);
-//        break;
-//    }
-//}
-
 void MainWindow::on_comboBox_currentTextChanged(const QString &arg1)
 {
     if (arg1 == "Select hardware") {
@@ -692,7 +663,7 @@ void MainWindow::on_train_button_clicked()
 
     //read directory path TODO
 
-    viewController->train(weightsDir, dataSetDir);
+    viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory());
 
 
 }
