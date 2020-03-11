@@ -44,6 +44,7 @@ private:
     list<pair<string,vector<string>>> results;
 
     void initControllers();
+    string transfer(string guiName);
 };
 
 #endif // MASTERCONTROLLER_H

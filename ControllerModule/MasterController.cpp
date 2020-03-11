@@ -35,21 +35,26 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
     for(pair<string, int> hw : predictionResults.hardwareDistribution){
         qDebug()<<QString::fromStdString(hw.first)<<endl;
     }
-    int count =0;
-    vector<pair<string, int>>  hwDist;
-    for(auto hD : predictionResults.hardwareDistribution){
-        for(auto hwMap : hwNamesMap){
-            if(hD.first.compare(hwMap.first) == 0){
-                hwDist.push_back({hwMap.second, hD.second});
-                qDebug()<<"Master distribution translation"<<QString::fromStdString(hwDist.back().first)<<endl; // debug: working
-            }
-        }
+
+    vector<pair<string, int>>  hwDistributionTransfered;
+    hwDistributionTransfered.clear();
+    for(pair<string, int> hD : predictionResults.hardwareDistribution){
+        hwDistributionTransfered.push_back({transfer(hD.first), hD.second});
+        qDebug()<<"Master distribution translation"<<QString::fromStdString(hwDistributionTransfered.back().first)<<endl; // debug: working
     }
 
-    nnObserver.setDistribution(hwDist);
+    nnObserver.setDistribution(hwDistributionTransfered);
     //----------------------------------------------------------------------------------------------
     vector<Result> results = nnObserver.classify();
     viewObserver.displayResults(results);    
+}
+
+string MasterController::transfer(string guiName) {
+    for(pair<string, string> entry : viewObserver.hwNamesMap) {
+        if (guiName.compare(entry.first) == 0) {
+            return entry.second;
+        }
+    }
 }
 
 void MasterController::train(string weightsDir, string dataSetDir){
