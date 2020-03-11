@@ -17,7 +17,7 @@ void MasterController::setPaths(vector<string> paths)
 
 }
 
-void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages)
+void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages, vector<pair<string, string>> hwNamesMap)
 {
     qDebug()<<"classify called in Master"<<endl; // debug: working
 
@@ -25,9 +25,28 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
 
     nnObserver.setCurrentNN(nn);
 
+    qDebug()<<"master setting in classify 1"<<endl;
+    for(string hw : selectedHardware){
+        qDebug()<<QString::fromStdString(hw)<<endl;
+    }
     DataResults predictionResults = predictionObserver.calculatePrediction(nrImages,nn,mode,selectedHardware);
 
-    nnObserver.setDistribution(predictionResults.hardwareDistribution);
+    qDebug()<<"master setting in classify 2"<<endl;
+    for(pair<string, int> hw : predictionResults.hardwareDistribution){
+        qDebug()<<QString::fromStdString(hw.first)<<endl;
+    }
+    int count =0;
+    vector<pair<string, int>>  hwDist;
+    for(auto hD : predictionResults.hardwareDistribution){
+        for(auto hwMap : hwNamesMap){
+            if(hD.first.compare(hwMap.first) == 0){
+                hwDist.push_back({hwMap.second, hD.second});
+                qDebug()<<"Master distribution translation"<<QString::fromStdString(hwDist.back().first)<<endl; // debug: working
+            }
+        }
+    }
+
+    nnObserver.setDistribution(hwDist);
     //----------------------------------------------------------------------------------------------
     vector<Result> results = nnObserver.classify();
     viewObserver.displayResults(results);    

@@ -20,6 +20,7 @@ class ViewController
 {
 public:
     ViewController(MasterController * partner);
+    vector <pair<string, string>> hwNamesMap;
     void handleClassifyRequest(GUISettings settings);
     void displayResults(vector<Result>);
     void getPrediction(GUISettings settings);
