@@ -19,6 +19,7 @@ public:
     void chooseNeuralNet(string nn);
     void setImageNames(std::vector<std::string> imageNames);
     void setDistribution(vector<pair<string, int> >);
+    vector<pair<string,int>> getDistribution();
 
 private:
     void readIR();

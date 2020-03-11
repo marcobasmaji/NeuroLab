@@ -49,6 +49,7 @@ SOURCES += \
     PredictionModule/HighestPerformance.cpp \
     PredictionModule/HighestEfficiency.cpp \
     PredictionModule/AlexPrediction.cpp \
+    Tests/TestsNN/Test_OpenVinoEnv.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/TopologyPanel.cpp \
@@ -92,6 +93,7 @@ HEADERS += \
     PredictionModule/HighestPerformance.h \
     PredictionModule/HighestEfficiency.h \
     PredictionModule/AlexPrediction.h \
+    Tests/TestsNN/Test_OpenVinoEnv.h \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
     ViewModule/TopologyPanel.h \

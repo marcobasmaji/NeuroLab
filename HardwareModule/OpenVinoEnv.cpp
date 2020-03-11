@@ -248,6 +248,11 @@ void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
     }
 }
 
+vector<pair<string, int> > OpenVinoEnv::getDistribution()
+{
+    return this->distribution;
+}
+
 
 
 
