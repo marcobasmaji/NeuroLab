@@ -322,6 +322,10 @@ void MainWindow::on_DeleteButton_clicked()
 void MainWindow::on_ClassifyButton_clicked()
 {
     // calling classify in GUI
+    qDebug()<<"MAinWindow gui setting in classify"<<endl;
+    for(string hw : guiSettings.getSelectedHardware()){
+        qDebug()<<QString::fromStdString(hw)<<endl;
+    }
     this->viewController->handleClassifyRequest(guiSettings);
 
 }
