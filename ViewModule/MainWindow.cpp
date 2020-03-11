@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->centralWidget()->setStyleSheet("border-image:url(\":/ViewModule/welcome_panel.png\"); background-position: center;" );
 
     this->viewController = partner;
     resultsCounter = 0;
@@ -24,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     ui->ModeOptions->hide();
     ui->GPU_checkbox->hide();
     ui->train_tab_widget->hide();
+    ui->topologyMenu->hide();
 
 }
 
@@ -32,51 +34,78 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setCheckedAll(bool checked){
-    int flag;
-    Qt::CheckState state;
-    if (checked) {
-        flag = 2; state=Qt::CheckState::Checked;
-    } else {
-        flag = 0; state=Qt::CheckState::Unchecked;
-    }
+void MainWindow::uncheckAllHardware(){
+
     for (HardwareElement hw : viewController->availableHardware) {
         switch(hw){
-        case MOV : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Checked) {
+        case MOV : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
                 //on_Mov1_checkbox_stateChanged(flag);
-            ui->Mov1_checkbox->setCheckState(state);}
+            ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
-        case MOV1 : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Checked) {
-            ui->Mov1_checkbox->setCheckState(state);}
+        case MOV1 : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
+            ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
-        case MOV2 : if (ui->Mov2_checkbox->checkState() != Qt::CheckState::Checked) {
+        case MOV2 : if (ui->Mov2_checkbox->checkState() != Qt::CheckState::Unchecked) {
                 //on_Mov2_checkbox_stateChanged(flag);
-            ui->Mov2_checkbox->setCheckState(state);}
+            ui->Mov2_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
-        case MOV3 : if (ui->Mov3_checkbox->checkState() != Qt::CheckState::Checked) {
+        case MOV3 : if (ui->Mov3_checkbox->checkState() != Qt::CheckState::Unchecked) {
                 //on_Mov3_checkbox_stateChanged(flag);
-            ui->Mov3_checkbox->setCheckState(state);}
+            ui->Mov3_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
-        case MOV4 : if (ui->Mov4_checkbox->checkState() != Qt::CheckState::Checked) {
+        case MOV4 : if (ui->Mov4_checkbox->checkState() != Qt::CheckState::Unchecked) {
                 //on_Mov4_checkbox_stateChanged(flag);
-            ui->Mov4_checkbox->setCheckState(state);}
+            ui->Mov4_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
-        case CPU : if (ui->CPU_checkbox->checkState() != Qt::CheckState::Checked) {
+        case CPU : if (ui->CPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
                 //on_CPU_checkbox_stateChanged(flag);
-            ui->CPU_checkbox->setCheckState(state);}
+            ui->CPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
-        case GPU : if (ui->GPU_checkbox->checkState() != Qt::CheckState::Checked) {
+        case GPU : if (ui->GPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
                 //on_GPU_checkbox_stateChanged(flag);
-            ui->GPU_checkbox->setCheckState(state);}
+            ui->GPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
-        case FPGA : if (ui->FPGA_checkbox->checkState() != Qt::CheckState::Checked) {
+        case FPGA : if (ui->FPGA_checkbox->checkState() != Qt::CheckState::Unchecked) {
                 //on_FPGA_checkbox_stateChanged(flag);
-            ui->FPGA_checkbox->setCheckState(state);}
+            ui->FPGA_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         }
     }
 }
-
+void MainWindow::selectAllHardware() {
+    if (guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION") {
+        return;
+    }
+    for (HardwareElement hw : viewController->availableHardware) {
+        switch(hw){
+        case MOV : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Checked) {
+            ui->Mov1_checkbox->setCheckState(Qt::CheckState::Checked);
+            }
+            break;
+        case MOV1 : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Checked) {
+            ui->Mov1_checkbox->setCheckState(Qt::CheckState::Checked);}
+            break;
+        case MOV2 : if (ui->Mov2_checkbox->checkState() != Qt::CheckState::Checked) {
+            ui->Mov2_checkbox->setCheckState(Qt::CheckState::Checked);}
+            break;
+        case MOV3 : if (ui->Mov3_checkbox->checkState() != Qt::CheckState::Checked) {
+            ui->Mov3_checkbox->setCheckState(Qt::CheckState::Checked);}
+            break;
+        case MOV4 : if (ui->Mov4_checkbox->checkState() != Qt::CheckState::Checked) {
+            ui->Mov4_checkbox->setCheckState(Qt::CheckState::Checked);}
+            break;
+        case CPU : if (ui->CPU_checkbox->checkState() != Qt::CheckState::Checked) {
+            ui->CPU_checkbox->setCheckState(Qt::CheckState::Checked);}
+            break;
+        case GPU : if (ui->GPU_checkbox->checkState() != Qt::CheckState::Checked) {
+            ui->GPU_checkbox->setCheckState(Qt::CheckState::Checked);}
+            break;
+        case FPGA : if (ui->FPGA_checkbox->checkState() != Qt::CheckState::Checked) {
+            ui->FPGA_checkbox->setCheckState(Qt::CheckState::Checked);}
+            break;
+        }
+    }
+}
 void MainWindow::enableCheckbox(HardwareElement checkboxName)
 {
     switch(checkboxName){
@@ -127,36 +156,37 @@ void MainWindow::on_LPC_radio_button_clicked()
 
     guiSettings.setMode("LOWEST_POWER_CONSUMPTION");
     bool hasMovidius = false;
-    setCheckedAll(false);
+    uncheckAllHardware();
     for (HardwareElement hw : viewController->availableHardware) {
         switch(hw){
         case MOV1 : hasMovidius = true;
             this->disableHWCheckboxes();
-            this->setCheckedAll(false);
+            this->uncheckAllHardware();
             ui->Mov1_checkbox->setCheckState(Qt::Checked);
             guiSettings.setSelectedHardware({MOV1});
             break;
         case MOV2 : hasMovidius = true;
             this->disableHWCheckboxes();
-            this->setCheckedAll(false);
+            this->uncheckAllHardware();
             ui->Mov2_checkbox->setCheckState(Qt::Checked);
             guiSettings.setSelectedHardware({MOV2});
             break;
         case MOV3: hasMovidius = true;
             this->disableHWCheckboxes();
-            this->setCheckedAll(false);
+            this->uncheckAllHardware();
             ui->Mov3_checkbox->setCheckState(Qt::Checked);
             guiSettings.setSelectedHardware({MOV3});
             break;
         case MOV4 : hasMovidius = true;
             this->disableHWCheckboxes();
-            this->setCheckedAll(false);
+            this->uncheckAllHardware();
             ui->Mov4_checkbox->setCheckState(Qt::Checked);
             guiSettings.setSelectedHardware({MOV4});
             break;
         default:    this->disableHWCheckboxes();
-            this->setCheckedAll(false);
+            this->uncheckAllHardware();
             ui->CPU_checkbox->setCheckState(Qt::Checked);
+            break;
 
         }
         if(hasMovidius){
@@ -173,7 +203,7 @@ void MainWindow::on_HP_radio_button_clicked()
     }
     guiSettings.setMode("HIGHEST_PERFOMANCE");
     viewController->displayAvailableHardware();
-    setCheckedAll(false);
+    uncheckAllHardware();
     enableClassifyIfPossible();
 
 }
@@ -186,7 +216,7 @@ void MainWindow::on_HEE_radio_button_clicked()
 
     guiSettings.setMode("HIGHEST_EFFICIENCY");
     viewController->displayAvailableHardware();
-    setCheckedAll(false);
+    uncheckAllHardware();
     enableClassifyIfPossible();
 }
 
@@ -195,7 +225,7 @@ void MainWindow::on_AlexNet_radio_button_clicked()
     guiSettings.setNn("ALEXNET");
     setEnabledModes(true);
     viewController->displayAvailableHardware();
-    setCheckedAll(false);
+    uncheckAllHardware();
     enableClassifyIfPossible();
     if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
         on_LPC_radio_button_clicked();
@@ -205,7 +235,7 @@ void MainWindow::on_AlexNet_radio_button_clicked()
 void MainWindow::on_NeuroLabNet_radio_button_clicked()
 {
     guiSettings.setNn("NEUROLABNET");
-    setCheckedAll(false);
+    uncheckAllHardware();
     disableHWCheckboxes();
     setEnabledModes(false);
 
@@ -218,7 +248,7 @@ void MainWindow::on_GoogleNet_radio_button_clicked()
     guiSettings.setNn("GOOGLENET");
     setEnabledModes(true);
     viewController->displayAvailableHardware();
-    setCheckedAll(false);
+    uncheckAllHardware();
     if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
         on_LPC_radio_button_clicked();
     }
@@ -257,7 +287,6 @@ void MainWindow::on_LoadButton_clicked()
     //load in mainwindow
     this->guiSettings.setPaths(vec);
     enableClassifyIfPossible();
-
 }
 
 void MainWindow::on_previewArea_itemClicked(QListWidgetItem *item)
@@ -370,22 +399,23 @@ void MainWindow::displayResults(vector<Result> results)
 void MainWindow::on_SelectAllHardware_clicked()
 {
     if(guiSettings.getNn() != "NEUROLABNET"){
-        setCheckedAll(true);
+        selectAllHardware();
         enableClassifyIfPossible();
     }
 }
 
 void MainWindow::on_Refresh_hardware_clicked()
 {
-
-    viewController->displayAvailableHardware();
+    uncheckAllHardware();
     guiSettings.clearHardware();
-    setCheckedAll(false);
+    viewController->displayAvailableHardware();
+
     if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
         on_LPC_radio_button_clicked();
     }
     if(guiSettings.getNn() == "NEUROLABNET"){
         on_NeuroLabNet_radio_button_clicked();
+
     }
 }
 
@@ -653,7 +683,13 @@ void MainWindow::on_select_weights_button_clicked()
 
 void MainWindow::on_train_button_clicked()
 {
-    //master train
+    string weightsDir;
+    string dataSetDir;
+
+    //read directory path TODO
+
+    viewController->train(weightsDir, dataSetDir);
+
 
 }
 
