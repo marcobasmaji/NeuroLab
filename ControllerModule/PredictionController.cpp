@@ -16,7 +16,7 @@ DataResults PredictionController::calculatePrediction(int numberOfImages,std::st
 {
 
     std::string alexnet = "ALEXNET";
-	std::string neuronet = "neuronet";
+	std::string neuronet = "NEUROLABNET";
 	if (NN.compare(alexnet) == 0) {
 		AlexPrediction *alex = new AlexPrediction;
 		Mode* mode = alex->chooseMode(Operationmode);
