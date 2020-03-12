@@ -24,7 +24,7 @@ std::vector<Hardware> NeuroPrediction::distributeAndPredict(std::vector<std::str
 	std::vector<Hardware> list;
 	double powerconsumption = 1;
 	std::string cpu = "CPU";
-	Hardware example{ cpu,0,(double)9,polynomCPU,powerconsumption,0.0,0.0 };
+	Hardware example{ cpu,numberOfImages,(double)9,polynomCPU,powerconsumption,5000000,14100 };
 	for (std::string element : availableHardware) {
 		if (element.compare(cpu) == 0) {
 			example.name = cpu;
@@ -32,6 +32,7 @@ std::vector<Hardware> NeuroPrediction::distributeAndPredict(std::vector<std::str
 			example.polynome = polynomCPU;
 			example.requiredTime = TimeValueOfX(polynomCPU, numberOfImages);
 			example.powerconsumption = example.powerconsumption * example.requiredTime;
+			example.bandwidth = 14100;
 			list.push_back(example);
 			return list;
 

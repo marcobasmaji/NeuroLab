@@ -1,6 +1,6 @@
 
 #include "LowestPowerConsumption.h"
-#include "../PredictionModule/Hardware.h"
+//#include "../PredictionModule/Hardware.h"
 #include <math.h>
 #include <iostream>
 /**
@@ -17,7 +17,9 @@ std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<st
 	std::vector<double> polynomFPGA{ 2,3,4,5 };
 	std::vector<double>polynomMovidius{ 0.00001, 0.0825, 7.0217 };
 	double flopsmovidius = 5000000;
-	double bandwithMovidius = 6.9;
+	double flopscpu = 50000000;
+	double bandwithMovidius = 14100;
+	double bandwithcpu = 120000;
 	Hardware example{ examplestring,numberOfImages,requiredTime,polynomFPGA,requiredTime,flopsmovidius,bandwithMovidius };
 	std::string CPU = "CPU";
 	std::string FPGA = "FPGA";
@@ -34,6 +36,8 @@ std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<st
 				example.numberOfAssignedImages = numberOfImages;
 				example.requiredTime = low->TimeValueOfX(example.polynome,example.numberOfAssignedImages);
 				example.powerconsumption = powerConsumptionMovidius;
+				example.bandwidth = bandwithcpu;
+				example.flops = flopscpu;
 				list.push_back(example);
 				return list;
 			}
@@ -46,6 +50,8 @@ std::vector<Hardware>LowestPowerConsumption::distributeAndPredict(std::vector<st
 				example.polynome = polynomCPU;
 				example.requiredTime = low->TimeValueOfX(example.polynome,example.numberOfAssignedImages);
 				example.powerconsumption = powerConsumptionCPU;
+				example.bandwidth = bandwithcpu;
+				example.flops = flopscpu;
 				list.push_back(example);
 				return list;
 		}

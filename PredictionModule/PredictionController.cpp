@@ -4,7 +4,7 @@
 #include "NeuroPrediction.h"
 #include <iostream>
 /**
- * @brief basically creates the desired prediction class and acts as a 
+ * @brief basically creates the desired prediction class.
  * 
  * @param availableHardware 
  * @param Operationmode 
@@ -14,8 +14,8 @@
  */
 DataResults PredictionController::calculatePrediction(int numberOfImages,std::string NN, std::string Operationmode,std::vector<std::string>& availableHardware)
 {
-	std::string alexnet = "Alexnet";
-	std::string neuronet = "neuronet";
+	std::string alexnet = "ALEXNET";
+	std::string neuronet = "NEUROLABNET";
 	if (NN.compare(alexnet) == 0) {
 		AlexPrediction *alex = new AlexPrediction;
 		Mode* mode = alex->chooseMode(Operationmode);

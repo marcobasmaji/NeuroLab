@@ -31,7 +31,7 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 	std::vector<std::vector<Hardware>> constellations;
 	double powerConsumptionMovidius = 10;
 	double powerConsumptionCPU = 100;
-	double bandwithMovidius = 1200;
+	double bandwithMovidius = 14100;
 	double flopsMovidius = 5000000;
 	double bandwithCPU = 120000;
 	double flopsCPU = 50000000;
@@ -80,7 +80,7 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 			if ((i->name.compare(FPGA))== 0) {
 			}
 			else {
-				i->bandwidth = 1400;
+				i->bandwidth = 14100;
 			}
 		}
 		
@@ -102,20 +102,33 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 				//hier statt requiredtime quotient
 				
 				while ((hardwarevec.at(i).requiredTime) < hardwarevec.at(size - i - 1).requiredTime) { // CHANGED
-					hardwarevec.at(i).numberOfAssignedImages = hardwarevec.at(i).numberOfAssignedImages + badgesize;
-					hardwarevec.at(size - i - 1).numberOfAssignedImages = hardwarevec.at(size - 1 - i).numberOfAssignedImages - badgesize;
-					double numberOfAssignedImages = (double)hardwarevec.at(i).numberOfAssignedImages;
-					hardwarevec.at(i).requiredTime = hi->TimeValueOfX(hardwarevec.at(i).polynome, numberOfAssignedImages);
-					double numberOfAssignedImagesEnd = hardwarevec.at(size - i - 1).numberOfAssignedImages;
-					hardwarevec.at(size - i - 1).requiredTime = hi->TimeValueOfX(hardwarevec.at(size - i - 1).polynome, numberOfAssignedImagesEnd);
+					if (hardwarevec.at(size-i-1).numberOfAssignedImages >= 16) {
+						hardwarevec.at(i).numberOfAssignedImages = hardwarevec.at(i).numberOfAssignedImages + badgesize;
+						hardwarevec.at(size - i - 1).numberOfAssignedImages = hardwarevec.at(size - 1 - i).numberOfAssignedImages - badgesize;
+						double numberOfAssignedImages = (double)hardwarevec.at(i).numberOfAssignedImages;
+						hardwarevec.at(i).requiredTime = hi->TimeValueOfX(hardwarevec.at(i).polynome, numberOfAssignedImages);
+						double numberOfAssignedImagesEnd = hardwarevec.at(size - i - 1).numberOfAssignedImages;
+						hardwarevec.at(size - i - 1).requiredTime = hi->TimeValueOfX(hardwarevec.at(size - i - 1).polynome, numberOfAssignedImagesEnd);
+					}
+					else {
+						sI++;
+						goto endswap;
+
+					}
+					
 					
 				}
+				
 			
 			
 				std::sort(hardwarevec.begin(), hardwarevec.end(), [](Hardware& h1, Hardware& h2) {
 					return h1.requiredTime < h2.requiredTime;
 					});
 			}
+		endswap:
+			std::sort(hardwarevec.begin(), hardwarevec.end(), [](Hardware& h1, Hardware& h2) {
+				return h1.requiredTime < h2.requiredTime;
+				});
 		constellations.push_back(hardwarevec);
 		
 		int m = 0;
@@ -128,8 +141,8 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 				m = sM;
 				numberOfHardwareElements = hardwarevec.size(); //changed
 				hardwarevector.at(m).numberOfAssignedImages = numberOfImages / (numberOfHardwareElements - 1);
-				double numberOfAssignedImages = hardwarevector.at(m).numberOfAssignedImages;
-				hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome, numberOfAssignedImages);
+				double numberOfAssignedImagess = hardwarevector.at(m).numberOfAssignedImages;
+				hardwarevector.at(m).requiredTime = hi->TimeValueOfX(hardwarevector.at(m).polynome, numberOfAssignedImagess);
 				
 			}
 			std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
