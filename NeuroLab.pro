@@ -23,7 +23,6 @@ SOURCES += \
     ControllerModule/NNController.cpp \
     ControllerModule/PredictionController.cpp \
     ControllerModule/ViewController.cpp \
-    DataModule/Shape.cpp \
     DataModule/WeightsAndBiasesCreator.cpp \
     HardwareModule/OpenCL/HardwareEnvironment.cpp \
     HardwareModule/OpenCL/HardwareType.cpp \
@@ -76,7 +75,6 @@ HEADERS += \
     ControllerModule/PredictionController.h \
     ControllerModule/ViewController.h \
     DataModule/Result.h \
-    DataModule/Shape.h \
     DataModule/WeightsAndBiasesCreator.h \
     HardwareModule/OpenCL/HardwareEnvironment.hpp \
     HardwareModule/OpenCL/OpenCLLayerCreator.hpp \
