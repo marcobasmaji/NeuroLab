@@ -11,7 +11,7 @@ DenseLayer::DenseLayer(OpenCLEnvironment *clEnv,
 {
     this->clEnv = clEnv;
     OpenCLLayerCreator* openCLLayerCreator = new OpenCLLayerCreator();
-    OpenCLLayer* cLDense = openCLLayerCreator->createDenseLayer(clEnv,10,inputDepth,
+    OpenCLLayer* cLDense = openCLLayerCreator->createDenseLayer(clEnv,1,inputDepth,
                                                                 inputHeight,inputWidth,
                                                                 numOutputs);
     this->clLayer = cLDense;
@@ -25,12 +25,12 @@ void DenseLayer::forwardPass()
 {
 
     //clLayer->setInputs(clEnv,input,105*105*3);
-    clLayer->computeForward(clEnv,16,numOutputs);
+    clLayer->computeForward(clEnv,1,numOutputs);
 }
 
 void DenseLayer::backPropagate()
 {
-    clLayer->computeErrorComp(clEnv,16);
+    clLayer->computeErrorComp(clEnv,1);
 }
 
 OpenCLLayer *DenseLayer::getCLLayer()

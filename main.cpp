@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     #endif
 
    //NeuroLabNet nn;
-   //nn.trainWithMnist();
+   //nn.train();
 
 
 }

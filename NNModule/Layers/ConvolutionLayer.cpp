@@ -20,11 +20,12 @@ ConvolutionLayer::ConvolutionLayer(
       verticalStride(verticalStride),
       numFilters(numFilters)
 {
+    size_t outputMaps = (inputHeight-filterHeight)/horizontalStride +1;
 
     this->clEnv = clEnv;
     OpenCLLayerCreator* openCLLayerCreator = new OpenCLLayerCreator();
-    OpenCLLayer* cLconv = openCLLayerCreator->createConvLayer(clEnv,16,inputDepth,inputHeight,
-                                                              inputWidth,numFilters,28,28,filterHeight,
+    OpenCLLayer* cLconv = openCLLayerCreator->createConvLayer(clEnv,1,inputDepth,inputHeight,
+                                                              inputWidth,numFilters,outputMaps,outputMaps,filterHeight,
                                                               filterWidth,horizontalStride,verticalStride);
     this->clLayer = cLconv;
     clLayer->setWeights(clEnv,getWeights(filterWidth*filterHeight*numFilters*inputDepth),filterWidth*filterHeight*numFilters*inputDepth);
@@ -37,12 +38,12 @@ void ConvolutionLayer::forwardPass()
 {
 
         //lLayer->setInputs(clEnv,input,inputHeight*inputWidth*inputDepth);
-        clLayer->computeForward(clEnv,16,numFilters);
+        clLayer->computeForward(clEnv,1,numFilters);
 
 }
 void ConvolutionLayer::backPropagate()
 {
-    clLayer->computeErrorComp(clEnv,16);
+    clLayer->computeErrorComp(clEnv,1);
 }
 OpenCLLayer* ConvolutionLayer::getCLLayer()
 {
