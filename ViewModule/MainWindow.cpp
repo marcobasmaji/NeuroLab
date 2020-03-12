@@ -14,8 +14,7 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->centralWidget()->setStyleSheet("border-image:url(\":/ViewModule/welcome_panel.png\"); background-position: center;" );
-
+    setBackgroundImage();
     this->viewController = partner;
     resultsCounter = 0;
 
@@ -608,7 +607,8 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         ui->HardwareOptions->hide();
         ui->NeuralNetOptions->hide();
         ui->ModeOptions->hide();
-
+        setBackgroundImage();
+        ui->verticalWidget->show();
     } else {
     ui->tabWidget->removeTab(index);}
 }
@@ -619,6 +619,9 @@ void MainWindow::on_classificationMenu_clicked()
     ui->HardwareOptions->show();
     ui->NeuralNetOptions->show();
     ui->ModeOptions->show();
+    ui->verticalWidget->hide();
+    resetPalette();
+
 }
 
 void MainWindow::enableClassifyIfPossible() {
@@ -633,6 +636,7 @@ void MainWindow::on_trainMenu_clicked()
 {
 
     ui->train_tab_widget->show();
+    resetPalette();
 }
 
 void MainWindow::on_load_dataset_button_clicked()
@@ -642,7 +646,8 @@ void MainWindow::on_load_dataset_button_clicked()
                                                          QFileDialog::ShowDirsOnly
                                                          | QFileDialog::DontResolveSymlinks);
     ui->dataset_path_label->setText(dir);
-    //guiSettings.setDataSetDirectory(dir.toStdString());
+    guiSettings.setDataSetDirectory(dir.toStdString());
+    enableTrainIfPossible();
 }
 
 void MainWindow::on_select_weights_button_clicked()
@@ -653,6 +658,7 @@ void MainWindow::on_select_weights_button_clicked()
                                                          | QFileDialog::DontResolveSymlinks);
     ui->weights_path_label->setText(dir);
     guiSettings.setWeightsDirectory(dir.toStdString());
+    enableTrainIfPossible();
 
 }
 
@@ -663,12 +669,48 @@ void MainWindow::on_train_button_clicked()
 
     //read directory path TODO
 
+    ui->train_success_label->setText("Training in progress. Please wait. (aber eigentlich nicht)");
     viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory());
 
+
+}
+
+void MainWindow::enableTrainIfPossible() {
+
+    if (!guiSettings.getWeightsDirectory().empty() && !guiSettings.getDataSetDirectory().empty()){
+        ui->train_button->setEnabled(true);
+    };
 
 }
 
 void MainWindow::on_train_tab_widget_tabCloseRequested(int index)
 {
     ui->train_tab_widget->hide();
+    setBackgroundImage();
+}
+
+void MainWindow::resetPalette(){
+    QWidget t;
+    this->setPalette(t.palette());
+}
+
+void MainWindow::setBackgroundImage(string imagePath){
+    QPixmap bkgnd(QString::fromStdString(imagePath));
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
+}
+
+void MainWindow::setBackgroundImage(){
+    QPixmap bkgnd(":/ViewModule/welcome_panel.png");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
+}
+
+void MainWindow::displayTrainingResults() {
+    ui->train_success_label->setText("Training successfull. Updated weights file saved in" +
+                                     QString::fromStdString(guiSettings.getWeightsDirectory()));
 }

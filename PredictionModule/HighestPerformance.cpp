@@ -1,6 +1,7 @@
 #pragma once
 #include "HighestPerformance.h"
-#include "../PredictionModule/Hardware.h"
+#include "Hardware.h"
+//#include "../PredictionModule/Hardware.h"
 #include<list>
 #include<math.h>
 #include<algorithm>
@@ -29,11 +30,11 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 	int number = 0;
 	double requiredTime = 0;
 	std::string examplestring = "example";
-	double bandwithmovidius = 8;
-	double flopsMvoidius = 13;
-	double bandwithCPU = 0.69;
+	double bandwithmovidius = 14100;
+	double flopsMvoidius = 5000000;
+	double bandwithCPU = 120000;
 	double flopsCPU = 50000000;
-	Hardware example{examplestring,number,requiredTime,polynomFPGA,requiredTime,0.0,0.0 };
+	Hardware example{examplestring,number,requiredTime,polynomFPGA,requiredTime,flopsCPU,bandwithCPU};
 	std::vector<Hardware> hardwarevector;
 	std::vector<std::vector<Hardware>> constellations;
 	double powerConsumptionMovidius = 10;
@@ -41,33 +42,33 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 	int desiredHardwaresize = hardwares.size();
 	for (int i = 0; i < desiredHardwaresize; i++) {
 		if (hardwares.at(i).compare(movidius1) == 0) {
-			Hardware h{ hardwares.at(i),number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMvoidius,bandwithmovidius };
+			Hardware h{ hardwares.at(i),numberOfImages,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMvoidius,bandwithmovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 			
 		}
 		if (hardwares.at(i).compare(movidius2) == 0) {
-			Hardware h{ hardwares.at(i),number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMvoidius,bandwithmovidius };
+			Hardware h{ movidius2,numberOfImages,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMvoidius,bandwithmovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (hardwares.at(i).compare(movidius3) == 0) {
-			Hardware h{ hardwares.at(i),number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMvoidius,bandwithmovidius };
+			Hardware h{ movidius3,numberOfImages,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMvoidius,bandwithmovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (hardwares.at(i).compare(movidius4) == 0) {
-			Hardware h{ hardwares.at(i),number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMvoidius,bandwithmovidius };
+			Hardware h{ movidius4,numberOfImages,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMvoidius,bandwithmovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (hardwares.at(i).compare(FPGA) == 0) {
-			Hardware h{ hardwares.at(i),number,requiredTime,polynomFPGA,16,0.0,0.0 };
+			Hardware h{ hardwares.at(i),numberOfImages,requiredTime,polynomFPGA,1600,1000000.0,1500.0 };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (hardwares.at(i).compare(CPU) == 0) {
-			Hardware h{ hardwares.at(i),number,requiredTime,polynomCPU,100,flopsCPU,bandwithCPU };
+			Hardware h{ CPU,numberOfImages,requiredTime,polynomCPU,145,flopsCPU,bandwithCPU };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
@@ -75,6 +76,16 @@ std::vector<Hardware>HighestPerformance::distributeAndPredict(std::vector<std::s
 	for (auto i = hardwarevector.begin(); i != hardwarevector.end(); i++) {
 		i->numberOfAssignedImages = numberOfImages / numberOfHardwareElements;
 		i->requiredTime = hi->TimeValueOfX(i->polynome, i->numberOfAssignedImages);
+		if (i->name.compare(CPU) == 0) {
+			i->bandwidth = bandwithCPU;
+		}
+		else {
+			if ((i->name.compare(FPGA)) == 0) {
+			}
+			else {
+				i->bandwidth = 14100;
+			}
+		}
 	}// rest noch nicht initialisiert
 	
 	//sorts after time it takes for the hardareElements to finish the tasks assigned to them

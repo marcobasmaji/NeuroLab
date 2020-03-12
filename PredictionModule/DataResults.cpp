@@ -31,7 +31,7 @@ DataResults::DataResults(std::vector<Hardware>& results) {
 		std::pair<std::string, double> flopspair = std::make_pair(i->name, flopshardware);
 		flops.push_back(flopspair);
 		double bandwidthhardware = i->bandwidth * i->numberOfAssignedImages;
-		std::pair < std::string, double> bandwidthpair = std::make_pair(i->name, bandwidthhardware);
+		std::pair < std::string, double> bandwidthpair = std::make_pair(i->name, i->bandwidth);
 		bandwidth.push_back(bandwidthpair);
 		// gibt probleme wenn die numberofassignedimages 0 ist
 		TotalPowerConsumption = TotalPowerConsumption + powerConsumptionHardware;
