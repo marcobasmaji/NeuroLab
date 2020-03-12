@@ -24,6 +24,8 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
     nnObserver.setCurrentNN(nn);
 
     qDebug()<<"master setting in classify 1"<<endl;
+    qDebug()<<"Nr images "<<nrImages<<endl;
+
     for(string hw : selectedHardware){
         qDebug()<<QString::fromStdString(hw)<<endl;
     }
@@ -31,15 +33,16 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
 
     qDebug()<<"master setting in classify 2"<<endl;
     for(pair<string, int> hw : predictionResults.hardwareDistribution){
-        qDebug()<<QString::fromStdString(hw.first)<<endl;
+        qDebug()<<QString::fromStdString(hw.first)<<" "<<hw.second<<endl;
     }
 
     vector<pair<string, int>>  hwDistributionTransfered;
     hwDistributionTransfered.clear();
     for(pair<string, int> hD : predictionResults.hardwareDistribution){
         hwDistributionTransfered.push_back({transfer(hD.first), hD.second});
-        qDebug()<<"Master distribution translation"<<QString::fromStdString(hwDistributionTransfered.back().first)<<endl; // debug: working
+        qDebug()<<"Master distribution translation"<<QString::fromStdString(hwDistributionTransfered.back().first)<<" "<<hwDistributionTransfered.back().second<<endl; // debug: working
     }
+
 
     nnObserver.setDistribution(hwDistributionTransfered);
     //----------------------------------------------------------------------------------------------

@@ -14,8 +14,7 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->centralWidget()->setStyleSheet("border-image:url(\":/ViewModule/welcome_panel.png\"); background-position: center;" );
-
+    setBackgroundImage();
     this->viewController = partner;
     resultsCounter = 0;
 
@@ -608,7 +607,8 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
         ui->HardwareOptions->hide();
         ui->NeuralNetOptions->hide();
         ui->ModeOptions->hide();
-
+        setBackgroundImage();
+        ui->verticalWidget->show();
     } else {
     ui->tabWidget->removeTab(index);}
 }
@@ -619,6 +619,9 @@ void MainWindow::on_classificationMenu_clicked()
     ui->HardwareOptions->show();
     ui->NeuralNetOptions->show();
     ui->ModeOptions->show();
+    ui->verticalWidget->hide();
+    resetPalette();
+
 }
 
 void MainWindow::enableClassifyIfPossible() {
@@ -633,6 +636,7 @@ void MainWindow::on_trainMenu_clicked()
 {
 
     ui->train_tab_widget->show();
+    resetPalette();
 }
 
 void MainWindow::on_load_dataset_button_clicked()
@@ -682,6 +686,28 @@ void MainWindow::enableTrainIfPossible() {
 void MainWindow::on_train_tab_widget_tabCloseRequested(int index)
 {
     ui->train_tab_widget->hide();
+    setBackgroundImage();
+}
+
+void MainWindow::resetPalette(){
+    QWidget t;
+    this->setPalette(t.palette());
+}
+
+void MainWindow::setBackgroundImage(string imagePath){
+    QPixmap bkgnd(QString::fromStdString(imagePath));
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
+}
+
+void MainWindow::setBackgroundImage(){
+    QPixmap bkgnd(":/ViewModule/welcome_panel.png");
+    bkgnd = bkgnd.scaled(this->size(), Qt::IgnoreAspectRatio);
+    QPalette palette;
+    palette.setBrush(QPalette::Background, bkgnd);
+    this->setPalette(palette);
 }
 
 void MainWindow::displayTrainingResults() {
