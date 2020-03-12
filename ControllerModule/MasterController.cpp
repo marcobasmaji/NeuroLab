@@ -19,8 +19,6 @@ void MasterController::setPaths(vector<string> paths)
 
 void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages, vector<pair<string, string>> hwNamesMap)
 {
-    qDebug()<<"classify called in Master"<<endl; // debug: working
-
     //-------------hier brauchen wir noch----------------------------------------------------------
 
     nnObserver.setCurrentNN(nn);
