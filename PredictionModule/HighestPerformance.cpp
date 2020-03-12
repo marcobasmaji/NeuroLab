@@ -1,6 +1,6 @@
 #pragma once
 #include "HighestPerformance.h"
-#include "hardware.h" 
+#include "Hardware.h"
 //#include "../PredictionModule/Hardware.h"
 #include<list>
 #include<math.h>
