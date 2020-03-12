@@ -18,8 +18,9 @@ Hardware::Hardware(std::string name, int numberOfassignedImages, double required
 	this->requiredTime = requiredTime;
 	this->polynome = polynome;
 	this->powerconsumption = powerconsumption;
-	this->bandwidth = bandwidth;
 	this->flops = flops;
+	this->bandwidth = bandwidth;
+	
 }
 
 

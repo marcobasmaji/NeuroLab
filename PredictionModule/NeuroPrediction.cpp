@@ -1,7 +1,7 @@
 #include "NeuroPrediction.h"
 #include <iostream>
 #include <math.h>
-#include "../PredictionModule/Hardware.h"
+//#include "../PredictionModule/Hardware.h"
 
 /**
  * @brief Construct a new Neuro Prediction:: Neuro Prediction object
@@ -19,10 +19,11 @@ NeuroPrediction::NeuroPrediction()
  */
 std::vector<Hardware> NeuroPrediction::distributeAndPredict(std::vector<std::string> availableHardware, int numberOfImages)
 {
-	std::string cpu = "CPU";
-	std::vector<double> polynomCPU{ 1,2,3,4 };
+	//std::string cpu = "CPU";
+	std::vector<double>polynomCPU{ -0.0000006,0.0237,1.1126 };
 	std::vector<Hardware> list;
 	double powerconsumption = 1;
+	std::string cpu = "CPU";
 	Hardware example{ cpu,0,(double)9,polynomCPU,powerconsumption,0.0,0.0 };
 	for (std::string element : availableHardware) {
 		if (element.compare(cpu) == 0) {
@@ -45,7 +46,7 @@ double NeuroPrediction::TimeValueOfX(std::vector<double>& polynome, double x)
 	double value = 0;
 	for (size_t i = 0; i < polynome.size(); i++) {
 		int intOfI = i;
-		value = value + pow(polynome[polynome.size() - intOfI], x);
+		value = value + pow(polynome[polynome.size() - intOfI-1], x);
 	}
 	return value;
 }

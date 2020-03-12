@@ -1,6 +1,7 @@
 #pragma once
 #include "HighestEfficiency.h"
-#include "../PredictionModule/Hardware.h"
+//#include "../PredictionModule/Hardware.h"
+#include"Hardware.h"
 #include <algorithm>
 #include <iostream>
 #include <math.h>
@@ -23,48 +24,46 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 	std::vector<double>polynomCPU{ -0.0000006,0.0237,1.1126 };
 	std::vector<double> polynomFPGA{ 2,3,4,5 };
 	std::vector<double>polynomMovidius{ 0.00001, 0.0825, 7.0217 };
-	int number = 0;
 	double requiredTime = 0;
 	std::string examplestring = "example";
 	HighestEfficiency* hi = new HighestEfficiency;
-	Hardware example{ examplestring,number,requiredTime,polynomFPGA,requiredTime,0.0,0.0 };
 	std::vector<Hardware> hardwarevector;
 	std::vector<std::vector<Hardware>> constellations;
 	double powerConsumptionMovidius = 10;
 	double powerConsumptionCPU = 100;
-	double bandwithMovidius = 6.9;
+	double bandwithMovidius = 1200;
 	double flopsMovidius = 5000000;
-	double bandwithCPU = 0.69;
+	double bandwithCPU = 120000;
 	double flopsCPU = 50000000;
 	for (std::string element : hardwares) {
 		if (element.compare(movidius1) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
+			Hardware h{ element,numberOfImages,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 
 		}
 		if (element.compare(movidius2) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
+			Hardware h{ element,numberOfImages,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (element.compare(movidius3) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
+			Hardware h{ element,numberOfImages,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (element.compare(movidius4) == 0) {
-			Hardware h{ element,number,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
+			Hardware h{ element,numberOfImages,requiredTime,polynomMovidius,powerConsumptionMovidius,flopsMovidius,bandwithMovidius };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (element.compare(FPGA) == 0) {
-			Hardware h{ element,number,requiredTime,polynomFPGA,16,0.0,0.0 };
+			Hardware h{ element,numberOfImages,requiredTime,polynomFPGA,16,0.0,0.0 };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 		}
 		if (element.compare(CPU) == 0) {
-			Hardware h{ element,number,requiredTime,polynomCPU,powerConsumptionCPU,flopsCPU,bandwithCPU };
+			Hardware h{ element,numberOfImages,requiredTime,polynomCPU,powerConsumptionCPU,flopsCPU,bandwithCPU };
 			hardwarevector.push_back(h);
 			numberOfHardwareElements++;
 			
@@ -74,6 +73,17 @@ std::vector<Hardware>HighestEfficiency::distributeAndPredict(std::vector<std::st
 	for (auto i = hardwarevector.begin(); i != hardwarevector.end(); i++) {
 		i->numberOfAssignedImages = numberOfImages / numberOfHardwareElements;
 		i->requiredTime = hi->TimeValueOfX(i->polynome, i->numberOfAssignedImages);
+		if (i->name.compare(CPU) == 0) {
+			i->bandwidth = bandwithCPU;
+		}
+		else  {
+			if ((i->name.compare(FPGA))== 0) {
+			}
+			else {
+				i->bandwidth = 1400;
+			}
+		}
+		
 	}
 	//sorts after time it takes for the hardareElements to finish the tasks assigned to them
 	std::sort(hardwarevector.begin(), hardwarevector.end(), [](Hardware& h1, Hardware& h2) {
