@@ -73,17 +73,17 @@ public:
         TopResults(_nTop, *_outBlob, results);
 
         /** Print the result iterating over each batch **/
-        std::cout << std::endl << "Top " << _nTop << " results:" << std::endl << std::endl;
+        //std::cout << std::endl << "Top " << _nTop << " results:" << std::endl << std::endl;
         // for NeuroLab
 
         for (unsigned int image_id = 0; image_id < _batchSize; ++image_id) {
-            std::cout << "Image " << _imageNames[image_id] << std::endl << std::endl;
+            //std::cout << "Image " << _imageNames[image_id] << std::endl << std::endl;
 
             //for NeuroLab
             Result r;
             r.setPath(_imageNames[image_id]);
 
-            printHeader();
+            //printHeader();
 
             for (size_t id = image_id * _nTop, cnt = 0; id < (image_id + 1) * _nTop; ++cnt, ++id) {
                 std::cout.precision(7);
@@ -92,14 +92,14 @@ public:
                         as<InferenceEngine::PrecisionTrait<InferenceEngine::Precision::FP32>::value_type*>()
                 [results[id] + image_id * (_outBlob->size() / _batchSize)];
 
-                std::cout << std::setw(static_cast<int>(_classidStr.length())) << std::left << results[id] << " ";
-                std::cout << std::left << std::setw(static_cast<int>(_probabilityStr.length())) << std::fixed << result;
+                //std::cout << std::setw(static_cast<int>(_classidStr.length())) << std::left << results[id] << " ";
+                //std::cout << std::left << std::setw(static_cast<int>(_probabilityStr.length())) << std::fixed << result;
 
 
                 if (!_labels.empty()) {
-                    std::cout << " " + _labels[results[id]];
+                    //std::cout << " " + _labels[results[id]];
                 }
-                std::cout << std::endl;
+                //std::cout << std::endl;
                 // for NeuroLab
                 pair<string,float> tmp;
                 tmp.first = _labels[results[id]];
@@ -107,7 +107,7 @@ public:
                 r.pushLabelsAndProb(tmp);
 
             }
-            std::cout << std::endl;
+            //std::cout << std::endl;
         this->endResults.push_back(r);
         }
     }
