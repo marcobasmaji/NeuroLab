@@ -162,25 +162,25 @@ void MainWindow::on_LPC_radio_button_clicked()
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov1_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setSelectedHardware({MOV1});
+            //guiSettings.setSelectedHardware({MOV1});
             break;
         case MOV2 : hasMovidius = true;
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov2_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setSelectedHardware({MOV2});
+            //guiSettings.setSelectedHardware({MOV2});
             break;
         case MOV3: hasMovidius = true;
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov3_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setSelectedHardware({MOV3});
+            //guiSettings.setSelectedHardware({MOV3});
             break;
         case MOV4 : hasMovidius = true;
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov4_checkbox->setCheckState(Qt::Checked);
-            guiSettings.setSelectedHardware({MOV4});
+            //guiSettings.setSelectedHardware({MOV4});
             break;
         default:    this->disableHWCheckboxes();
             this->uncheckAllHardware();
@@ -409,9 +409,9 @@ void MainWindow::on_SelectAllHardware_clicked()
 
 void MainWindow::on_Refresh_hardware_clicked()
 {
+    viewController->displayAvailableHardware();
     uncheckAllHardware();
     guiSettings.clearHardware();
-    viewController->displayAvailableHardware();
     ui->hardwareNotUsed_label->clear();
 
     if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
