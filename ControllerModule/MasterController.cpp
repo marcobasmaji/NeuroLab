@@ -43,10 +43,17 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
         qDebug()<<"Master distribution translation"<<QString::fromStdString(hwDistributionTransfered.back().first)<<" "<<hwDistributionTransfered.back().second<<endl; // debug: working
     }
 
-
     nnObserver.setDistribution(hwDistributionTransfered);
     //----------------------------------------------------------------------------------------------
     vector<Result> results = nnObserver.classify();
+    for(Result r : results){
+        if(r.getPath().find("ERROR") != string::npos){
+            viewObserver.showErrorMessage(r.getPath());
+            qDebug()<<QString::fromStdString(r.getPath())<<endl;
+            return;
+        }
+    }
+
     viewObserver.displayResults(results);    
 }
 

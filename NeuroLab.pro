@@ -63,7 +63,6 @@ SOURCES += \
     Tests/TestsView/GuiSettingsTest.cpp \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
-    ViewModule/TopologyPanel.cpp \
     ViewModule/TrainingPanel.cpp \
     main.cpp
 
@@ -116,12 +115,10 @@ HEADERS += \
     Tests/TestsView/GuiSettingsTest.hpp \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
-    ViewModule/TopologyPanel.h \
     ViewModule/TrainingPanel.h
 
 FORMS += \
     ViewModule/MainWindow.ui \
-    ViewModule/TopologyPanel.ui \
     ViewModule/TrainingPanel.ui \
 
 # Default rules for deployment.

@@ -666,9 +666,6 @@ void MainWindow::on_train_button_clicked()
 {
     string weightsDir;
     string dataSetDir;
-
-    //read directory path TODO
-
     ui->train_success_label->setText("Training in progress. Please wait. (aber eigentlich nicht)");
     viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory());
 
@@ -713,4 +710,10 @@ void MainWindow::setBackgroundImage(){
 void MainWindow::displayTrainingResults() {
     ui->train_success_label->setText("Training successfull. Updated weights file saved in" +
                                      QString::fromStdString(guiSettings.getWeightsDirectory()));
+}
+
+void MainWindow::showErrorMessage(string mes){
+    TrainingPanel *popUp = new TrainingPanel(this);
+    popUp->setErrorMessage(mes);
+    popUp->show();
 }

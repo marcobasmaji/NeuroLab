@@ -177,15 +177,17 @@ void ViewController::displayAvailableHardware()
 }
 
 void ViewController::train(string weightsDir, string dataSetDir){
-   //
-   //mainWindow->showInProgress();
-   //
 
-    master->train(weightsDir, dataSetDir);
+   master->train(weightsDir, dataSetDir);
 
-   //
-   //mainWindow->showFinished();
-   //
+
+   mainWindow->displayTrainingResults();
+
 }
+
+void ViewController::showErrorMessage(string mes) {
+    mainWindow->showErrorMessage(mes);
+}
+
 
 

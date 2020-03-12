@@ -32,6 +32,7 @@ public:
     void removeImage(string imagePath);
     void train(string weightsDir, string dataSetDir);
 
+    void showErrorMessage(string mes);
 private:
     //MainWindow* mainWindow;
     MasterController* master;

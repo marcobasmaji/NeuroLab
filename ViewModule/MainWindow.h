@@ -35,6 +35,7 @@ public:
     void disableHWCheckboxes();
 
     void displayTrainingResults();
+    void showErrorMessage(string mes);
 private slots:
     void on_LoadButton_clicked();
 
