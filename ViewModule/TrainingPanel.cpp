@@ -1,26 +1,19 @@
 #include "TrainingPanel.h"
 #include <QFileDialog>
 #include <QDebug>
-TrainingPanel::TrainingPanel(QWidget *parent, GUISettings guiSet)
+TrainingPanel::TrainingPanel(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::TrainingPanel)
 {
     ui->setupUi(this);
-    this->guiSettings = guiSet;
+    this->setFixedSize(380,120);
 }
 
 
 
-void TrainingPanel::on_load_data_set_dir_clicked()
+void TrainingPanel::setErrorMessage(string mes)
 {
-    QStringList filesList = QFileDialog::getOpenFileNames(this,
-                                                          tr("Load Image"), "/home", tr("Image Files (*.png *.jpg *.bmp *.jpeg)"));
-    if(filesList.isEmpty()){
-        return;
-    }
+    ui->label->setText(QString::fromStdString(mes));
 }
 
-void TrainingPanel::on_pushButton_clicked()
-{
-    qDebug()<<"endlich auf gerufen"<<endl;
-}
+

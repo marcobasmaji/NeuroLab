@@ -7,17 +7,9 @@
 class TrainingPanel : public QMainWindow
 {
 public:
-    explicit TrainingPanel(QWidget *parent, GUISettings guiSettings);
+    explicit TrainingPanel(QWidget *parent);
     Ui::TrainingPanel *ui;
-private slots:
-
-
-    void on_load_data_set_dir_clicked();
-
-    void on_pushButton_clicked();
-
-private:
-    GUISettings guiSettings;
+    void setErrorMessage(string mes);
 };
 
 #endif // WELCOMEPANEL_H
