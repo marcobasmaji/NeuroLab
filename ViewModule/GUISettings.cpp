@@ -108,7 +108,13 @@ void GUISettings::setWeightsDirectory(const string dir)
 string GUISettings::getDataSetDirectory() const
 {
     return dataSetDirectory;
+}
+
+void GUISettings::setDataSetDirectory(string dir)
+{
+    dataSetDirectory = dir;
 };
+
 
 
 

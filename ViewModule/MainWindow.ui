@@ -630,6 +630,9 @@
       </property>
      </widget>
      <widget class="QPushButton" name="train_button">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>230</x>
@@ -721,6 +724,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
+     <width>1020</width>
+     <height>26</height>
      <width>1032</width>
      <height>22</height>
     </rect>

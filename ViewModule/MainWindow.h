@@ -34,6 +34,7 @@ public:
     void enableCheckbox(HardwareElement checkboxName);
     void disableHWCheckboxes();
 
+    void displayTrainingResults();
 private slots:
     void on_LoadButton_clicked();
 
@@ -125,6 +126,7 @@ private:
     void checkSelectedHardware();
     void uncheckAllHardware();
     void selectAllHardware();
+    void enableTrainIfPossible();
     void resetPalette();
     void setBackgroundImage(string imagePath);
     void setBackgroundImage();

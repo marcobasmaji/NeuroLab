@@ -646,7 +646,8 @@ void MainWindow::on_load_dataset_button_clicked()
                                                          QFileDialog::ShowDirsOnly
                                                          | QFileDialog::DontResolveSymlinks);
     ui->dataset_path_label->setText(dir);
-    //guiSettings.setDataSetDirectory(dir.toStdString());
+    guiSettings.setDataSetDirectory(dir.toStdString());
+    enableTrainIfPossible();
 }
 
 void MainWindow::on_select_weights_button_clicked()
@@ -657,6 +658,7 @@ void MainWindow::on_select_weights_button_clicked()
                                                          | QFileDialog::DontResolveSymlinks);
     ui->weights_path_label->setText(dir);
     guiSettings.setWeightsDirectory(dir.toStdString());
+    enableTrainIfPossible();
 
 }
 
@@ -667,8 +669,17 @@ void MainWindow::on_train_button_clicked()
 
     //read directory path TODO
 
+    ui->train_success_label->setText("Training in progress. Please wait. (aber eigentlich nicht)");
     viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory());
 
+
+}
+
+void MainWindow::enableTrainIfPossible() {
+
+    if (!guiSettings.getWeightsDirectory().empty() && !guiSettings.getDataSetDirectory().empty()){
+        ui->train_button->setEnabled(true);
+    };
 
 }
 
@@ -697,4 +708,9 @@ void MainWindow::setBackgroundImage(){
     QPalette palette;
     palette.setBrush(QPalette::Background, bkgnd);
     this->setPalette(palette);
+}
+
+void MainWindow::displayTrainingResults() {
+    ui->train_success_label->setText("Training successfull. Updated weights file saved in" +
+                                     QString::fromStdString(guiSettings.getWeightsDirectory()));
 }
