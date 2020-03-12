@@ -125,5 +125,8 @@ private:
     void checkSelectedHardware();
     void uncheckAllHardware();
     void selectAllHardware();
+    void resetPalette();
+    void setBackgroundImage(string imagePath);
+    void setBackgroundImage();
 };
 #endif // MAINWINDOW_H(imageToBeRemoved)
