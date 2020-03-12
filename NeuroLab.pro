@@ -50,6 +50,7 @@ SOURCES += \
     PredictionModule/HighestPerformance.cpp \
     PredictionModule/HighestEfficiency.cpp \
     PredictionModule/AlexPrediction.cpp \
+    Tests/TestsNN/Test_OpenVinoEnv.cpp \
     Tests/TestStarter.cpp \
     Tests/TestsExample/TestExample.cpp \
     Tests/TestsOpenCL/TestMaxPooling.cpp \
@@ -103,6 +104,7 @@ HEADERS += \
     PredictionModule/HighestPerformance.h \
     PredictionModule/HighestEfficiency.h \
     PredictionModule/AlexPrediction.h \
+    Tests/TestsNN/Test_OpenVinoEnv.h \
     Tests/TestStarter.hpp \
     Tests/TestsExample/TestExample.hpp \
     Tests/TestsOpenCL/TestMaxPooling.hpp \
