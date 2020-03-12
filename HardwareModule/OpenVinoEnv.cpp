@@ -21,10 +21,39 @@ OpenVinoEnv::OpenVinoEnv() {
     chooseNeuralNet("ALEXNET");
 }
 vector<Result> OpenVinoEnv::classify() {
-    readIR();
-    configureInputAndOutput();
-    CreateRequestsWithInput();
+    // reading the network from the file
+    try {
+        readIR();
+    } catch (const InferenceEngine::details::InferenceEngineException &e) {
+        Result r;
+        r.setPath("ERROR reading the .xml and .bin files");
+        vector<Result> v;
+        v.push_back(r);
+        return v;
+    }
+    // reading and preparing images
+    try {
+        configureInputAndOutput();
+    } catch (const InferenceEngine::details::InferenceEngineException &e) {
+        Result r;
+        r.setPath("ERROR reading the images");
+        vector<Result> v;
+        v.push_back(r);
+        return v;
+    }
+    // creating infer requests on the provided hardware platforms
+    try {
+        CreateRequestsWithInput();
+    } catch (const InferenceEngine::details::InferenceEngineException &e) {
+        Result r;
+        r.setPath("ERROR loading the network on the hardware plugin(s)");
+        vector<Result> v;
+        v.push_back(r);
+        return v;
+    }
+    // starting classifcation
     infer();
+    // getting output
     vector<Result> results = processOutput();
     return results;
 }
@@ -83,7 +112,8 @@ void OpenVinoEnv::CreateRequestsWithInput()
     size_t count = 0;
     for(auto &i : this->distribution)
     {
-        InferenceEngine::ExecutableNetwork en = core.LoadNetwork(cnnnetwork,i.first);
+        InferenceEngine::ExecutableNetwork en;
+        en = core.LoadNetwork(cnnnetwork,i.first);
         InferRequest inferRequest = en.CreateInferRequest();
         for (auto & item : inputInfo) {
 
@@ -115,8 +145,10 @@ void OpenVinoEnv::CreateRequestsWithInput()
 
 void OpenVinoEnv::infer()
 {
+    int i = 0;
     for(auto &item : requests)
     {
+        cerr<< "Classified " << this->distribution[i].second << " images on " << distribution[i].first << endl;
         item.Infer();
     }
 }
@@ -226,7 +258,7 @@ void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
             {
                 if(platfrom.second == min)
                 {
-                    platforms.erase(platforms.begin() + j);                  
+                    platforms.erase(platforms.begin() + j);
 
                 } else {
                     platfrom.second -=min;
