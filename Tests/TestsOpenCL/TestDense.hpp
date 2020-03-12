@@ -39,9 +39,12 @@ class TestDense{
 public:
     Util* util=new Util();
 
+    void parseStructure(DenseLayerCont* denseLayerCont,string content);
+
     void createRandomDenseLayerCont(DenseLayerCont* denseLayerCont);
     void createPerzeptronLayerOpennn(DenseLayerCont* denseLayerCont, PerceptronLayer* perceptronLayerOpennn);
 
     int testFeedForward();
     int testErrorComp();
+    int testWeightsUpdate();
 };

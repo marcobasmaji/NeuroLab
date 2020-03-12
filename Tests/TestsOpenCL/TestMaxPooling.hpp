@@ -39,9 +39,11 @@ class TestMaxPooling{
 public:
     Util* util=new Util();
 
-    void createRandomPoolingLayerCont(PoolingLayerCont* poolingLayer);
+    void createRandomPoolingLayerCont(PoolingLayerCont* poolingLayerCont);
     void createPoolingLayerOpennn(PoolingLayerCont* poolingLayerCont, PoolingLayer* poolingLayerOpennn);
 
     int testFeedForward();
     int testErrorComp();
+
+    void parseStructure(PoolingLayerCont* poolingLayerCont, string content);
 };

@@ -8,7 +8,6 @@
 #include <ControllerModule/ViewController.h>
 #include <ControllerModule/PredictionController.h>
 #include <ControllerModule/NNController.h>
-#include <ControllerModule/ImagePareser.h>
 #include <ControllerModule/HardwareElement.h>
 #include <ControllerModule/HardwareSurveillence.h>
 
@@ -22,7 +21,8 @@ class MasterController
 public:
     MasterController();
     void setPaths(vector<string> paths);
-    void classify(string nn, string mode, vector<string> selectedHardware, int nrImages);
+    void classify(string nn, string mode, vector<string> selectedHardware, int nrImages, vector<pair<string, string>> hwNamesMap);
+    void train(string weightsDir, string dataSetDir);
     void getPrediction(const string net, const string mode, vector<string> hardware, int nrImages);
     void setNNType(string nn);
     void setMode(string mode);
@@ -35,7 +35,6 @@ private:
     NNController nnObserver;
     ViewController viewObserver;
     PredictionController predictionObserver;
-    ImagePareser imageParser;
     string nnType;
     list<HardwareElement> selectedHardware;
     string mode;
@@ -43,6 +42,7 @@ private:
     list<pair<string,vector<string>>> results;
 
     void initControllers();
+    string transfer(string guiName);
 };
 
 #endif // MASTERCONTROLLER_H

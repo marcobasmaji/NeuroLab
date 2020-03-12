@@ -20,6 +20,7 @@ class ViewController
 {
 public:
     ViewController(MasterController * partner);
+    vector <pair<string, string>> hwNamesMap;
     void handleClassifyRequest(GUISettings settings);
     void displayResults(vector<Result>);
     void getPrediction(GUISettings settings);
@@ -29,6 +30,7 @@ public:
     void setAvailableHardware(vector<string> &hardwareElements);
     void displayAvailableHardware();
     void removeImage(string imagePath);
+    void train(string weightsDir, string dataSetDir);
 
 private:
     //MainWindow* mainWindow;

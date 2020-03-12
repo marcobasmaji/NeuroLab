@@ -17,6 +17,7 @@ ViewController::ViewController(MasterController* partner)
     this->master= partner;
     mainWindow = new MainWindow(nullptr,this);
     mainWindow->setWindowTitle("NeuroLab");
+    mainWindow->setFixedSize(1020, 615 );
     this->displayAvailableHardware();
     mainWindow->show();
 
@@ -32,7 +33,13 @@ void ViewController::handleClassifyRequest(GUISettings settings)
 {
     vector<string> paths = settings.getPaths();
     this->master->setPaths(paths);
-    this->master->classify(settings.getNn(), settings.getMode(),  settings.getSelectedHardware(), paths.size());
+
+    qDebug()<<"View gui setting in classify"<<endl;
+    for(string hw : settings.getSelectedHardware()){
+        qDebug()<<QString::fromStdString(hw)<<endl;
+    }
+
+    this->master->classify(settings.getNn(), settings.getMode(),  settings.getSelectedHardware(), paths.size(), hwNamesMap);
 }
 
 void ViewController::displayResults(vector<Result> results)
@@ -137,18 +144,22 @@ void ViewController::setAvailableHardware(vector<string> &hardwareElements)
         if(hardware.find("MYRIAD") != std::string::npos) {
             movidiusCounter++;
             setAvailableMovidius(movidiusCounter);
+            hwNamesMap.push_back({"MYRIAD." + to_string(movidiusCounter), hardware});
         }
 
         if(hardware.compare("CPU") == 0){
             availableHardware.push_back(CPU);
+            hwNamesMap.push_back({"CPU", hardware});
         }
 
         if(hardware.compare("GPU") == 0){
             availableHardware.push_back(GPU);
+            hwNamesMap.push_back({"GPU", hardware});
         }
 
         if(hardware.compare("FPGA") == 0){
             availableHardware.push_back(FPGA);
+            hwNamesMap.push_back({"FPGA", hardware});
         }
     }
 }
@@ -163,6 +174,18 @@ void ViewController::displayAvailableHardware()
     for(HardwareElement element : availableHardware){
        mainWindow->enableCheckbox(element);
     }
+}
+
+void ViewController::train(string weightsDir, string dataSetDir){
+   //
+   //mainWindow->showInProgress();
+   //
+
+    master->train(weightsDir, dataSetDir);
+
+   //
+   //mainWindow->showFinished();
+   //
 }
 
 

@@ -17,18 +17,48 @@ void MasterController::setPaths(vector<string> paths)
 
 }
 
-void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages)
+void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages, vector<pair<string, string>> hwNamesMap)
 {
-    qDebug()<<"classify called in Master"<<endl; // debug: working
-
     //-------------hier brauchen wir noch----------------------------------------------------------
 
     nnObserver.setCurrentNN(nn);
+
+    qDebug()<<"master setting in classify 1"<<endl;
+    for(string hw : selectedHardware){
+        qDebug()<<QString::fromStdString(hw)<<endl;
+    }
     DataResults predictionResults = predictionObserver.calculatePrediction(nrImages,nn,mode,selectedHardware);
-    nnObserver.setDistribution(predictionResults.hardwareDistribution);
+
+    qDebug()<<"master setting in classify 2"<<endl;
+    for(pair<string, int> hw : predictionResults.hardwareDistribution){
+        qDebug()<<QString::fromStdString(hw.first)<<endl;
+    }
+
+    vector<pair<string, int>>  hwDistributionTransfered;
+    hwDistributionTransfered.clear();
+    for(pair<string, int> hD : predictionResults.hardwareDistribution){
+        hwDistributionTransfered.push_back({transfer(hD.first), hD.second});
+        qDebug()<<"Master distribution translation"<<QString::fromStdString(hwDistributionTransfered.back().first)<<endl; // debug: working
+    }
+
+    nnObserver.setDistribution(hwDistributionTransfered);
     //----------------------------------------------------------------------------------------------
     vector<Result> results = nnObserver.classify();
     viewObserver.displayResults(results);    
+}
+
+string MasterController::transfer(string guiName) {
+    for(pair<string, string> entry : viewObserver.hwNamesMap) {
+        if (guiName.compare(entry.first) == 0) {
+            return entry.second;
+        }
+    }
+}
+
+void MasterController::train(string weightsDir, string dataSetDir){
+    //---------------this is needed----------
+    //nnObserver.train(weightsDir,dataSetDir);
+    //----------------------
 }
 void MasterController::getPrediction(const string net, const string mode, vector<string> hardware , int nrImages)
 {

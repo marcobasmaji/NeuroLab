@@ -24,8 +24,6 @@ vector<Result> OpenVinoEnv::classify() {
     readIR();
     configureInputAndOutput();
     CreateRequestsWithInput();
-    // createInferRequest();
-    //prepareInput();
     infer();
     vector<Result> results = processOutput();
     return results;
@@ -38,8 +36,8 @@ void OpenVinoEnv::readIR()
     QString s = QString::fromStdString(structurePath);
     QFileInfo file1("../"+s);
 
-    network_reader.ReadNetwork( file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnet.xml");
-    network_reader.ReadWeights(file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnet.bin");
+    network_reader.ReadNetwork( file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/" + structurePath);
+    network_reader.ReadWeights(file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/" + weightsPath);
     this->cnnnetwork = network_reader.getNetwork();
 }
 void OpenVinoEnv::configureInputAndOutput()
@@ -74,11 +72,10 @@ void OpenVinoEnv::configureInputAndOutput()
     /** Setting batch size using image count **/
     cnnnetwork.setBatchSize(imagesData.size());
     size_t batchSize = cnnnetwork.getBatchSize();
-    std::cout << "Batch size is " << std::to_string(batchSize) << std::endl;
+    std::cerr << "Batch size is " << std::to_string(batchSize) << std::endl;
     this->batchSize = batchSize;
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
-    cerr << "valid images size is " << validImageNames.size() << endl;
 }
 
 void OpenVinoEnv::CreateRequestsWithInput()
@@ -118,11 +115,8 @@ void OpenVinoEnv::CreateRequestsWithInput()
 
 void OpenVinoEnv::infer()
 {
-    int i= 1;
     for(auto &item : requests)
     {
-        qDebug() << "Hi im request nr"  << i++<< endl;
-
         item.Infer();
     }
 }
@@ -162,7 +156,7 @@ vector<Result> OpenVinoEnv::processOutput()
     cerr << "Printing out each Hardware combination with its number of images" << endl;
     for(auto &i:this->distribution)
     {
-        cerr<< i.first << "  " << i.second << endl;
+        cerr<< "Hardware combination: " << i.first << "  " << "Number of Images: " << i.second << endl;
     }
 
     return endResults;
@@ -232,8 +226,7 @@ void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
             {
                 if(platfrom.second == min)
                 {
-                    platforms.erase(platforms.begin() + j);
-                    cerr << platfrom.first<< "ssssss"<< endl;
+                    platforms.erase(platforms.begin() + j);                  
 
                 } else {
                     platfrom.second -=min;

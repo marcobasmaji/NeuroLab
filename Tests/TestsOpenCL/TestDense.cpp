@@ -5,10 +5,11 @@
 #include "ie_iexecutable_network.hpp"
 #include <iostream>
 #include "ie_core.hpp"
+#include "Tests/TestsOpenCL/ManuelTestData.hpp"
 
 using namespace std;
 
-#define TEST_CASES 1;
+#define TEST_CASES 10;
 
 //Dense Layer
 #define DENSE_LAYER_MAX_BATCH_SIZE 10;
@@ -16,7 +17,30 @@ using namespace std;
 #define DENSE_LAYER_MAX_INPUT_HEIGHT 20;
 #define DENSE_LAYER_MAX_INPUT_WIDTH 20;
 #define DENSE_LAYER_MAX_OUTPUT_NEURONS 10;
-#define POOLING_LAYER_MAX_ABSOLUTE_DIFFERENCE 0.0001;
+#define DENSE_LAYER_MAX_ABSOLUTE_DIFFERENCE 0.0001;
+
+void TestDense::parseStructure(DenseLayerCont* denseLayerCont,string content){
+    stringstream in(content);
+    while(!in.eof()){
+        string key;
+        in>>key;
+        string value;
+        in>>value;
+        if(key=="BatchSize"){
+            denseLayerCont->batchSize=stof(value);
+        }else if(key=="InputMaps"){
+            denseLayerCont->inputMaps=stof(value);
+        }else if(key=="InputWidth"){
+            denseLayerCont->inputWidth=stof(value);
+        }else if(key=="InputHeight"){
+            denseLayerCont->inputHeight=stof(value);
+        }else if(key=="OutputNeurons"){
+            denseLayerCont->outputNeurons=stof(value);
+        }else{
+            cerr<<"This key is not implemented ("<<key<<","<<value<<")!"<<endl;
+        }
+    }
+}
 
 void TestDense::createRandomDenseLayerCont(DenseLayerCont* denseLayerCont){
     int maxBatchSize=DENSE_LAYER_MAX_BATCH_SIZE;
@@ -128,7 +152,7 @@ int TestDense::testFeedForward(){
             float value2=outputs2[index];
 
             float diff=abs(value1-value2);
-            float maxAbsoluteDiff=POOLING_LAYER_MAX_ABSOLUTE_DIFFERENCE;
+            float maxAbsoluteDiff=DENSE_LAYER_MAX_ABSOLUTE_DIFFERENCE;
             if(diff>maxAbsoluteDiff){
                 differences++;
             }
@@ -145,12 +169,208 @@ int TestDense::testFeedForward(){
 
     return differences;
 }
-//TODO
 int TestDense::testErrorComp(){
-    //TODO
-    return 0;
-}
+    ManuelTestData* manuelTestData=new ManuelTestData();
 
+    //load errors input
+    vector<float>vectorErrorsInput;
+    util->loadStringToArray(manuelTestData->getDenseErrorsInputTest1(),&vectorErrorsInput);
+    float*errorsInput=(float*)malloc(sizeof(float)*vectorErrorsInput.size());
+    util->convertVectorToFloatArray(&vectorErrorsInput, errorsInput);
+
+    //load errors output
+    vector<float>vectorErrorsOutput;
+    util->loadStringToArray(manuelTestData->getDenseErrorsOutputTest1(),&vectorErrorsOutput);
+    float*errorsOutput=(float*)malloc(sizeof(float)*vectorErrorsOutput.size());
+    util->convertVectorToFloatArray(&vectorErrorsOutput, errorsOutput);
+
+    //load input values
+    vector<float>vectorInputValues;
+    util->loadStringToArray(manuelTestData->getDenseInputValuesTest1(),&vectorInputValues);
+    float*inputValues=(float*)malloc(sizeof(float)*vectorInputValues.size());
+    util->convertVectorToFloatArray(&vectorInputValues, inputValues);
+
+    //load output values
+    vector<float>vectorOutputValues;
+    util->loadStringToArray(manuelTestData->getDenseOutputValuesTest1(),&vectorOutputValues);
+    float*outputValues=(float*)malloc(sizeof(float)*vectorOutputValues.size());
+    util->convertVectorToFloatArray(&vectorOutputValues, outputValues);
+
+    //load weight values
+    vector<float>vectorWeightValues;
+    util->loadStringToArray(manuelTestData->getDenseWeightsTest1(),&vectorWeightValues);
+    float*weightValues=(float*)malloc(sizeof(float)*vectorWeightValues.size());
+    util->convertVectorToFloatArray(&vectorWeightValues, weightValues);
+
+    //load bias values
+    vector<float>vectorBiasValues;
+    util->loadStringToArray(manuelTestData->getDenseWeightsTest1(),&vectorBiasValues);
+    float*biasValues=(float*)malloc(sizeof(float)*vectorBiasValues.size());
+    util->convertVectorToFloatArray(&vectorBiasValues, biasValues);
+
+    string content=manuelTestData->getDenseStructureTest1();
+    DenseLayerCont* denseLayerCont=new DenseLayerCont();
+    parseStructure(denseLayerCont, content);
+    denseLayerCont->outputErrors=errorsOutput;
+    denseLayerCont->inputValues=inputValues;
+    denseLayerCont->weights=weightValues;
+    denseLayerCont->biases=biasValues;
+
+    OpenCLEnvironmentCreator* envCreator=new OpenCLEnvironmentCreator();
+    OpenCLEnvironment* env=envCreator->createOpenCLEnvironment(HardwareType::CPU);
+    OpenCLLayerCreator* openclLayerCreator=new OpenCLLayerCreator();
+    OpenCLLayer* openclLayer=openclLayerCreator->createDenseLayer(env, denseLayerCont->batchSize, denseLayerCont->inputMaps, denseLayerCont->inputHeight, denseLayerCont->inputWidth, denseLayerCont->outputNeurons);
+    openclLayer->setBiases(env, denseLayerCont->biases, denseLayerCont->outputNeurons);
+    openclLayer->setWeights(env, denseLayerCont->weights, denseLayerCont->inputMaps*denseLayerCont->inputHeight*denseLayerCont->inputWidth*denseLayerCont->outputNeurons);
+    openclLayer->setInputs(env, denseLayerCont->inputValues, denseLayerCont->batchSize*denseLayerCont->inputMaps*denseLayerCont->inputHeight*denseLayerCont->inputWidth);
+    openclLayer->setOutputErrors(env, denseLayerCont->outputErrors, denseLayerCont->batchSize*denseLayerCont->outputNeurons);
+
+    openclLayer->computeForward(env, denseLayerCont->batchSize, denseLayerCont->outputNeurons);
+    openclLayer->computeErrorComp(env, denseLayerCont->batchSize);
+    float*computedInputErrors=openclLayer->getErrorInputs(env, denseLayerCont->batchSize, denseLayerCont->inputMaps, denseLayerCont->inputHeight, denseLayerCont->inputWidth, NULL);
+
+    int differences=0;
+    for(int batch=0;batch<denseLayerCont->batchSize;batch++){
+        for(int map=0;map<denseLayerCont->inputMaps;map++){
+            for(int y=0;y<denseLayerCont->inputHeight;y++){
+                for(int x=0;x<denseLayerCont->inputWidth;x++){
+                    int index=x+denseLayerCont->inputWidth*(y+denseLayerCont->inputHeight*(map+denseLayerCont->inputMaps*(batch)));
+                    float diff=errorsInput[index]-computedInputErrors[index];
+                    float maxAbsolutDifference=DENSE_LAYER_MAX_ABSOLUTE_DIFFERENCE;
+                    if(abs(diff)>maxAbsolutDifference){
+                        differences++;
+                    }
+                }
+            }
+        }
+    }
+
+    delete[]computedInputErrors;
+    delete envCreator;
+    delete env;
+    delete openclLayerCreator;
+    delete openclLayer;
+    delete denseLayerCont;
+    delete[]errorsInput;
+    delete[]outputValues;
+    delete manuelTestData;
+
+    return differences;
+}
+int TestDense::testWeightsUpdate(){
+    ManuelTestData* manuelTestData=new ManuelTestData();
+
+    //load errors input
+    vector<float>vectorErrorsInput;
+    util->loadStringToArray(manuelTestData->getDenseErrorsInputTest1(),&vectorErrorsInput);
+    float*errorsInput=(float*)malloc(sizeof(float)*vectorErrorsInput.size());
+    util->convertVectorToFloatArray(&vectorErrorsInput, errorsInput);
+
+    //load errors output
+    vector<float>vectorErrorsOutput;
+    util->loadStringToArray(manuelTestData->getDenseErrorsOutputTest1(),&vectorErrorsOutput);
+    float*errorsOutput=(float*)malloc(sizeof(float)*vectorErrorsOutput.size());
+    util->convertVectorToFloatArray(&vectorErrorsOutput, errorsOutput);
+
+    //load input values
+    vector<float>vectorInputValues;
+    util->loadStringToArray(manuelTestData->getDenseInputValuesTest1(),&vectorInputValues);
+    float*inputValues=(float*)malloc(sizeof(float)*vectorInputValues.size());
+    util->convertVectorToFloatArray(&vectorInputValues, inputValues);
+
+    //load output values
+    vector<float>vectorOutputValues;
+    util->loadStringToArray(manuelTestData->getDenseOutputValuesTest1(),&vectorOutputValues);
+    float*outputValues=(float*)malloc(sizeof(float)*vectorOutputValues.size());
+    util->convertVectorToFloatArray(&vectorOutputValues, outputValues);
+
+    //load weight values
+    vector<float>vectorWeightValues;
+    util->loadStringToArray(manuelTestData->getDenseWeightsTest1(),&vectorWeightValues);
+    float*weightValues=(float*)malloc(sizeof(float)*vectorWeightValues.size());
+    util->convertVectorToFloatArray(&vectorWeightValues, weightValues);
+
+    //load bias values
+    vector<float>vectorBiasValues;
+    util->loadStringToArray(manuelTestData->getDenseBiasesTest1(),&vectorBiasValues);
+    float*biasValues=(float*)malloc(sizeof(float)*vectorBiasValues.size());
+    util->convertVectorToFloatArray(&vectorBiasValues, biasValues);
+
+    //load new bias values
+    vector<float>vectorNewBiasValues;
+    util->loadStringToArray(manuelTestData->getDenseNewBiasesTest1(),&vectorNewBiasValues);
+    float*newBiasValues=(float*)malloc(sizeof(float)*vectorNewBiasValues.size());
+    util->convertVectorToFloatArray(&vectorNewBiasValues, newBiasValues);
+
+    //load new weight values
+    vector<float>vectorNewWeightsValues;
+    util->loadStringToArray(manuelTestData->getDenseNewWeightsTest1(),&vectorNewWeightsValues);
+    float*newWeightsValues=(float*)malloc(sizeof(float)*vectorNewWeightsValues.size());
+    util->convertVectorToFloatArray(&vectorNewWeightsValues, newWeightsValues);
+
+    //load learning rate
+    float learningRate=stof(manuelTestData->getDenseLearningRateTest1());
+
+    string content=manuelTestData->getDenseStructureTest1();
+    DenseLayerCont* denseLayerCont=new DenseLayerCont();
+    parseStructure(denseLayerCont, content);
+    denseLayerCont->outputErrors=errorsOutput;
+    denseLayerCont->inputValues=inputValues;
+    denseLayerCont->weights=weightValues;
+    denseLayerCont->biases=biasValues;
+    denseLayerCont->learningRate=learningRate;
+
+    OpenCLEnvironmentCreator* envCreator=new OpenCLEnvironmentCreator();
+    OpenCLEnvironment* env=envCreator->createOpenCLEnvironment(HardwareType::CPU);
+    OpenCLLayerCreator* openclLayerCreator=new OpenCLLayerCreator();
+    OpenCLLayer* openclLayer=openclLayerCreator->createDenseLayer(env, denseLayerCont->batchSize, denseLayerCont->inputMaps, denseLayerCont->inputHeight, denseLayerCont->inputWidth, denseLayerCont->outputNeurons);
+    openclLayer->setBiases(env, denseLayerCont->biases, denseLayerCont->outputNeurons);
+    openclLayer->setWeights(env, denseLayerCont->weights, denseLayerCont->inputMaps*denseLayerCont->inputHeight*denseLayerCont->inputWidth*denseLayerCont->outputNeurons);
+    openclLayer->setInputs(env, denseLayerCont->inputValues, denseLayerCont->batchSize*denseLayerCont->inputMaps*denseLayerCont->inputHeight*denseLayerCont->inputWidth);
+    openclLayer->setOutputErrors(env, denseLayerCont->outputErrors, denseLayerCont->batchSize*denseLayerCont->outputNeurons);
+    openclLayer->setLearningRate(learningRate);
+
+    openclLayer->computeForward(env, denseLayerCont->batchSize, denseLayerCont->outputNeurons);
+    openclLayer->computeErrorComp(env, denseLayerCont->batchSize);
+    openclLayer->computeWeightsUpdate(env, denseLayerCont->outputNeurons);
+    float*computedNewWeights=openclLayer->getWeights(env, denseLayerCont->inputMaps*denseLayerCont->inputHeight*denseLayerCont->inputWidth*denseLayerCont->outputNeurons);
+    float*computedNewBiases=openclLayer->getBiases(env, denseLayerCont->outputNeurons);
+
+    int differences=0;
+    float maxAbsolutDifference=DENSE_LAYER_MAX_ABSOLUTE_DIFFERENCE;
+    for(int out=0;out<denseLayerCont->outputNeurons;out++){
+        for(int map=0;map<denseLayerCont->inputMaps;map++){
+            for(int y=0;y<denseLayerCont->inputHeight;y++){
+                for(int x=0;x<denseLayerCont->inputWidth;x++){
+                    int index=x+denseLayerCont->inputWidth*(y+denseLayerCont->inputHeight*(map+denseLayerCont->inputMaps*(out)));
+                    float diff=newWeightsValues[index]-computedNewWeights[index];
+                    if(abs(diff)>maxAbsolutDifference){
+                        differences++;
+                    }
+                }
+            }
+        }
+        float diff=newBiasValues[out]-computedNewBiases[out];
+        if(abs(diff)>maxAbsolutDifference){
+            differences++;
+        }
+    }
+
+    delete[]computedNewBiases;
+    delete[]computedNewWeights;
+    delete envCreator;
+    delete env;
+    delete openclLayerCreator;
+    delete openclLayer;
+    delete denseLayerCont;
+    delete[]errorsInput;
+    delete[]outputValues;
+    delete[]newWeightsValues;
+    delete[]newBiasValues;
+    delete manuelTestData;
+
+    return differences;
+}
 
 TEST(Dense, FeedforwardProcess){
     TestDense* p=new TestDense();
@@ -166,11 +386,15 @@ TEST(Dense, FeedforwardProcess){
 TEST(Dense, ErrorComp){
     TestDense* p=new TestDense();
 
-    int testCases=TEST_CASES;
-    for(int testCase=0;testCase<testCases;testCase++){
-        EXPECT_EQ(0,p->testErrorComp());
-    }
+    EXPECT_EQ(0,p->testErrorComp());
 
     delete p;
 }
 
+TEST(Dense, WeightsUpdate){
+    TestDense* p=new TestDense();
+
+    EXPECT_EQ(0,p->testWeightsUpdate());
+
+    delete p;
+}

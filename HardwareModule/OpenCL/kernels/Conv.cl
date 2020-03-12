@@ -82,13 +82,13 @@ __kernel void errorComp(__global float* errorInput, __global const float* errorO
 		}
 	}
 	
-	for(int inputMap=0;inputMap<inputMaps;inputMap++){
-		for(int outputMap=0;outputMap<outputMaps;outputMap++){
-			for(int outputY=0;outputY<outputHeight;outputY++){
-				for(int outputX=0;outputX<outputWidth;outputX++){
-					int idOutput=calculateArrayID(outputMaps, outputHeight, outputWidth, batch, outputMap, outputY, outputX);
-					float error=errorOutput[idOutput];
+	for(int outputMap=0;outputMap<outputMaps;outputMap++){
+		for(int outputY=0;outputY<outputHeight;outputY++){
+			for(int outputX=0;outputX<outputWidth;outputX++){
+				int idOutput=calculateArrayID(outputMaps, outputHeight, outputWidth, batch, outputMap, outputY, outputX);
+				float error=errorOutput[idOutput];
 					
+				for(int inputMap=0;inputMap<inputMaps;inputMap++){
 					for(int kernelY=0;kernelY<kernelHeight;kernelY++){
 						for(int kernelX=0;kernelX<kernelWidth;kernelX++){
 							int inputY=outputY*strideHeight+kernelY;
@@ -98,7 +98,7 @@ __kernel void errorComp(__global float* errorInput, __global const float* errorO
 							int weightID=calculateWeightID(inputMaps, kernelHeight, kernelWidth, outputMap, inputMap, kernelY, kernelX);
 								
 							float weight=weights[weightID];
-							errorInput[inputID]=error*weight;
+							errorInput[inputID]+=error*weight;
 						}
 					}
 				}

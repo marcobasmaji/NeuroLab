@@ -30,7 +30,13 @@ public:
     void unselectHardwareElement(string element);
     void selectHardwareElement(string element);
 
+    string getDataSetDirectory() const;
     void setDataSetDirectory(string dir);
+
+    string getWeightsDirectory() const;
+    void setWeightsDirectory(string dir);
+
+
 
 private:
     string nn;
@@ -39,6 +45,7 @@ private:
     vector<string> paths;
 
     string dataSetDirectory;
+    string weightsDirectory;
 };
 
 #endif // GUISETTINGS_H

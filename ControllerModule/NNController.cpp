@@ -9,8 +9,6 @@ NNController::NNController()
 }
 vector<Result> NNController::classify()
 {
-    qDebug()<<"classify called in NN"<<endl; // debug:
-
     if(currentNN == "ALEXNET")
     {
         pnn.setNerualNet("ALEXNET");
