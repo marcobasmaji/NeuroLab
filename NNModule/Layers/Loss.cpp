@@ -10,9 +10,9 @@ float* Loss::getOutputError(float distribution[],string label)
 {
     qDebug() << "reached 4" << endl;
 
-    float derivative[numInputs];
+    float* derivative = (float*)malloc(numInputs * sizeof (float*));
     float targetDistribution[numInputs];
-    QDir dir("/home/mo/classes");
+    QDir dir("/home/mo/dataset");
     QStringList files = dir.entryList(QStringList(),QDir::Dirs);
     int i = 0;
     for(auto &item : files) {
@@ -30,16 +30,15 @@ float* Loss::getOutputError(float distribution[],string label)
             i++;
         }
     }
-
     // calculate
     float loss = 0;
-    for(unsigned int i=0;i<sizeof (targetDistribution);i++)
+    for(unsigned int i=0;i<numInputs;i++)
     {
         loss += targetDistribution[i]*std::log(distribution[i]);
     }
     // save loss in case needed
     this->loss = -loss;
-    for (size_t j=0; j<sizeof (targetDistribution);j++)
+    for (size_t j=0; j<numInputs;j++)
     {
         // derivative
         derivative[j] =-(targetDistribution[j]/distribution[j]);

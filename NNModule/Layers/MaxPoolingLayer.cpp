@@ -9,10 +9,11 @@ MaxPoolingLayer::MaxPoolingLayer(OpenCLEnvironment* clEnv,
                                  size_t verticalStride,
                                  size_t horizontalStride)
 {
+    size_t outputMaps = (inputHeight-poolingWindowHeight)/horizontalStride +1;
     this->clEnv = clEnv;
     OpenCLLayerCreator* openCLLayerCreator = new OpenCLLayerCreator();
-    OpenCLLayer* clMax = openCLLayerCreator->createMaxPoolLayer(clEnv,10,inputDepth,inputHeight,
-                                                                inputWidth,14,14,poolingWindowHeight,
+    OpenCLLayer* clMax = openCLLayerCreator->createMaxPoolLayer(clEnv,1,inputDepth,inputHeight,
+                                                                inputWidth,outputMaps,outputMaps,poolingWindowHeight,
                                                                 poolingWindowWidth,horizontalStride,verticalStride);
     this->clLayer = clMax;
 
@@ -20,12 +21,12 @@ MaxPoolingLayer::MaxPoolingLayer(OpenCLEnvironment* clEnv,
 
 void MaxPoolingLayer::forwardPass()
 {
-    clLayer->computeForward(clEnv,10,inputDepth);
+    clLayer->computeForward(clEnv,1,inputDepth);
 }
 
 void MaxPoolingLayer::backPropagate()
 {
-    clLayer->computeErrorComp(clEnv,16);
+    clLayer->computeErrorComp(clEnv,1);
 }
 
 OpenCLLayer *MaxPoolingLayer::getCLLayer()
