@@ -8,7 +8,6 @@
 #include <ControllerModule/ViewController.h>
 #include <ControllerModule/PredictionController.h>
 #include <ControllerModule/NNController.h>
-#include <ControllerModule/ImagePareser.h>
 #include <ControllerModule/HardwareElement.h>
 #include <ControllerModule/HardwareSurveillence.h>
 
@@ -36,7 +35,6 @@ private:
     NNController nnObserver;
     ViewController viewObserver;
     PredictionController predictionObserver;
-    ImagePareser imageParser;
     string nnType;
     list<HardwareElement> selectedHardware;
     string mode;

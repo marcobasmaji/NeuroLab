@@ -19,7 +19,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     ControllerModule/HardwareSurveillence.cpp \
-    ControllerModule/ImagePareser.cpp \
     ControllerModule/MasterController.cpp \
     ControllerModule/NNController.cpp \
     ControllerModule/PredictionController.cpp \
@@ -71,7 +70,6 @@ SOURCES += \
 HEADERS += \
     ControllerModule/HardwareElement.h \
     ControllerModule/HardwareSurveillence.h \
-    ControllerModule/ImagePareser.h \
     ControllerModule/MasterController.h \
     ControllerModule/NNController.h \
     ControllerModule/PredictionController.h \
