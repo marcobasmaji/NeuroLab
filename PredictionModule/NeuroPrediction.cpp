@@ -42,12 +42,15 @@ std::vector<Hardware> NeuroPrediction::distributeAndPredict(std::vector<std::str
 	return list;
 
 }
+
 double NeuroPrediction::TimeValueOfX(std::vector<double>& polynome, double x)
 {
 	double value = 0;
-	for (size_t i = 0; i < polynome.size(); i++) {
-		int intOfI = i;
-		value = value + pow(polynome[polynome.size() - intOfI-1], x);
+	int i = 0;
+	for (size_t sI = 0; sI < polynome.size(); sI++) {
+		i = sI;
+		int size = polynome.size();
+		value = value + polynome.at(i) * pow(x, size - i - 1);
 	}
 	return value;
 }
