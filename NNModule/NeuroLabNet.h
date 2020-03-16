@@ -24,24 +24,24 @@ public:
     NeuroLabNet();
 	void init();
     vector<Result> classify();
-	void train();
+    void train(string weightsDir, string dataSetDir);
 	void executeTransferLearning();
     void updateDataSet(vector<string> dataSet);
-    void trainWithMnist();
     vector<pair<string,float>> getLabelWithProb(float prob[]);
 private:
     vector<string> dataSet;
     OpenCLEnvironment* clEnv;
     //Layers
-    ConvolutionLayer* conv1=nullptr;
-    ReLULayer* relu1=nullptr;
-    MaxPoolingLayer* max1=nullptr;
-    ConvolutionLayer *conv2=nullptr;
-    ReLULayer *relu2=nullptr;
-    MaxPoolingLayer* max2=nullptr;
-    DenseLayer* dense=nullptr;
-    SoftmaxLayer* soft=nullptr;
-    Loss* lossFunction=nullptr;
+    OpenCLLayer* conv1;
+    OpenCLLayer* conv2;
+    OpenCLLayer* relu1;
+    OpenCLLayer* relu2;
+    OpenCLLayer* max1;
+    OpenCLLayer* max2;
+    OpenCLLayer* dense;
+    OpenCLLayer* soft;
+    //loss function
+    Loss* lossFunction;
 
     static bool sortBySec(const pair<int,int> &a,
                   const pair<int,int> &b)

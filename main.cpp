@@ -20,10 +20,6 @@ int main(int argc, char *argv[]) {
         MasterController masterController;
     #endif
 
-   //NeuroLabNet nn;
-   //nn.train();
-
-
 }
 
 

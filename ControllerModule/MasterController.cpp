@@ -66,9 +66,7 @@ string MasterController::transfer(string guiName) {
 }
 
 void MasterController::train(string weightsDir, string dataSetDir){
-    //---------------this is needed----------
-    //nnObserver.train(weightsDir,dataSetDir);
-    //----------------------
+    nnObserver.trainNeuroLab(weightsDir,dataSetDir);
 }
 void MasterController::getPrediction(const string net, const string mode, vector<string> hardware , int nrImages)
 {
