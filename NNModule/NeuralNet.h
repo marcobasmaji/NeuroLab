@@ -10,9 +10,6 @@ using namespace std;
 class NeuralNet 
 {
 public:
-    virtual void init() = 0;
-    //virtual void classify() = 0;
-    virtual void train() = 0;
     virtual void executeTransferLearning()=0;
     /*void updateDataSet(DataSet dataSet) {
 		this->dataSet = dataSet;

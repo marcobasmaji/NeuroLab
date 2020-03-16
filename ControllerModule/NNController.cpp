@@ -49,6 +49,11 @@ void NNController::setHardwareDistribution(vector<string> distr)
 
 }
 
+void NNController::trainNeuroLab(string weightsDir, string dataSetDir)
+{
+    neuroLabNet.train(weightsDir, dataSetDir);
+}
+
 void NNController::setCurrentNN(string currentNN)
 {
     this->currentNN = currentNN;
