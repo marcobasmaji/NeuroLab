@@ -217,7 +217,6 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
             qDebug()<<"Training with image Nr. "<< count << endl;
             qDebug()<< dirOfImages.absolutePath() << image << endl;
             // get pixels from path
-            // CRASHING HERE ON THE SECOND IMAGE
             cv::Mat img = cv::imread(dirOfImages.absolutePath().toStdString() +"/"+ image.toStdString());
             if(img.empty())
             {
@@ -311,7 +310,9 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
     float* calculatedWeightsConv1 = conv1->getWeights(clEnv,CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1);
     float* calculatedWeightsConv2 = conv2->getWeights(clEnv,CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2);
     float* calculatedWeightsDense = dense->getWeights(clEnv,DENSE_INPUT * DENSE_INPUT* FILTERS_2);
-
+    
+    //////// Tried using standard fstream / ofstream but even with setting the right flags, 
+    //////// i couldnt create a file that doesnt exist. So using QFile and QStream
     QFile file(QString::fromStdString(weightsDir)+"/new/weights_conv1");
     QTextStream stream(&file);
     if(file.open(QIODevice::WriteOnly |QIODevice::Text))
