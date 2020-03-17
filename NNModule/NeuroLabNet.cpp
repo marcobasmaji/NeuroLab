@@ -279,7 +279,7 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
                 targetDistribution[4] = 1;
 
             }
-            float * actualDistribution = soft->getOutputs(clEnv,BATCH_SIZE,1,5,1,nullptr);
+            float * actualDistribution = soft->getOutputs(clEnv,BATCH_SIZE,5,1,1,nullptr);
             float lossOutput[5] ={0};
             //float * lossOutput=lossFunction->getOutputError(outputs,folder.toStdString(),dataSetDir);
             for(unsigned int i=0;i<5;i++)
