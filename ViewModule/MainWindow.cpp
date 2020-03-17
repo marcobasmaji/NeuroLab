@@ -737,7 +737,7 @@ void MainWindow::setBackgroundImage(){
 
 void MainWindow::displayTrainingResults() {
     ui->train_success_label->setText("Training successfull. Updated weights file saved in " +
-                                     QString::fromStdString(guiSettings.getWeightsDirectory()));
+                                     QString::fromStdString(guiSettings.getNewWeightsDirectory()));
 }
 
 void MainWindow::showErrorMessage(string mes){
