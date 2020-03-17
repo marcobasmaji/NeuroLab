@@ -44,7 +44,7 @@
        <x>20</x>
        <y>30</y>
        <width>151</width>
-       <height>91</height>
+       <height>95</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -68,7 +68,7 @@
       <item>
        <widget class="QRadioButton" name="NeuroLabNet_radio_button">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
          <string>NeuroLab Net</string>
@@ -95,7 +95,7 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>231</width>
+       <width>234</width>
        <height>111</height>
       </rect>
      </property>
@@ -728,7 +728,7 @@
      <x>0</x>
      <y>0</y>
      <width>1032</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

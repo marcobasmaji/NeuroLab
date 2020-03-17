@@ -39,7 +39,7 @@ void ViewController::handleClassifyRequest(GUISettings settings)
         qDebug()<<QString::fromStdString(hw)<<endl;
     }
 
-    this->master->classify(settings.getNn(), settings.getMode(),  settings.getSelectedHardware(), paths.size(), hwNamesMap);
+    this->master->classify(settings.getNn(), settings.getMode(),  settings.getSelectedHardware(), paths.size());
 }
 
 void ViewController::displayResults(vector<Result> results)

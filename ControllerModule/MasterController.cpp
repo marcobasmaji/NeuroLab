@@ -17,7 +17,7 @@ void MasterController::setPaths(vector<string> paths)
 
 }
 
-void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages, vector<pair<string, string>> hwNamesMap)
+void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages)
 {
     //-------------hier brauchen wir noch----------------------------------------------------------
 
