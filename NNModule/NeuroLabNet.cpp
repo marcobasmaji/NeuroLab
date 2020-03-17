@@ -50,7 +50,7 @@ NeuroLabNet::NeuroLabNet(){
     relu1 = layerCreator->createReluLayer(clEnv,BATCH_SIZE,FILTERS_1,CONV_1_OUTPUT,CONV_1_OUTPUT);
     max1 = layerCreator->createMaxPoolLayer(clEnv,BATCH_SIZE,FILTERS_1,MAX_1_INPUT,MAX_1_INPUT,MAX_1_OUTPUT,
                                             MAX_1_OUTPUT,MAX_1_WINDOW,MAX_1_WINDOW,MAX_1_STRIDE,MAX_1_STRIDE);
-    conv2 = layerCreator->createConvLayer(clEnv,BATCH_SIZE,CHANNELS,CONV_2_INPUT,CONV_2_INPUT,
+    conv2 = layerCreator->createConvLayer(clEnv,BATCH_SIZE,FILTERS_1,CONV_2_INPUT,CONV_2_INPUT,
                                           FILTERS_2,CONV_2_OUTPUT,CONV_2_OUTPUT,CONV_2_KERNEL,
                                           CONV_2_KERNEL,CONV_2_STRIDE,CONV_2_STRIDE);
     relu2 = layerCreator->createReluLayer(clEnv,BATCH_SIZE,FILTERS_2,CONV_2_OUTPUT,CONV_2_OUTPUT);
@@ -79,18 +79,53 @@ void NeuroLabNet::init() {
 
 vector<Result> NeuroLabNet::classify() {
     vector<Result> results;
-    size_t LastBatchSize;
-    if(this->dataSet.size()%BATCH_SIZE!=0)
-    {
-        LastBatchSize = this->dataSet.size() % BATCH_SIZE;
-    }
 
     // for each image, read, resize and turn into a 3D array of pixels
     float pixels[BATCH_SIZE*CONV_1_INPUT*CONV_1_INPUT*CHANNELS];
 
+    // set calculated weights for this network
+    // TODOOOOOOOOO
+
+    float weightsConv1[CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1 * CHANNELS];
+    float weightsConv2[CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1];
+    float weightsDense[DENSE_INPUT*DENSE_INPUT* FILTERS_2 * SOFTMAX_INPUT];
+    qDebug() << "Parsing weights" << endl;
+    {
+        ifstream file("/home/mo/NeuroLab_Resources/weights_conv1");
+        if(file.is_open())
+        {
+            for(int i = 0; i < CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1; ++i)
+            {
+                file >> weightsConv1[i];
+            }
+        }
+        // parsing weights for conv 2
+        ifstream file1("/home/mo/NeuroLab_Resources/weights_conv2");
+        if(file1.is_open())
+        {
+            for(int i = 0; i < CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2; ++i)
+            {
+                file1 >> weightsConv2[i];
+            }
+        }
+        // parsing weights for dense
+        ifstream file2("/home/mo/NeuroLab_Resources/weights_dense");
+        if(file2.is_open())
+        {
+            for(int i = 0; i < DENSE_INPUT * DENSE_INPUT * FILTERS_2; ++i)
+            {
+                file2 >> weightsDense[i];
+            }
+        }
+    }
+    qDebug() << "Setting weights" << endl;
+    conv1->setWeights(clEnv,weightsConv1,CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1);
+    conv2->setWeights(clEnv,weightsConv1,CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2);
+    dense->setWeights(clEnv,weightsConv1,DENSE_INPUT * DENSE_INPUT * FILTERS_2);
+    qDebug() << "Reading folders and images" << endl;
+
     for(auto &item:dataSet)
     {
-
 
         cv::Mat img = cv::imread(item);
         if(img.empty())
@@ -122,7 +157,9 @@ vector<Result> NeuroLabNet::classify() {
                 }
             }
         }
+        // set data in the first layer
         this->conv1->setInputs(clEnv,pixels,CONV_1_INPUT*CONV_1_INPUT*CHANNELS);
+
         // start forward passing
         this->conv1->computeForward(clEnv,BATCH_SIZE,FILTERS_1);
         this->relu1->computeForward(clEnv,BATCH_SIZE,FILTERS_1);
@@ -133,7 +170,7 @@ vector<Result> NeuroLabNet::classify() {
         this->dense->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
         this->soft->computeForward(clEnv,BATCH_SIZE,SOFTMAX_INPUT);
         //////////////////
-        float* prob = this->soft->getOutputs(clEnv,BATCH_SIZE,5,1,1,nullptr);
+        float* prob = this->soft->getOutputs(clEnv,BATCH_SIZE,SOFTMAX_INPUT,1,1,nullptr);
         Result result;
         result.setPath(item);
         result.setLabelsAndProb(getLabelWithProb(prob));
@@ -144,15 +181,23 @@ vector<Result> NeuroLabNet::classify() {
 
 void NeuroLabNet::train(string weightsDir, string dataSetDir) {
     // parsing weights for conv 1
-    float weightsConv1[CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1];
-    float weightsConv2[CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2];
-    float weightsDense[DENSE_INPUT*DENSE_INPUT* FILTERS_2];
+    float weightsConv1[CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1 * CHANNELS];
+    float weightsConv2[CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1];
+    float weightsDense[DENSE_INPUT*DENSE_INPUT* FILTERS_2 * SOFTMAX_INPUT];
+
+    float biasesConv1[FILTERS_1] = {0};
+    float biasesConv2[FILTERS_2] = {0};
+    float biasesDense[SOFTMAX_INPUT] = {0};
+
+    conv1->setLearningRate(0.03);
+    conv2->setLearningRate(0.03);
+    dense->setLearningRate(0.03);
     qDebug() << "Parsing weights" << endl;
     {
         ifstream file(weightsDir+"/weights_conv1");
         if(file.is_open())
         {
-            for(int i = 0; i < CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1; ++i)
+            for(int i = 0; i < CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1* CHANNELS; ++i)
             {
                 file >> weightsConv1[i];
             }
@@ -161,7 +206,7 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
         ifstream file1(weightsDir+"/weights_conv2");
         if(file1.is_open())
         {
-            for(int i = 0; i < CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2; ++i)
+            for(int i = 0; i < CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1; ++i)
             {
                 file1 >> weightsConv2[i];
             }
@@ -170,16 +215,19 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
         ifstream file2(weightsDir+"/weights_dense");
         if(file2.is_open())
         {
-            for(int i = 0; i < DENSE_INPUT * DENSE_INPUT * FILTERS_2; ++i)
+            for(int i = 0; i < DENSE_INPUT * DENSE_INPUT * FILTERS_2 * SOFTMAX_INPUT; ++i)
             {
                 file2 >> weightsDense[i];
             }
         }
     }
     qDebug() << "Setting weights" << endl;
-    conv1->setWeights(clEnv,weightsConv1,CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1);
-    conv2->setWeights(clEnv,weightsConv1,CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2);
-    dense->setWeights(clEnv,weightsConv1,DENSE_INPUT * DENSE_INPUT * FILTERS_2);
+    conv1->setWeights(clEnv,weightsConv1,CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1 * CHANNELS);
+    conv2->setWeights(clEnv,weightsConv2,CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1);
+    dense->setWeights(clEnv,weightsDense,DENSE_INPUT * DENSE_INPUT * FILTERS_2 * SOFTMAX_INPUT);
+    conv1->setBiases(clEnv, biasesConv1, FILTERS_1);
+    conv2->setBiases(clEnv, biasesConv2, FILTERS_2);
+    dense->setBiases(clEnv, biasesDense, SOFTMAX_INPUT);
     qDebug() << "Reading folders and images" << endl;
     // read image list from directory
     QDir dir(QString::fromStdString(dataSetDir));
@@ -256,41 +304,34 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
             this->conv2->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
             this->relu2->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
             this->max2->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
-            this->dense->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
+            this->dense->computeForward(clEnv,BATCH_SIZE,SOFTMAX_INPUT);
             this->soft->computeForward(clEnv,BATCH_SIZE,SOFTMAX_INPUT);
 
-            // compute error with Loss (using labels as well)
-            //float* outputs = this->soft->getOutputs(clEnv,BATCH_SIZE,SOFTMAX_INPUT,1,1,nullptr);
+            // set target distribution
             float targetDistribution[] = {0,0,0,0,0};
-            if(folder.toStdString() == "bianca"){
-                targetDistribution[0] = 1;
-
-            }else if (folder.toStdString() == "bonny"){
-
-                targetDistribution[1] = 1;
-
-            }else if(folder.toStdString() == "jens"){
-                targetDistribution[2] = 1;
-
-            }else if (folder.toStdString() == "mohamad"){
-                targetDistribution[3] = 1;
-
-            }else if(folder.toStdString() == "niklas"){
-                targetDistribution[4] = 1;
-
+            for(int j = 0;j<SOFTMAX_INPUT;j++)
+            {
+                if(folder.toStdString() == labels[j])
+                {
+                    targetDistribution[j] = 1;
+                }
             }
-            float * actualDistribution = soft->getOutputs(clEnv,BATCH_SIZE,5,1,1,nullptr);
-            float lossOutput[5] ={0};
+
+
+            // get actual distribtuion
+            float * actualDistribution = soft->getOutputs(clEnv,BATCH_SIZE,SOFTMAX_INPUT,1,1,nullptr);
+            float lossOutput[SOFTMAX_INPUT] ={0};
+
             //float * lossOutput=lossFunction->getOutputError(outputs,folder.toStdString(),dataSetDir);
-            for(unsigned int i=0;i<5;i++)
+            for(unsigned int i=0;i<SOFTMAX_INPUT;i++)
             {
                 loss += targetDistribution[i]*std::log(actualDistribution[i]);
             }
             // save loss in case needed
             this->loss = -loss;
+            // calculate derivative
             for (size_t j=0; j<5;j++)
-            {
-                // derivative
+            {                
                 lossOutput[j] =-(targetDistribution[j]/actualDistribution[j]);
             }
             //set upstream gradient
@@ -307,17 +348,19 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
         }
     }
     qDebug()<<"Saving weights and biases"<< endl;
-    float* calculatedWeightsConv1 = conv1->getWeights(clEnv,CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1);
-    float* calculatedWeightsConv2 = conv2->getWeights(clEnv,CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2);
-    float* calculatedWeightsDense = dense->getWeights(clEnv,DENSE_INPUT * DENSE_INPUT* FILTERS_2);
-    
+
+    float* calculatedWeightsConv1 = conv1->getWeights(clEnv,CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1 * CHANNELS);
+    float* calculatedWeightsConv2 = conv2->getWeights(clEnv,CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1);
+    float* calculatedWeightsDense = dense->getWeights(clEnv,DENSE_INPUT * DENSE_INPUT* FILTERS_2 * SOFTMAX_INPUT);
+
     //////// Tried using standard fstream / ofstream but even with setting the right flags, 
     //////// i couldnt create a file that doesnt exist. So using QFile and QStream
+
     QFile file(QString::fromStdString(weightsDir)+"/new/weights_conv1");
     QTextStream stream(&file);
     if(file.open(QIODevice::WriteOnly |QIODevice::Text))
     {
-        for(int i = 0; i < CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1; ++i)
+        for(int i = 0; i < CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1 * CHANNELS; ++i)
         {
             stream << calculatedWeightsConv1[i] << " ";
         }
@@ -327,7 +370,7 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
     QTextStream stream1(&file1);
     if(file.open(QIODevice::WriteOnly |QIODevice::Text))
     {
-        for(int i = 0; i < CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1; ++i)
+        for(int i = 0; i < CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1; ++i)
         {
             stream1 << calculatedWeightsConv2[i] << " ";
         }
@@ -337,7 +380,7 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
     QTextStream stream2(&file2);
     if(file.open(QIODevice::WriteOnly |QIODevice::Text))
     {
-        for(int i = 0; i < CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1; ++i)
+        for(int i = 0; i < DENSE_INPUT * DENSE_INPUT * FILTERS_2 * SOFTMAX_INPUT; ++i)
         {
             stream2 << calculatedWeightsDense[i] << " ";
         }
