@@ -275,7 +275,6 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
             qDebug()<<"Training with image Nr. "<< count << endl;
             qDebug()<< dirOfImages.absolutePath() << image << endl;
             // get pixels from path
-            // CRASHING HERE ON THE SECOND IMAGE
             cv::Mat img = cv::imread(dirOfImages.absolutePath().toStdString() +"/"+ image.toStdString());
             if(img.empty())
             {
@@ -328,9 +327,11 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
                 }
             }
 
+
             // get actual distribtuion
             float * actualDistribution = soft->getOutputs(clEnv,BATCH_SIZE,SOFTMAX_INPUT,1,1,nullptr);
             float lossOutput[SOFTMAX_INPUT] ={0};
+
             //float * lossOutput=lossFunction->getOutputError(outputs,folder.toStdString(),dataSetDir);
             for(unsigned int i=0;i<SOFTMAX_INPUT;i++)
             {
@@ -357,11 +358,14 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
         }
     }
     qDebug()<<"Saving weights and biases"<< endl;
+
     float* calculatedWeightsConv1 = conv1->getWeights(clEnv,CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1 * CHANNELS);
     float* calculatedWeightsConv2 = conv2->getWeights(clEnv,CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1);
     float* calculatedWeightsDense = dense->getWeights(clEnv,DENSE_INPUT * DENSE_INPUT* FILTERS_2 * SOFTMAX_INPUT);
 
+
     QFile file("team/weights_conv1");
+
     QTextStream stream(&file);
     if(file.open(QIODevice::WriteOnly |QIODevice::Text))
     {

@@ -71,6 +71,27 @@ void MainWindow::uncheckAllHardware(){
         }
     }
 }
+
+void MainWindow::setAllExistingHardwareUnchecked() {
+    if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
+                ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+    if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
+                ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+    if (ui->Mov2_checkbox->checkState() != Qt::CheckState::Unchecked) {
+                ui->Mov2_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+    if (ui->Mov3_checkbox->checkState() != Qt::CheckState::Unchecked) {
+                ui->Mov3_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+    if (ui->Mov4_checkbox->checkState() != Qt::CheckState::Unchecked) {
+                ui->Mov4_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+    if (ui->CPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
+                ui->CPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+    if (ui->GPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
+                ui->GPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+    if (ui->FPGA_checkbox->checkState() != Qt::CheckState::Unchecked) {
+                ui->FPGA_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+
+}
+
 void MainWindow::selectAllHardware() {
     if (guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION") {
         return;
@@ -239,7 +260,11 @@ void MainWindow::on_NeuroLabNet_radio_button_clicked()
     setEnabledModes(false);
 
     ui->CPU_checkbox->setCheckState(Qt::Checked);
+    qDebug()<<QString::fromStdString(guiSettings.getNn())<<endl;
+    for (string hw : guiSettings.getSelectedHardware()) {
 
+        qDebug()<<QString::fromStdString(hw)<<endl;
+    }
 }
 
 void MainWindow::on_GoogleNet_radio_button_clicked()
@@ -409,6 +434,7 @@ void MainWindow::on_SelectAllHardware_clicked()
 
 void MainWindow::on_Refresh_hardware_clicked()
 {
+    setAllExistingHardwareUnchecked();
     viewController->displayAvailableHardware();
     uncheckAllHardware();
     guiSettings.clearHardware();
