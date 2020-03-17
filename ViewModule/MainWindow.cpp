@@ -260,7 +260,11 @@ void MainWindow::on_NeuroLabNet_radio_button_clicked()
     setEnabledModes(false);
 
     ui->CPU_checkbox->setCheckState(Qt::Checked);
+    qDebug()<<QString::fromStdString(guiSettings.getNn())<<endl;
+    for (string hw : guiSettings.getSelectedHardware()) {
 
+        qDebug()<<QString::fromStdString(hw)<<endl;
+    }
 }
 
 void MainWindow::on_GoogleNet_radio_button_clicked()
