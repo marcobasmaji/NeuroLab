@@ -38,6 +38,9 @@ public:
 
 
 
+    string getNewWeightsDirectory() const;
+    void setNewWeightsDirectory(string value);
+
 private:
     string nn;
     string mode;
@@ -46,6 +49,7 @@ private:
 
     string dataSetDirectory;
     string weightsDirectory;
+    string newWeightsDirectory;
 };
 
 #endif // GUISETTINGS_H

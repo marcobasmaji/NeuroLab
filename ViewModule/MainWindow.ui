@@ -609,7 +609,7 @@
      <widget class="QPushButton" name="load_dataset_button">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>310</x>
         <y>100</y>
         <width>106</width>
         <height>30</height>
@@ -622,7 +622,7 @@
      <widget class="QPushButton" name="select_weights_button">
       <property name="geometry">
        <rect>
-        <x>260</x>
+        <x>310</x>
         <y>170</y>
         <width>106</width>
         <height>30</height>
@@ -651,9 +651,9 @@
      <widget class="QLabel" name="dataset_path_label">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>440</x>
         <y>100</y>
-        <width>471</width>
+        <width>541</width>
         <height>21</height>
        </rect>
       </property>
@@ -664,9 +664,9 @@
      <widget class="QLabel" name="weights_path_label">
       <property name="geometry">
        <rect>
-        <x>380</x>
+        <x>440</x>
         <y>170</y>
-        <width>471</width>
+        <width>551</width>
         <height>21</height>
        </rect>
       </property>
@@ -707,6 +707,45 @@
         <y>410</y>
         <width>431</width>
         <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="new_weights_dir_button">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>240</y>
+        <width>106</width>
+        <height>30</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Select</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>240</y>
+        <width>281</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Select directory for new weights</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="new_weights_dir_label">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>240</y>
+        <width>541</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">

@@ -105,6 +105,8 @@ private slots:
 
     void on_train_tab_widget_tabCloseRequested(int index);
 
+    void on_new_weights_dir_button_clicked();
+
 private:
 
     Ui::MainWindow *ui;
@@ -132,5 +134,6 @@ private:
     void setBackgroundImage(string imagePath);
     void setBackgroundImage();
     void setAllExistingHardwareUnchecked();
+    void training_running();
 };
 #endif // MAINWINDOW_H(imageToBeRemoved)

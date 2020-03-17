@@ -43,7 +43,7 @@ vector<Result> OpenVinoEnv::classify() {
     }
     // creating infer requests on the provided hardware platforms
     try {
-        CreateRequestsWithInput();
+        CreateRequestsWithInput(); //betrifft hw
     } catch (const InferenceEngine::details::InferenceEngineException &e) {
         Result r;
         r.setPath("ERROR loading the network on the hardware plugin(s)");

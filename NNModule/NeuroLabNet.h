@@ -24,7 +24,7 @@ public:
     NeuroLabNet();
 	void init();
     vector<Result> classify();
-    void train(string weightsDir, string dataSetDir);
+    void train(string weightsDir, string dataSetDir, string newWeightsDir);
 	void executeTransferLearning();
     void updateDataSet(vector<string> dataSet);
     vector<pair<string,float>> getLabelWithProb(float prob[]);
