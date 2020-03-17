@@ -17,7 +17,7 @@ void MasterController::setPaths(vector<string> paths)
 
 }
 
-void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages, vector<pair<string, string>> hwNamesMap)
+void MasterController::classify(string nn, string mode, vector<string> selectedHardware, int nrImages)
 {
     //-------------hier brauchen wir noch----------------------------------------------------------
 
@@ -43,7 +43,13 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
         qDebug()<<"Master distribution translation"<<QString::fromStdString(hwDistributionTransfered.back().first)<<" "<<hwDistributionTransfered.back().second<<endl; // debug: working
     }
 
-    nnObserver.setDistribution(hwDistributionTransfered);
+    if (nn.compare("NEUROLABNET") == 0) {
+
+        nnObserver.setDistribution({{"CPU", nrImages}});
+    } else {
+
+        nnObserver.setDistribution(hwDistributionTransfered);
+    }
     //----------------------------------------------------------------------------------------------
     vector<Result> results = nnObserver.classify();
     for(Result r : results){
