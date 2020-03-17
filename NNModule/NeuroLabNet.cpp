@@ -84,14 +84,18 @@ vector<Result> NeuroLabNet::classify() {
     float pixels[BATCH_SIZE*CONV_1_INPUT*CONV_1_INPUT*CHANNELS];
 
     // set calculated weights for this network
-    // TODOOOOOOOOO
 
     float weightsConv1[CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1 * CHANNELS];
     float weightsConv2[CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1];
     float weightsDense[DENSE_INPUT*DENSE_INPUT* FILTERS_2 * SOFTMAX_INPUT];
+
+    float biasesConv1[FILTERS_1] = {0};
+    float biasesConv2[FILTERS_2] = {0};
+    float biasesDense[SOFTMAX_INPUT] = {0};
+
     qDebug() << "Parsing weights" << endl;
     {
-        ifstream file("/home/mo/NeuroLab_Resources/weights_conv1");
+        ifstream file("team/weights_conv1");
         if(file.is_open())
         {
             for(int i = 0; i < CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1; ++i)
@@ -100,7 +104,7 @@ vector<Result> NeuroLabNet::classify() {
             }
         }
         // parsing weights for conv 2
-        ifstream file1("/home/mo/NeuroLab_Resources/weights_conv2");
+        ifstream file1("team/weights_conv2");
         if(file1.is_open())
         {
             for(int i = 0; i < CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2; ++i)
@@ -109,7 +113,7 @@ vector<Result> NeuroLabNet::classify() {
             }
         }
         // parsing weights for dense
-        ifstream file2("/home/mo/NeuroLab_Resources/weights_dense");
+        ifstream file2("team/weights_dense");
         if(file2.is_open())
         {
             for(int i = 0; i < DENSE_INPUT * DENSE_INPUT * FILTERS_2; ++i)
@@ -122,6 +126,12 @@ vector<Result> NeuroLabNet::classify() {
     conv1->setWeights(clEnv,weightsConv1,CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1);
     conv2->setWeights(clEnv,weightsConv1,CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2);
     dense->setWeights(clEnv,weightsConv1,DENSE_INPUT * DENSE_INPUT * FILTERS_2);
+
+    conv1->setBiases(clEnv, biasesConv1, FILTERS_1);
+    conv2->setBiases(clEnv, biasesConv2, FILTERS_2);
+    dense->setBiases(clEnv, biasesDense, SOFTMAX_INPUT);
+
+
     qDebug() << "Reading folders and images" << endl;
 
     for(auto &item:dataSet)
@@ -351,7 +361,7 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
     float* calculatedWeightsConv2 = conv2->getWeights(clEnv,CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1);
     float* calculatedWeightsDense = dense->getWeights(clEnv,DENSE_INPUT * DENSE_INPUT* FILTERS_2 * SOFTMAX_INPUT);
 
-    QFile file(QString::fromStdString(weightsDir)+"/new/weights_conv1");
+    QFile file("team/weights_conv1");
     QTextStream stream(&file);
     if(file.open(QIODevice::WriteOnly |QIODevice::Text))
     {
@@ -360,26 +370,29 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir) {
             stream << calculatedWeightsConv1[i] << " ";
         }
     }
+    file.close();
     // parsing weights for conv 2
-    QFile file1(QString::fromStdString(weightsDir)+"/new/weights_conv2");
+    QFile file1("team/weights_conv2");
     QTextStream stream1(&file1);
-    if(file.open(QIODevice::WriteOnly |QIODevice::Text))
+    if(file1.open(QIODevice::WriteOnly |QIODevice::Text))
     {
         for(int i = 0; i < CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1; ++i)
         {
             stream1 << calculatedWeightsConv2[i] << " ";
         }
     }
+    file1.close();
     // parsing weights for dense
-    QFile file2(QString::fromStdString(weightsDir)+"/new/weights_dense");
+    QFile file2("team/weights_dense");
     QTextStream stream2(&file2);
-    if(file.open(QIODevice::WriteOnly |QIODevice::Text))
+    if(file2.open(QIODevice::WriteOnly |QIODevice::Text))
     {
         for(int i = 0; i < DENSE_INPUT * DENSE_INPUT * FILTERS_2 * SOFTMAX_INPUT; ++i)
         {
             stream2 << calculatedWeightsDense[i] << " ";
         }
     }
+    file2.close();
 
 }
 
