@@ -690,17 +690,19 @@ void MainWindow::on_select_weights_button_clicked()
 
 void MainWindow::on_train_button_clicked()
 {
-    string weightsDir;
-    string dataSetDir;
-    ui->train_success_label->setText("Training in progress. Please wait. (aber eigentlich nicht)");
-    viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory());
+    training_running();
+    viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory());
+}
 
+void MainWindow::training_running() {
 
+    ui->train_success_label->setText("Training in progress. Please wait.");
 }
 
 void MainWindow::enableTrainIfPossible() {
 
-    if (!guiSettings.getWeightsDirectory().empty() && !guiSettings.getDataSetDirectory().empty()){
+    if (!guiSettings.getWeightsDirectory().empty() && !guiSettings.getDataSetDirectory().empty()
+            && !guiSettings.getNewWeightsDirectory().empty()){
         ui->train_button->setEnabled(true);
     };
 
@@ -734,7 +736,7 @@ void MainWindow::setBackgroundImage(){
 }
 
 void MainWindow::displayTrainingResults() {
-    ui->train_success_label->setText("Training successfull. Updated weights file saved in" +
+    ui->train_success_label->setText("Training successfull. Updated weights file saved in " +
                                      QString::fromStdString(guiSettings.getWeightsDirectory()));
 }
 
@@ -742,4 +744,15 @@ void MainWindow::showErrorMessage(string mes){
     TrainingPanel *popUp = new TrainingPanel(this);
     popUp->setErrorMessage(mes);
     popUp->show();
+}
+
+void MainWindow::on_new_weights_dir_button_clicked()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Select folder for new train"),
+                                                         "/home",
+                                                         QFileDialog::ShowDirsOnly
+                                                         | QFileDialog::DontResolveSymlinks);
+    ui->new_weights_dir_label->setText(dir);
+    guiSettings.setNewWeightsDirectory(dir.toStdString());
+    enableTrainIfPossible();
 }

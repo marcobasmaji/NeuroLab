@@ -176,9 +176,9 @@ void ViewController::displayAvailableHardware()
     }
 }
 
-void ViewController::train(string weightsDir, string dataSetDir){
+void ViewController::train(string weightsDir, string dataSetDir, string newWeightsDir){
 
-   master->train(weightsDir, dataSetDir);
+   master->train(weightsDir, dataSetDir, newWeightsDir);
 
 
    mainWindow->displayTrainingResults();

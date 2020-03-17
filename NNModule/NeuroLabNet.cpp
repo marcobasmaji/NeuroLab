@@ -179,7 +179,7 @@ vector<Result> NeuroLabNet::classify() {
     return results;
 }
 
-void NeuroLabNet::train(string weightsDir, string dataSetDir) {
+void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsDir) {
     // parsing weights for conv 1
     float weightsConv1[CONV_1_KERNEL * CONV_1_KERNEL * FILTERS_1 * CHANNELS];
     float weightsConv2[CONV_2_KERNEL * CONV_2_KERNEL * FILTERS_2 * FILTERS_1];
