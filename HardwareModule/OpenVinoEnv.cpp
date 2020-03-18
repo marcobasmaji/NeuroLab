@@ -21,6 +21,7 @@ OpenVinoEnv::OpenVinoEnv() {
     chooseNeuralNet("ALEXNET");
 }
 vector<Result> OpenVinoEnv::classify() {
+    this->endResults.clear();
     // reading the network from the file
     try {
         readIR();
@@ -35,18 +36,21 @@ vector<Result> OpenVinoEnv::classify() {
     try {
         configureInputAndOutput();
     } catch (const InferenceEngine::details::InferenceEngineException &e) {
+        // in this case, the exceptions adds the error cause and then classifies on the HETERO plugin
         Result r;
         r.setPath("ERROR reading the images");
-        vector<Result> v;
-        v.push_back(r);
-        return v;
+        //vector<Result> v;
+        endResults.push_back(r);
+        //return v;
+        setDistribution({{"HETERO:CPU,MYRIAD", imageNames.size()}});
+        return classify();
     }
     // creating infer requests on the provided hardware platforms
     try {
         CreateRequestsWithInput(); //betrifft hw
     } catch (const InferenceEngine::details::InferenceEngineException &e) {
         Result r;
-        r.setPath("ERROR loading the network on the hardware plugin(s)");
+        r.setPath("ERROR loading the network on the Myriad plugin(s).\nRunning classification on the other chosen hardware.\nTip:\nTry unplugging and replugging the Myriad devices. ");
         vector<Result> v;
         v.push_back(r);
         return v;
@@ -155,7 +159,7 @@ void OpenVinoEnv::infer()
 
 vector<Result> OpenVinoEnv::processOutput()
 {
-    this->endResults.clear();
+
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
     QFileInfo file2("../alexnetLabels.txt");
@@ -222,6 +226,10 @@ void OpenVinoEnv::setImageNames(std::vector<std::string> imageNames)
 
 void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
 {
+    // this method will be used to deploy a specific amount of images on a specific Hardware.
+    // The distribution comes from the prediction unit.
+    // While some  of the Movidius sticks sjut shut down sometimes, we decided in this case to use the other
+    // chosen hardware
     this->distribution.clear();
     this->requests.clear();
     if(platforms.size() ==1)
