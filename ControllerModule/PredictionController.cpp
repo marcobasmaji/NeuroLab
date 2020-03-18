@@ -18,7 +18,7 @@ DataResults PredictionController::calculatePrediction(int numberOfImages,std::st
     std::string alexnet = "ALEXNET";
 	std::string neuronet = "NEUROLABNET";
     std::string googlenet = "GOOGLENET";
-    if (NN.compare(alexnet) == 0 || NN.compare(googlenet)) {
+    if (NN.compare(alexnet) == 0 || NN.compare(googlenet)==0) {
 		AlexPrediction *alex = new AlexPrediction;
 		Mode* mode = alex->chooseMode(Operationmode);
 		std::vector<Hardware> vectorResults = (mode->distributeAndPredict(availableHardware, numberOfImages));
