@@ -21,7 +21,6 @@ OpenVinoEnv::OpenVinoEnv() {
     chooseNeuralNet("ALEXNET");
 }
 vector<Result> OpenVinoEnv::classify() {
-    setDistribution({{"HETERO:CPU,MYRIAD", imageNames.size()}});
     this->endResults.clear();
     // reading the network from the file
     try {
@@ -227,6 +226,10 @@ void OpenVinoEnv::setImageNames(std::vector<std::string> imageNames)
 
 void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
 {
+    // this method will be used to deploy a specific amount of images on a specific Hardware.
+    // The distribution comes from the prediction unit.
+    // While some  of the Movidius sticks sjut shut down sometimes, we decided in this case to use the other
+    // chosen hardware
     this->distribution.clear();
     this->requests.clear();
     if(platforms.size() ==1)
