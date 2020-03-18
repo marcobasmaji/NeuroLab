@@ -21,6 +21,8 @@ OpenVinoEnv::OpenVinoEnv() {
     chooseNeuralNet("ALEXNET");
 }
 vector<Result> OpenVinoEnv::classify() {
+    setDistribution({{"HETERO:CPU,MYRIAD", imageNames.size()}});
+    this->endResults.clear();
     // reading the network from the file
     try {
         readIR();
@@ -35,18 +37,21 @@ vector<Result> OpenVinoEnv::classify() {
     try {
         configureInputAndOutput();
     } catch (const InferenceEngine::details::InferenceEngineException &e) {
+        // in this case, the exceptions adds the error cause and then classifies on the HETERO plugin
         Result r;
         r.setPath("ERROR reading the images");
-        vector<Result> v;
-        v.push_back(r);
-        return v;
+        //vector<Result> v;
+        endResults.push_back(r);
+        //return v;
+        setDistribution({{"HETERO:CPU,MYRIAD", imageNames.size()}});
+        return classify();
     }
     // creating infer requests on the provided hardware platforms
     try {
         CreateRequestsWithInput();
     } catch (const InferenceEngine::details::InferenceEngineException &e) {
         Result r;
-        r.setPath("ERROR loading the network on the hardware plugin(s)");
+        r.setPath("ERROR loading the network on the Myriad plugin(s).\nRunning classification on the other chosen hardware.\nTip:\nTry unplugging and replugging the Myriad devices. ");
         vector<Result> v;
         v.push_back(r);
         return v;
@@ -155,7 +160,7 @@ void OpenVinoEnv::infer()
 
 vector<Result> OpenVinoEnv::processOutput()
 {
-    this->endResults.clear();
+
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
     QFileInfo file2("../alexnetLabels.txt");
