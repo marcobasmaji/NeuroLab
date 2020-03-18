@@ -364,7 +364,7 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
     float* calculatedWeightsDense = dense->getWeights(clEnv,DENSE_INPUT * DENSE_INPUT* FILTERS_2 * SOFTMAX_INPUT);
 
 
-    QFile file("team/weights_conv1");
+    QFile file(QString::fromStdString(newWeightsDir) +"/weights_conv1");
 
     QTextStream stream(&file);
     if(file.open(QIODevice::WriteOnly |QIODevice::Text))
@@ -376,7 +376,7 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
     }
     file.close();
     // parsing weights for conv 2
-    QFile file1("team/weights_conv2");
+    QFile file1(QString::fromStdString(newWeightsDir) +"/weights_conv2");
     QTextStream stream1(&file1);
     if(file1.open(QIODevice::WriteOnly |QIODevice::Text))
     {
@@ -387,7 +387,7 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
     }
     file1.close();
     // parsing weights for dense
-    QFile file2("team/weights_dense");
+    QFile file2(QString::fromStdString(newWeightsDir) +"/weights_dense");
     QTextStream stream2(&file2);
     if(file2.open(QIODevice::WriteOnly |QIODevice::Text))
     {
