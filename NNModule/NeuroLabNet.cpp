@@ -266,95 +266,99 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
         QDir dirOfImages(QString::fromStdString(dataSetDir)+"/"+folder);
         QStringList images = dirOfImages.entryList((QStringList()<<"*.jpg"<<"*.JPG",QDir::Files));
         unsigned int count = 0;
-        for(auto & image:images)
+        for(unsigned int epoch = 0; epoch < 15; epoch++)
         {
-            if(image.startsWith(".")){
-                continue;
-            }
-            count++;
-            qDebug()<<"Training with image Nr. "<< count << endl;
-            qDebug()<< dirOfImages.absolutePath() << image << endl;
-            // get pixels from path
-            cv::Mat img = cv::imread(dirOfImages.absolutePath().toStdString() +"/"+ image.toStdString());
-            if(img.empty())
+            for(auto & image:images)
             {
-                cerr<<"Image is invalid"<<endl;
-                continue;
-            }
-            if(img.channels()!=3)
-            {
-                cerr<<"Image doesn't have enough channels"<<endl;
-                continue;
-            }
-            cv::Mat resizedImg;
-            cv::Size size(CONV_1_INPUT,CONV_1_INPUT);
-            // resize image
-            cv::resize(img,resizedImg,size,cv::INTER_LINEAR);
-
-            float pixels[CONV_1_INPUT*CONV_1_INPUT*CHANNELS];
-
-            for(unsigned int i =0;i<CONV_1_INPUT;i++)
-            {
-                for(unsigned int j =0;j<CONV_1_INPUT;j++)
+                if(image.startsWith(".")){
+                    continue;
+                }
+                count++;
+                qDebug()<<"Training with image Nr. "<< count << endl;
+                qDebug()<< dirOfImages.absolutePath() << image << endl;
+                // get pixels from path
+                cv::Mat img = cv::imread(dirOfImages.absolutePath().toStdString() +"/"+ image.toStdString());
+                if(img.empty())
                 {
-                    for(unsigned int h =0;h<CHANNELS;h++)
+                    cerr<<"Image is invalid"<<endl;
+                    continue;
+                }
+                if(img.channels()!=3)
+                {
+                    cerr<<"Image doesn't have enough channels"<<endl;
+                    continue;
+                }
+                cv::Mat resizedImg;
+                cv::Size size(CONV_1_INPUT,CONV_1_INPUT);
+                // resize image
+                cv::resize(img,resizedImg,size,cv::INTER_LINEAR);
+
+                float pixels[CONV_1_INPUT*CONV_1_INPUT*CHANNELS];
+
+                for(unsigned int i =0;i<CONV_1_INPUT;i++)
+                {
+                    for(unsigned int j =0;j<CONV_1_INPUT;j++)
                     {
-                        // the function at returns an array with the length 3, whereby each field has the red, blue or green value
-                        //pixels[i][j][h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
-                        pixels[(i * CONV_1_INPUT + j) * CHANNELS + h] = resizedImg.at<cv::Vec3b>(i,j).val[h]/255.0;
+                        for(unsigned int h =0;h<CHANNELS;h++)
+                        {
+                            // the function at returns an array with the length 3, whereby each field has the red, blue or green value
+                            //pixels[i][j][h] = resizedImg.at<cv::Vec3b>(i,j).val[h];
+                            pixels[(i * CONV_1_INPUT + j) * CHANNELS + h] = resizedImg.at<cv::Vec3b>(i,j).val[h]/255.0;
+                        }
                     }
                 }
-            }
-            this->conv1->setInputs(clEnv,pixels,CONV_1_INPUT*CONV_1_INPUT*CHANNELS);
+                this->conv1->setInputs(clEnv,pixels,CONV_1_INPUT*CONV_1_INPUT*CHANNELS);
 
-            // start forward passing
-            this->conv1->computeForward(clEnv,BATCH_SIZE,FILTERS_1);
-            this->relu1->computeForward(clEnv,BATCH_SIZE,FILTERS_1);
-            this->max1->computeForward(clEnv,BATCH_SIZE,FILTERS_1);
-            this->conv2->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
-            this->relu2->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
-            this->max2->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
-            this->dense->computeForward(clEnv,BATCH_SIZE,SOFTMAX_INPUT);
-            this->soft->computeForward(clEnv,BATCH_SIZE,SOFTMAX_INPUT);
+                // start forward passing
+                this->conv1->computeForward(clEnv,BATCH_SIZE,FILTERS_1);
+                this->relu1->computeForward(clEnv,BATCH_SIZE,FILTERS_1);
+                this->max1->computeForward(clEnv,BATCH_SIZE,FILTERS_1);
+                this->conv2->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
+                this->relu2->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
+                this->max2->computeForward(clEnv,BATCH_SIZE,FILTERS_2);
+                this->dense->computeForward(clEnv,BATCH_SIZE,SOFTMAX_INPUT);
+                this->soft->computeForward(clEnv,BATCH_SIZE,SOFTMAX_INPUT);
 
-            // set target distribution
-            float targetDistribution[] = {0,0,0,0,0};
-            for(int j = 0;j<SOFTMAX_INPUT;j++)
-            {
-                if(folder.toStdString() == labels[j])
+                // set target distribution
+                float targetDistribution[] = {0,0,0,0,0};
+                for(int j = 0;j<SOFTMAX_INPUT;j++)
                 {
-                    targetDistribution[j] = 1;
+                    if(folder.toStdString() == labels[j])
+                    {
+                        targetDistribution[j] = 1;
+                    }
                 }
-            }
 
 
-            // get actual distribtuion
-            float * actualDistribution = soft->getOutputs(clEnv,BATCH_SIZE,SOFTMAX_INPUT,1,1,nullptr);
-            float lossOutput[SOFTMAX_INPUT] ={0};
+                // get actual distribtuion
+                float * actualDistribution = soft->getOutputs(clEnv,BATCH_SIZE,SOFTMAX_INPUT,1,1,nullptr);
+                float lossOutput[SOFTMAX_INPUT] ={0};
 
-            //float * lossOutput=lossFunction->getOutputError(outputs,folder.toStdString(),dataSetDir);
-            for(unsigned int i=0;i<SOFTMAX_INPUT;i++)
-            {
-                loss += targetDistribution[i]*std::log(actualDistribution[i]);
+                //float * lossOutput=lossFunction->getOutputError(outputs,folder.toStdString(),dataSetDir);
+                for(unsigned int i=0;i<SOFTMAX_INPUT;i++)
+                {
+                    loss += targetDistribution[i]*std::log(actualDistribution[i]);
+                }
+                // save loss in case needed
+                this->loss = -loss;
+                // calculate derivative
+                for (size_t j=0; j<5;j++)
+                {
+                    lossOutput[j] =-(targetDistribution[j]/actualDistribution[j]);
+                }
+                //set upstream gradient
+                soft->setOutputErrors(clEnv,lossOutput,5);
+                // back propagate
+                conv1->computeErrorComp(clEnv,BATCH_SIZE);
+                relu1->computeErrorComp(clEnv,BATCH_SIZE);
+                max1->computeErrorComp(clEnv,BATCH_SIZE);
+                conv2->computeErrorComp(clEnv,BATCH_SIZE);
+                relu2->computeErrorComp(clEnv,BATCH_SIZE);
+                max2->computeErrorComp(clEnv,BATCH_SIZE);
+                dense->computeErrorComp(clEnv,BATCH_SIZE);
+                soft->computeErrorComp(clEnv,BATCH_SIZE);
+
             }
-            // save loss in case needed
-            this->loss = -loss;
-            // calculate derivative
-            for (size_t j=0; j<5;j++)
-            {                
-                lossOutput[j] =-(targetDistribution[j]/actualDistribution[j]);
-            }
-            //set upstream gradient
-            soft->setOutputErrors(clEnv,lossOutput,5);
-            // back propagate
-            conv1->computeErrorComp(clEnv,BATCH_SIZE);
-            relu1->computeErrorComp(clEnv,BATCH_SIZE);
-            max1->computeErrorComp(clEnv,BATCH_SIZE);
-            conv2->computeErrorComp(clEnv,BATCH_SIZE);
-            relu2->computeErrorComp(clEnv,BATCH_SIZE);
-            max2->computeErrorComp(clEnv,BATCH_SIZE);
-            dense->computeErrorComp(clEnv,BATCH_SIZE);
-            soft->computeErrorComp(clEnv,BATCH_SIZE);
         }
     }
     qDebug()<<"Saving weights and biases"<< endl;
