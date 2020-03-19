@@ -21,6 +21,7 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
 {
     //-------------hier brauchen wir noch----------------------------------------------------------
 
+    cerr<<"Master nn "<<nn<<endl;
     nnObserver.setCurrentNN(nn);
 
     qDebug()<<"master setting in classify 1"<<endl;

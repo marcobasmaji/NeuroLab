@@ -23,38 +23,12 @@ OpenVinoEnv::OpenVinoEnv() {
 vector<Result> OpenVinoEnv::classify() {
     this->endResults.clear();
     // reading the network from the file
-    try {
-        readIR();
-    } catch (const InferenceEngine::details::InferenceEngineException &e) {
-        Result r;
-        r.setPath("ERROR reading the .xml and .bin files");
-        vector<Result> v;
-        v.push_back(r);
-        return v;
-    }
+    readIR();
     // reading and preparing images
-    try {
-        configureInputAndOutput();
-    } catch (const InferenceEngine::details::InferenceEngineException &e) {
-        // in this case, the exceptions adds the error cause and then classifies on the HETERO plugin
-        Result r;
-        r.setPath("ERROR reading the images");
-        //vector<Result> v;
-        endResults.push_back(r);
-        //return v;
-        setDistribution({{"HETERO:CPU,MYRIAD", imageNames.size()}});
-        return classify();
-    }
+    configureInputAndOutput();
+    // in this case, the exceptions adds the error cause and then classifies on the HETERO plugin
     // creating infer requests on the provided hardware platforms
-    try {
-        CreateRequestsWithInput(); //betrifft hw
-    } catch (const InferenceEngine::details::InferenceEngineException &e) {
-        Result r;
-        r.setPath("ERROR loading the network on the Myriad plugin(s).\nRunning classification on the other chosen hardware.\nTip:\nTry unplugging and replugging the Myriad devices. ");
-        vector<Result> v;
-        v.push_back(r);
-        return v;
-    }
+    CreateRequestsWithInput(); //betrifft hw
     // starting classifcation
     infer();
     // getting output
@@ -117,8 +91,9 @@ void OpenVinoEnv::CreateRequestsWithInput()
     for(auto &i : this->distribution)
     {
         InferenceEngine::ExecutableNetwork en;
-        cerr<<"Inferrequest for "<<cnnnetwork.getName()<<" and "<<  i.first<<" and "<< i.second<<endl;
-        en = core.LoadNetwork(cnnnetwork,i.first);
+        InferenceEngine::Core core;
+        cerr<<"Inferrequest for "<<cnnnetwork.getName()<<" and "<<i.first<<" and "<< i.second<<endl;
+        en = core.LoadNetwork(cnnnetwork, i.first);
         InferRequest inferRequest = en.CreateInferRequest();
         for (auto & item : inputInfo) {
 
@@ -152,7 +127,7 @@ void OpenVinoEnv::infer()
 {
     cerr<<"infer function called"<<endl;
     int i = 0;
-//    for(auto &item : requests)
+    //    for(auto &item : requests)
     {
         cerr<< "infer: Classified " << this->distribution[i].second << " images on " << distribution[i].first << endl;
         requests.back().Infer();
@@ -176,9 +151,7 @@ vector<Result> OpenVinoEnv::processOutput()
             labels.push_back(strLine);
         }
     }
-    for(auto &reqeust : this->requests)
-    {
-        Blob::Ptr outputBlob = reqeust.GetBlob(output_info.begin()->first);
+        Blob::Ptr outputBlob = this->requests.back().GetBlob(output_info.begin()->first);
 
 
         ClassificationResult classificationResult(outputBlob, validImageNames,
@@ -186,30 +159,22 @@ vector<Result> OpenVinoEnv::processOutput()
                                                   labels);
         classificationResult.print();
         vector<Result> r = classificationResult.getEndResults();
-        for(auto & item : r)
-        {
-            endResults.push_back(item);
-        }
-    }
-    cerr << "classified with " << this->structurePath << endl;
-    cerr << "Printing out each Hardware combination with its number of images" << endl;
-    for(auto &i:this->distribution)
-    {
-        cerr<< "Hardware combination: " << i.first << "  " << "Number of Images: " << i.second << endl;
-    }
 
-    return endResults;
+
+    cerr << "classified with " << this->structurePath << endl;
+
+    return r;
 }
 
 
 
 void OpenVinoEnv::chooseNeuralNet(string nn) {
-    if(nn == ("ALEXNET"))
+    if(nn.compare("ALEXNET") == 0)
     {
         this->structurePath = "alexnet.xml";
         this->weightsPath = "alexnet.bin";
     }
-    else if(nn == "GOOGLENET")
+    else if(nn.compare("GOOGLENET") == 0)
     {
         this->structurePath = "googlenet.xml";
         this->weightsPath = "googlenet.bin";
@@ -229,52 +194,6 @@ void OpenVinoEnv::setImageNames(std::vector<std::string> imageNames)
 
 void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
 {
-    // this method will be used to deploy a specific amount of images on a specific Hardware.
-    // The distribution comes from the prediction unit.
-    // While some  of the Movidius sticks sjut shut down sometimes, we decided in this case to use the other
-    // chosen hardware
-    this->distribution.clear();
-    this->requests.clear();
-
-    int min = platforms.front().second;
-    cerr << min<< endl;
-
-    unsigned int size = platforms.size();
-    for(unsigned int h = 0; h < size - 1; h++)
-    {
-        // Turning the distribution into hardware combinations
-
-        int min = findMinDistribution(platforms);
-        cerr << min<< endl;
-
-        // create MULTI PLUGIN
-        string s = "MULTI:";
-        unsigned int i = 0;
-        for(auto &platform : platforms)
-        {
-            s = s + platform.first + (i < platforms.size() - 1 ? "," : "");
-            i++;
-        }
-        distribution.push_back({s,min*platforms.size()});
-
-        int j =0;
-        for(auto &platfrom: platforms)
-        {
-            if(platfrom.second == min)
-            {
-                platforms.erase(platforms.begin() + j);
-                j--;
-
-            }
-            j++;
-        }
-        for(auto &platfrom: platforms){
-                platfrom.second -=min;
-        }
-
-        // push back last plugin without MULTI
-
-    }
     distribution.push_back(platforms.back());
 }
 

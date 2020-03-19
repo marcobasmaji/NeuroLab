@@ -3,6 +3,7 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <thread>
 
 #include <HardwareModule/OpenVinoEnv.h>
 #include <DataModule/Result.h>
@@ -17,8 +18,14 @@ public:
     void setPlatforms(vector<pair<string, int> > platforms);
     vector<Result> classify();
     void setNerualNet(string nn);
+    void threading(OpenVinoEnv *env);
 private:
-    OpenVinoEnv vino;
+    vector<string> allImages;
+    vector<pair<string, int> > distribution;
+    string currentNN;
+    vector<Result> results;
+    vector<OpenVinoEnv*> envs;
+
 };
 
 #endif // PRETRAINEDNN_H
