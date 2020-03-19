@@ -19,7 +19,7 @@ vector<float> WeightsAndBiasesCreator::createWeights(){
             for(int kernelY=0; kernelY < kernelHeight; kernelY++){
                 for(int kernelX=0; kernelX < kernelWidth; kernelX++){
                     //https://hackernoon.com/how-to-initialize-weights-in-a-neural-net-so-it-performs-well-3e9302d4490f for formula for relu
-                    weights[calculateId(outputMap, inputMap, kernelY, kernelX)]=(float)(sqrt(2) * distribution(generator)/sqrt((float)inputNeurons));
+                    weights[calculateId(outputMap, inputMap, kernelY, kernelX)]=(float)(sqrt(2) * distribution(generator)/(float)inputNeurons);
                 }
             }
         }
