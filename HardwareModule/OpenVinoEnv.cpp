@@ -117,6 +117,7 @@ void OpenVinoEnv::CreateRequestsWithInput()
     for(auto &i : this->distribution)
     {
         InferenceEngine::ExecutableNetwork en;
+        cerr<<"Inferrequest for "<<cnnnetwork.getName()<<" and "<<  i.first<<" and "<< i.second<<endl;
         en = core.LoadNetwork(cnnnetwork,i.first);
         InferRequest inferRequest = en.CreateInferRequest();
         for (auto & item : inputInfo) {
@@ -149,11 +150,13 @@ void OpenVinoEnv::CreateRequestsWithInput()
 
 void OpenVinoEnv::infer()
 {
+    cerr<<"infer function called"<<endl;
     int i = 0;
-    for(auto &item : requests)
+//    for(auto &item : requests)
     {
-        cerr<< "Classified " << this->distribution[i].second << " images on " << distribution[i].first << endl;
-        item.Infer();
+        cerr<< "infer: Classified " << this->distribution[i].second << " images on " << distribution[i].first << endl;
+        requests.back().Infer();
+        i++;
     }
 }
 
@@ -232,58 +235,65 @@ void OpenVinoEnv::setDistribution(vector<pair<string, int> > platforms)
     // chosen hardware
     this->distribution.clear();
     this->requests.clear();
-    if(platforms.size() ==1)
+
+    int min = platforms.front().second;
+    cerr << min<< endl;
+
+    unsigned int size = platforms.size();
+    for(unsigned int h = 0; h < size - 1; h++)
     {
-        distribution.push_back(platforms.back());
-    }
-    else
-    {
-        unsigned int size = platforms.size();
-        for(unsigned int h = 0; h<size-1;h++)
+        // Turning the distribution into hardware combinations
+
+        int min = findMinDistribution(platforms);
+        cerr << min<< endl;
+
+        // create MULTI PLUGIN
+        string s = "MULTI:";
+        unsigned int i = 0;
+        for(auto &platform : platforms)
         {
-            // Turning the distribution into hardware combinations
-            int min = platforms.front().second;
-            for(auto &platfrom: platforms)
-            {
-                if(platfrom.second <= min)
-                {
-                    min = platfrom.second;
-                }
-            }
-            cerr << min<< endl;
-
-            // create MULTI PLUGIN
-            string s = "MULTI:";
-            unsigned int i = 0;
-            for(auto &platform : platforms)
-            {
-                s = s + platform.first + (i<platforms.size()-1 ? "," : "");
-                i++;
-            }
-            distribution.push_back({s,min*platforms.size()});
-            int j =0;
-            for(auto &platfrom: platforms)
-            {
-                if(platfrom.second == min)
-                {
-                    platforms.erase(platforms.begin() + j);
-
-                } else {
-                    platfrom.second -=min;
-
-                }
-                j++;
-            }
-
+            s = s + platform.first + (i < platforms.size() - 1 ? "," : "");
+            i++;
         }
+        distribution.push_back({s,min*platforms.size()});
+
+        int j =0;
+        for(auto &platfrom: platforms)
+        {
+            if(platfrom.second == min)
+            {
+                platforms.erase(platforms.begin() + j);
+                j--;
+
+            }
+            j++;
+        }
+        for(auto &platfrom: platforms){
+                platfrom.second -=min;
+        }
+
         // push back last plugin without MULTI
-        distribution.push_back(platforms.back());
+
     }
+    distribution.push_back(platforms.back());
 }
 
 vector<pair<string, int> > OpenVinoEnv::getDistribution()
 {
     return this->distribution;
+}
+
+int OpenVinoEnv::findMinDistribution(vector<pair<string, int> > platforms) {
+    int min = platforms.front().second;
+    for(auto &platfrom: platforms)
+    {
+        if(platfrom.second <= min)
+        {
+            min = platfrom.second;
+        }
+    }
+    cerr << min<< endl;
+    return min;
 }
 
 

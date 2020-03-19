@@ -49,4 +49,9 @@ private:
         return (a.second > b.second);
     }
 
+    static bool sortinrev(const pair<string,float> &a,
+                   const pair<string,float> &b)
+    {
+           return (a.second > b.second);
+    }
 };

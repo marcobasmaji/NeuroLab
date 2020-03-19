@@ -414,25 +414,38 @@ void NeuroLabNet::updateDataSet(vector<string> dataSet)
 vector<pair<string,float>> NeuroLabNet::getLabelWithProb(float prob[])
 {
     // need to parse labels with prob. and sort it and get the top 5
-    vector<pair<string,float>> vec;
-    QDir dir(QString::fromStdString("/home/mo/dataset"));
-    QStringList files = dir.entryList(QStringList(),QDir::Dirs);
+
+    QFileInfo file2("../neurolabnetLabels.txt");
+    std::string labelFileName = file2.absolutePath().toStdString()+"/NeuroLab/HardwareModule/neurolabnetLabels.txt";
+    std::vector<std::string> labels;
+    std::ifstream inputFile;
+    inputFile.open(labelFileName, std::ios::in);
+    if (inputFile.is_open()) {
+        std::string strLine;
+        while (std::getline(inputFile, strLine)) {
+            labels.push_back(strLine);
+        }
+    }
+
+    vector<pair<string,float>> results;
+//    QDir dir(QString::fromStdString("/home/mo/dataset"));
+//    QStringList files = dir.entryList(QStringList(),QDir::Dirs);
 
     int i =0;
-    for(auto &item : files) {
-        if(item.startsWith(".")){
-            continue;
-        }
+    for(auto &item : labels) {
+//        if(item.startsWith(".")){
+//            continue;
+//        }
         pair<string,float> pair;
-        pair.first = item.toStdString();
+        pair.first = item;
         pair.second = prob[i];
-        vec.push_back(pair);
+        results.push_back(pair);
         i++;
     }
 
 
-    //sort(vec.begin(),vec.end(),sortBySec);
-    return vec ;
+    sort(results.begin(),results.end(), sortinrev);
+    return results ;
 
 }
 

@@ -42,6 +42,7 @@ private:
     size_t batchSize;
     vector<InferenceEngine::InferRequest> requests;
     vector<pair<string, int> > distribution;
+    int findMinDistribution(vector<pair<string, int> > platforms);
 };
 
 #endif // OPENVINOENV_H
