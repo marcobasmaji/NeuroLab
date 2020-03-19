@@ -432,14 +432,10 @@ vector<pair<string,float>> NeuroLabNet::getLabelWithProb(float prob[])
     }
 
     vector<pair<string,float>> results;
-//    QDir dir(QString::fromStdString("/home/mo/dataset"));
-//    QStringList files = dir.entryList(QStringList(),QDir::Dirs);
 
     int i =0;
     for(auto &item : labels) {
-//        if(item.startsWith(".")){
-//            continue;
-//        }
+
         pair<string,float> pair;
         pair.first = item;
         pair.second = prob[i];

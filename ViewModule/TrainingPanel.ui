@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Training</string>
+   <string>Warning</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="dataset_dir_label">
@@ -60,7 +60,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>      </string>
+        <string/>
        </property>
       </widget>
      </item>
