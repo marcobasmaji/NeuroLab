@@ -112,16 +112,6 @@ void ViewController::displayPrediction(double totalTime, double totalPowerConsum
     stream2 << std::fixed << std::setprecision(2) << totalPowerConsumption;
     std::string totalPowerConsumption_string = stream2.str();
 
-
-    /*PredictionValues *cpu = parseHardware("CPU", timeConsumption, powerConsumption, flops, bandwidth);
-    PredictionValues *gpu = parseHardware("GPU", timeConsumption, powerConsumption, flops, bandwidth);
-    PredictionValues *mov1 = parseHardware("MYRIAD.1", timeConsumption, powerConsumption, flops, bandwidth);
-    PredictionValues *mov2 = parseHardware("MYRIAD.2", timeConsumption, powerConsumption, flops, bandwidth);
-    PredictionValues *mov3 = parseHardware("MYRIAD.3", timeConsumption, powerConsumption, flops, bandwidth);
-    PredictionValues *mov4 = parseHardware("MYRIAD.4", timeConsumption, powerConsumption, flops, bandwidth);
-    PredictionValues *fpga = parseHardware("FPGA", timeConsumption, powerConsumption, flops, bandwidth);
-    string totalTime_string = "131";
-    string totalPowerConsumption_string = "777";*/
     mainWindow->displayPrediction(totalTime_string, totalPowerConsumption_string, cpu, gpu, mov1, mov2, mov3, mov4, fpga);
 
 }
@@ -139,6 +129,7 @@ void ViewController::setAvailableMovidius(int movidiusCounter) {
 void ViewController::setAvailableHardware(vector<string> &hardwareElements)
 {
     availableHardware.clear();
+    hwNamesMap.clear();
     int movidiusCounter = 0;
     for(string hardware : hardwareElements){
         if(hardware.find("MYRIAD") != std::string::npos) {

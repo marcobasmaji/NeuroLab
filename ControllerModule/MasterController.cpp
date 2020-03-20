@@ -21,6 +21,7 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
 {
     //-------------hier brauchen wir noch----------------------------------------------------------
 
+    cerr<<"Master nn "<<nn<<endl;
     nnObserver.setCurrentNN(nn);
 
     qDebug()<<"master setting in classify 1"<<endl;
@@ -94,16 +95,21 @@ void MasterController::getPrediction(const string net, const string mode, vector
 vector<string> MasterController::getAvailableHardware()
 {
 
-    //InferenceEngine::Core core;
-    //return core.GetAvailableDevices();
-     HardwareSurveillence surv;
-     vector<string> d = surv.checkAvailableHardware();
+    InferenceEngine::Core core;
+    vector<string> d =  core.GetAvailableDevices();
+    cerr<<"Available hardware: "<<endl;
+    for(string dev : d){
+        cerr<<dev<<endl;
+    }
+    return d;
+    // HardwareSurveillence surv;
+     //vector<string> d = surv.checkAvailableHardware();
     //vector<string> d = checkWithOpenVino();
     //for(string device : d){
          //devices.push_back(device);
     //}
     //d.push_back("GPU");
-     return d;
+    // return d;
    /* InferenceEngine::Core core;
     return core.GetAvailableDevices();*/
 

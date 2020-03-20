@@ -9,32 +9,23 @@ NNController::NNController()
 }
 vector<Result> NNController::classify()
 {
-    if(currentNN == "ALEXNET")
+    cerr<<"NNController nn "<<currentNN<<endl;
+    if(currentNN.compare("ALEXNET") == 0  || currentNN.compare("GOOGLENET") == 0)
     {
-        pnn.setNerualNet("ALEXNET");
-        pnn.setImagePaths(pathList);
         return pnn.classify();
     }
-    else if(currentNN == "GOOGLENET")
-    {
-        pnn.setNerualNet("GOOGLENET");
-        pnn.setImagePaths(pathList);
-        return pnn.classify();
-    }
-    else if(currentNN == "NEUROLABNET")
+    else if(currentNN.compare("NEUROLABNET") == 0)
     {
         neuroLabNet.updateDataSet(pathList);
         return neuroLabNet.classify();
     }
-    else
-    {
-        return {};
-    }
+    return {};
 }
 
 void NNController::setPathList(vector<string> list)
 {
     this->pathList = list;
+    pnn.setImagePaths(list);
 
 }
 
@@ -57,4 +48,5 @@ void NNController::trainNeuroLab(string weightsDir, string dataSetDir, string ne
 void NNController::setCurrentNN(string currentNN)
 {
     this->currentNN = currentNN;
+    pnn.setNerualNet(currentNN);
 }
