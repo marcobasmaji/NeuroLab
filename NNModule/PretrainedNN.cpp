@@ -5,7 +5,7 @@ PretrainedNN::PretrainedNN()
 
 }
 
-vector<Result> PretrainedNN::classify()
+void PretrainedNN::classify()
 {
     cerr<<"PNN nn "<<currentNN<<endl;
 
@@ -23,12 +23,20 @@ vector<Result> PretrainedNN::classify()
         this->results.insert(results.end(), envResults.begin(), envResults.end());
     }
 
-    return results;
+    for(auto & ov : envs)
+    {
+        delete ov;
+    }
 }
 
 void PretrainedNN::threading(OpenVinoEnv *env){
     vector<Result> intermidiate;
     env->classify();
+}
+
+vector<Result> PretrainedNN::getResults()
+{
+    return this->results;
 }
 
 
@@ -39,7 +47,6 @@ void PretrainedNN::setImagePaths(vector<string> imagePaths)
 
 void PretrainedNN::setPlatforms(vector<pair<string, int> > platforms)
 {
-    //distribution = platforms;
     envs.clear();
     int count = 0;
     vector<string> imagesToDeploy;

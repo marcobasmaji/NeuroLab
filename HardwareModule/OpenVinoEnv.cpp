@@ -28,6 +28,7 @@ void OpenVinoEnv::classify() {
         Result r;
         r.setPath("ERROR reading the .xml and .bin files");
         endResults.push_back(r);
+        return;
     }
     // reading and preparing images
     try {
@@ -36,14 +37,17 @@ void OpenVinoEnv::classify() {
         Result r;
         r.setPath("ERROR reading the images");
         endResults.push_back(r);
+        return;
     }
     // creating infer requests on the provided hardware platforms
     try {
-        createRequestsWithInput(); //betrifft hw
+        createRequestsWithInput();
     } catch (const InferenceEngine::details::InferenceEngineException &e) {
         Result r;
         r.setPath("ERROR loading the network on the hardware plugin(s)");
         endResults.push_back(r);
+        // when plugin not loaded, the function infer() is still called. So must return.
+        return;
     }
     // starting classifcation
     try {
@@ -52,6 +56,7 @@ void OpenVinoEnv::classify() {
         Result r;
         r.setPath("ERROR infer not successfull");
         endResults.push_back(r);
+        return;
     }
 
     // getting output and saving results

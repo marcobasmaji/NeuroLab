@@ -16,9 +16,10 @@ public:
     PretrainedNN();
     void setImagePaths(vector<string> imagePaths);
     void setPlatforms(vector<pair<string, int> > platforms);
-    vector<Result> classify();
+    void classify();
     void setNerualNet(string nn);
     void threading(OpenVinoEnv *env);
+    vector<Result> getResults();
 private:
     vector<string> allImages;
     vector<pair<string, int> > distribution;

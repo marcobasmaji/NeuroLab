@@ -135,11 +135,9 @@ LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgcodecs
 LIBS += -L$$PWD/Tools/opencv2/lib/ -lopencv_imgproc
 LIBS += -L$$PWD/Tools/tbb/lib -ltbb
 LIBS += -L$$PWD/Tools/tbb/lib -ltbbmalloc
-LIBS += -L$$PWD/Tools/opencl/ -lOpenCL
+LIBS += -L$$PWD/Tools/opencl/lib/ -lOpenCL
 LIBS += -L$$PWD/Tools/opennn/lib/ -lopennn
-LIBS += -L$$PWD/Tools/openvino/lib/intel64/ -lHeteroPlugin
-LIBS += -L$$PWD/Tools/openvino/lib/intel64/ -lMKLDNNPlugin
-LIBS += -L$$PWD/Tools/openvino/lib/intel64/ -lmyriadPlugin
+
 
 
 # Headers
