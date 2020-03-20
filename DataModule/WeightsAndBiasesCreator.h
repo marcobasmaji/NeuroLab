@@ -55,6 +55,7 @@ public:
     void createBiasFile(string fileName, string dir);
     void updateWeights();
     void updateBias();
+    void createWeightsAndBiases();
 };
 
 #endif // WEIGHTSCREATOR_H
