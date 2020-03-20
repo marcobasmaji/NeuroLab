@@ -15,18 +15,20 @@ vector<Result> PretrainedNN::classify()
     for(int i = 0; i < (int) envs.size(); i++){
         threads.push_back(thread(&PretrainedNN::threading, this, envs[i]));
     }
-
     for (auto& thread : threads) thread.join();
+    // erst nach join get reuslts
+    for(auto & ov : envs)
+    {
+        vector<Result> envResults = ov->getResults();
+        this->results.insert(results.end(), envResults.begin(), envResults.end());
+    }
 
     return results;
 }
 
 void PretrainedNN::threading(OpenVinoEnv *env){
     vector<Result> intermidiate;
-    intermidiate = env->classify();
-    for(Result inter : intermidiate){
-        results.push_back(inter);
-    }
+    env->classify();
 }
 
 
@@ -44,7 +46,7 @@ void PretrainedNN::setPlatforms(vector<pair<string, int> > platforms)
     for(pair<string, int> dist : platforms){
         OpenVinoEnv *env;
         env = new OpenVinoEnv();
-        env->setDistribution({dist});
+        env->setDevice(dist.first);
         env->chooseNeuralNet(currentNN);
         int dif = dist.second + count;
         imagesToDeploy.clear();

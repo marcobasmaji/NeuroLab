@@ -15,16 +15,16 @@ class OpenVinoEnv
 {
 public:
     OpenVinoEnv();
-    vector<Result> classify();
+    void classify();
     void chooseNeuralNet(string nn);
     void setImageNames(std::vector<std::string> imageNames);
-    void setDistribution(vector<pair<string, int> >);
-    vector<pair<string,int>> getDistribution();
+    void setDevice(string device);
+    vector<Result> getResults();
 
 private:
     void readIR();
     void configureInputAndOutput();
-    void CreateRequestsWithInput();
+    void createRequestsWithInput();
     void infer();
     vector<Result> processOutput();
 
@@ -40,9 +40,8 @@ private:
     std::vector<std::shared_ptr<unsigned char>> imagesData;
     std::vector<std::string> validImageNames;
     size_t batchSize;
-    vector<InferenceEngine::InferRequest> requests;
+    InferenceEngine::InferRequest inferRequest;
     vector<pair<string, int> > distribution;
-    int findMinDistribution(vector<pair<string, int> > platforms);
 };
 
 #endif // OPENVINOENV_H
