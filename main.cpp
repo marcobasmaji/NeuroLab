@@ -6,7 +6,7 @@
 using namespace std;
 
 //#define TEST_PROJECT      //comment this line out to start the tests
-#define CREATE_WEIGHTS    //commit this line out to create random weights and biases
+//#define CREATE_WEIGHTS    //commit this line out to create random weights and biases
 
 #ifdef TEST_PROJECT
 #include "Tests/TestStarter.hpp"
