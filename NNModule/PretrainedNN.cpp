@@ -14,8 +14,11 @@ void PretrainedNN::classify()
     vector<thread> threads;
     for(int i = 0; i < (int) envs.size(); i++){
         threads.push_back(thread(&PretrainedNN::threading, this, envs[i]));
+        cerr<<"Threads created"<<endl;
     }
     for (auto& thread : threads) thread.join();
+    cerr<<"Threads joined"<<endl;
+
     // erst nach join get reuslts
     for(auto & ov : envs)
     {
