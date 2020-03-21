@@ -6,47 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>394</width>
-    <height>172</height>
+    <width>528</width>
+    <height>247</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Warning</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="dataset_dir_label">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>100</y>
-      <width>211</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="weights_dir_label">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>150</y>
-      <width>211</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>381</width>
-      <height>101</height>
+      <width>501</width>
+      <height>221</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
