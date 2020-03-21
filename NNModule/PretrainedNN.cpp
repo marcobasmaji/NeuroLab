@@ -27,6 +27,7 @@ void PretrainedNN::classify()
     {
         delete ov;
     }
+    core->~Core();
 }
 
 void PretrainedNN::threading(OpenVinoEnv *env){
@@ -47,6 +48,7 @@ void PretrainedNN::setImagePaths(vector<string> imagePaths)
 
 void PretrainedNN::setPlatforms(vector<pair<string, int> > platforms)
 {
+    this->core = new InferenceEngine::Core();
     envs.clear();
     int count = 0;
     vector<string> imagesToDeploy;
@@ -55,6 +57,7 @@ void PretrainedNN::setPlatforms(vector<pair<string, int> > platforms)
         env = new OpenVinoEnv();
         env->setDevice(dist.first);
         env->chooseNeuralNet(currentNN);
+        env->setCore(core);
         int dif = dist.second + count;
         imagesToDeploy.clear();
         for(int i = count; i < dif && (int)allImages.size() >= dif; i++)

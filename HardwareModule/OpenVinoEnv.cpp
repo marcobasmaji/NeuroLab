@@ -51,7 +51,11 @@ void OpenVinoEnv::classify() {
     }
     // starting classifcation
     try {
+        //mutex en_mutex;
+        //en_mutex.lock();
         infer();
+        //en_mutex.unlock();
+
     } catch (const InferenceEngine::details::InferenceEngineException &e) {
         Result r;
         r.setPath("ERROR infer not successfull");
@@ -115,21 +119,18 @@ void OpenVinoEnv::configureInputAndOutput()
 void OpenVinoEnv::createRequestsWithInput()
 {
     InferenceEngine::ExecutableNetwork en;
-    InferenceEngine::Core core;
+//    InferenceEngine::Core core;
     cerr<<"Inferrequest on "<<cnnnetwork.getName()<<" on platform "<<deviceName<<" with nr of imgs "<< imagesData.size()<<endl;
     mutex en_mutex;
     en_mutex.lock();
-    en = core.LoadNetwork(cnnnetwork, deviceName);
+    en = core->LoadNetwork(cnnnetwork, deviceName);
     en_mutex.unlock();
     InferRequest inferRequest = en.CreateInferRequest();
     for (auto & item : inputInfo) {
 
         Blob::Ptr inputBlob = inferRequest.GetBlob(item.first);
         SizeVector dims = inputBlob->getTensorDesc().getDims();
-        /* Fill input tensor with images
-
-Mohamadℹ️, [20.03.20 12:14]
-. First b channel, then g and r channels */
+        /* Fill input tensor with images. First b channel, then g and r channels */
         size_t num_channels = dims[1];
         size_t image_size = dims[3] * dims[2];
         auto data = inputBlob->buffer().as<PrecisionTrait<Precision::U8>::value_type *>();
@@ -232,3 +233,6 @@ void OpenVinoEnv::setDevice(string device)
 //    cerr << min<< endl;
 //    return min;
 //}
+void OpenVinoEnv::setCore(InferenceEngine::Core *core) {
+    this->core=core;
+}

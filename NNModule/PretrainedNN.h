@@ -13,6 +13,7 @@ using namespace std;
 class PretrainedNN
 {
 public:
+    InferenceEngine::Core* core;
     PretrainedNN();
     void setImagePaths(vector<string> imagePaths);
     void setPlatforms(vector<pair<string, int> > platforms);
