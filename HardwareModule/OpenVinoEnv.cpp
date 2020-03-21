@@ -71,11 +71,13 @@ void OpenVinoEnv::classify() {
 void OpenVinoEnv::readIR()
 {
     CNNNetReader network_reader;
-    QString s = QString::fromStdString(structurePath);
-    QFileInfo file1("../"+s);
+    //QString s = QString::fromStdString(structurePath);
+    //QFileInfo file1("../"+s);
 
-    network_reader.ReadNetwork( file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/" + structurePath);
-    network_reader.ReadWeights(file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/" + weightsPath);
+   // network_reader.ReadNetwork( file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/" + structurePath);
+    //network_reader.ReadWeights(file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/" + weightsPath);
+    network_reader.ReadNetwork("Networks/"+ this->structurePath);
+    network_reader.ReadWeights("Networks/" + this->weightsPath);
     this->cnnnetwork = network_reader.getNetwork();
 }
 void OpenVinoEnv::configureInputAndOutput()
@@ -159,8 +161,9 @@ vector<Result> OpenVinoEnv::processOutput()
 
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
     this->outputInfo = output_info;
-    QFileInfo file2("../alexnetLabels.txt");
-    std::string labelFileName = file2.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnetLabels.txt";
+    //QFileInfo file2("../alexnetLabels.txt");
+    //std::string labelFileName = file2.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnetLabels.txt";
+    string labelFileName = "Networks/alexnetLabels.txt";
     std::vector<std::string> labels;
     std::ifstream inputFile;
     inputFile.open(labelFileName, std::ios::in);
