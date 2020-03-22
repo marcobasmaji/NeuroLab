@@ -10,6 +10,7 @@
 #include <DataModule/Result.h>
 #include <ControllerModule/HardwareElement.h>
 #include <list>
+#include <iomanip>
 
 using namespace std;
 // defining a class here to avoid having a loop of includes.
