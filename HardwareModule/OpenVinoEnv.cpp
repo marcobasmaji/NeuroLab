@@ -144,9 +144,7 @@ void OpenVinoEnv::createRequestsWithInput()
             en = core->LoadNetwork(cnnnetwork, deviceName);
             break;
         } catch (InferenceEngine::details::InferenceEngineException) {
-            Result r;
-            r.setPath("ERROR in createRequestWithInput loading the network on the hardware plugin(s)");
-            endResults.push_back(r);
+
         }
     }
 

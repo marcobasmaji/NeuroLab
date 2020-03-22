@@ -12,6 +12,8 @@
 #include <ControllerModule/HardwareElement.h>
 #include <string>
 #include <QListWidgetItem>
+#include <QProgressDialog>
+#include <QTimer>
 #include "TrainingPanel.h"
 
 QT_BEGIN_NAMESPACE
@@ -134,6 +136,6 @@ private:
     void setBackgroundImage(string imagePath);
     void setBackgroundImage();
     void setAllExistingHardwareUnchecked();
-    void training_running();
+    void training_running(QProgressBar *progress_bar);
 };
 #endif // MAINWINDOW_H(imageToBeRemoved)

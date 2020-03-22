@@ -6,7 +6,8 @@
 #include <QDebug>
 #include <QScrollArea>
 #include <QVBoxLayout>
-
+#include <QProgressBar>
+#include <thread>
 
 
 MainWindow::MainWindow(QWidget *parent, ViewController *partner)
@@ -690,13 +691,37 @@ void MainWindow::on_select_weights_button_clicked()
 
 void MainWindow::on_train_button_clicked()
 {
-    training_running();
-    viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory());
+    ui->train_button->setEnabled(false);
+    QProgressBar *progress_bar;
+    progress_bar = new QProgressBar(ui->train_button) ;
+    progress_bar->setTextVisible(false);
+
+    QLabel *inProgressLabel;
+    inProgressLabel = new QLabel("Training is in progress. Please do not close the window!");
+
+    ui->loading_layout->addWidget(progress_bar);
+    ui->loading_layout->addWidget(inProgressLabel);
+
+//    QTimer *timer = new QTimer(progress_bar);
+//    connect(timer, &QTimer::timeout, this, &MainWindow::training_running);
+//    timer->start(1000);
+
+    //std::thread thread(&MainWindow::training_running, this, progress_bar);
+
+    //viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory());
+
+    //thread.join();
 }
 
-void MainWindow::training_running() {
+void MainWindow::training_running(QProgressBar *progress_bar) {
+    if(progress_bar->value() > 100){
+        progress_bar->setValue(0);
+        return;
+    }
 
-    ui->train_success_label->setText("Training in progress. Please wait.");
+    progress_bar->setValue(progress_bar->value() + 1);
+
+
 }
 
 void MainWindow::enableTrainIfPossible() {
@@ -736,8 +761,8 @@ void MainWindow::setBackgroundImage(){
 }
 
 void MainWindow::displayTrainingResults() {
-    ui->train_success_label->setText("Training successfull. Updated weights file saved in " +
-                                     QString::fromStdString(guiSettings.getNewWeightsDirectory()));
+    //ui->train_success_label->setText("Training successfull. Updated weights file saved in " +
+                                     //QString::fromStdString(guiSettings.getNewWeightsDirectory()));
 }
 
 void MainWindow::showErrorMessage(string mes){

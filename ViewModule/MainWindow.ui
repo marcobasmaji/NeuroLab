@@ -700,19 +700,6 @@
        <string>Select Weights directory</string>
       </property>
      </widget>
-     <widget class="QLabel" name="train_success_label">
-      <property name="geometry">
-       <rect>
-        <x>410</x>
-        <y>410</y>
-        <width>431</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
      <widget class="QPushButton" name="new_weights_dir_button">
       <property name="geometry">
        <rect>
@@ -751,6 +738,30 @@
       <property name="text">
        <string/>
       </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>281</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Help us train NeuroLab!</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>370</y>
+        <width>531</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="loading_layout"/>
      </widget>
     </widget>
    </widget>
