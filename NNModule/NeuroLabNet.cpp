@@ -1,4 +1,4 @@
-#include "NNModule/NeuroLabNet.hpp"
+#include "NNModule/NeuroLabNet.h"
 #include <fstream>
 #include <iostream>
 #include <dirent.h>
