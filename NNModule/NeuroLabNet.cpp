@@ -419,8 +419,8 @@ vector<pair<string,float>> NeuroLabNet::getLabelWithProb(float prob[])
 {
     // need to parse labels with prob. and sort it and get the top 5
 
-    QFileInfo file2("../neurolabnetLabels.txt");
-    std::string labelFileName = file2.absolutePath().toStdString()+"/NeuroLab/HardwareModule/neurolabnetLabels.txt";
+    //QFileInfo file2("../neurolabnetLabels.txt");
+    std::string labelFileName = "Networks/neurolabnetLabels.txt";
     std::vector<std::string> labels;
     std::ifstream inputFile;
     inputFile.open(labelFileName, std::ios::in);

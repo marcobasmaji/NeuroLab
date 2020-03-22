@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
     ui->HardwareOptions->hide();
     ui->NeuralNetOptions->hide();
     ui->ModeOptions->hide();
-    ui->GPU_checkbox->hide();
+    ui->FPGA_checkbox->hide();
     ui->train_tab_widget->hide();
     ui->topologyMenu->hide();
 

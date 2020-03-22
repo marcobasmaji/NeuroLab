@@ -12,7 +12,8 @@ vector<Result> NNController::classify()
     cerr<<"NNController nn "<<currentNN<<endl;
     if(currentNN.compare("ALEXNET") == 0  || currentNN.compare("GOOGLENET") == 0)
     {
-        return pnn.classify();
+         pnn.classify();
+         return pnn.getResults();
     }
     else if(currentNN.compare("NEUROLABNET") == 0)
     {

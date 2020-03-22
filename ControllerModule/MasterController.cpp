@@ -40,7 +40,9 @@ void MasterController::classify(string nn, string mode, vector<string> selectedH
     vector<pair<string, int>>  hwDistributionTransfered;
     hwDistributionTransfered.clear();
     for(pair<string, int> hD : predictionResults.hardwareDistribution){
-        hwDistributionTransfered.push_back({transfer(hD.first), hD.second});
+        if(hD.second != 0){
+            hwDistributionTransfered.push_back({transfer(hD.first), hD.second});
+        }
         qDebug()<<"Master distribution translation"<<QString::fromStdString(hwDistributionTransfered.back().first)<<" "<<hwDistributionTransfered.back().second<<endl; // debug: working
     }
 

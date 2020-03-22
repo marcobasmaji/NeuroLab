@@ -6,7 +6,7 @@ TrainingPanel::TrainingPanel(QWidget *parent)
     , ui(new Ui::TrainingPanel)
 {
     ui->setupUi(this);
-    this->setFixedSize(380,120);
+    //this->setFixedSize(380,120);
 }
 
 

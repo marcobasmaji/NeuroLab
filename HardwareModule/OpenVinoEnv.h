@@ -21,6 +21,7 @@ public:
     void setDevice(string device);
     vector<Result> getResults();
 
+    void setCore(InferenceEngine::Core *core);
 private:
     void readIR();
     void configureInputAndOutput();
@@ -28,7 +29,7 @@ private:
     void infer();
     vector<Result> processOutput();
 
-    InferenceEngine::Core core;
+    InferenceEngine::Core* core;
     InferenceEngine::CNNNetwork cnnnetwork;
     InferenceEngine::InputsDataMap inputInfo;
     InferenceEngine::OutputsDataMap outputInfo;

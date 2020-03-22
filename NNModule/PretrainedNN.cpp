@@ -5,7 +5,7 @@ PretrainedNN::PretrainedNN()
 
 }
 
-vector<Result> PretrainedNN::classify()
+void PretrainedNN::classify()
 {
     cerr<<"PNN nn "<<currentNN<<endl;
 
@@ -14,8 +14,11 @@ vector<Result> PretrainedNN::classify()
     vector<thread> threads;
     for(int i = 0; i < (int) envs.size(); i++){
         threads.push_back(thread(&PretrainedNN::threading, this, envs[i]));
+        cerr<<"Threads created"<<endl;
     }
     for (auto& thread : threads) thread.join();
+    cerr<<"Threads joined"<<endl;
+
     // erst nach join get reuslts
     for(auto & ov : envs)
     {
@@ -23,12 +26,22 @@ vector<Result> PretrainedNN::classify()
         this->results.insert(results.end(), envResults.begin(), envResults.end());
     }
 
-    return results;
+    for(auto & ov : envs)
+    {
+        delete ov;
+    }
+
+    core->~Core();
 }
 
 void PretrainedNN::threading(OpenVinoEnv *env){
     vector<Result> intermidiate;
     env->classify();
+}
+
+vector<Result> PretrainedNN::getResults()
+{
+    return this->results;
 }
 
 
@@ -39,7 +52,7 @@ void PretrainedNN::setImagePaths(vector<string> imagePaths)
 
 void PretrainedNN::setPlatforms(vector<pair<string, int> > platforms)
 {
-    //distribution = platforms;
+    this->core = new InferenceEngine::Core();
     envs.clear();
     int count = 0;
     vector<string> imagesToDeploy;
@@ -48,6 +61,7 @@ void PretrainedNN::setPlatforms(vector<pair<string, int> > platforms)
         env = new OpenVinoEnv();
         env->setDevice(dist.first);
         env->chooseNeuralNet(currentNN);
+        env->setCore(core);
         int dif = dist.second + count;
         imagesToDeploy.clear();
         for(int i = count; i < dif && (int)allImages.size() >= dif; i++)
