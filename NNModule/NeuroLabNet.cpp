@@ -112,13 +112,13 @@ vector<Result> NeuroLabNet::classify(){
         length=BATCH_SIZE*DENSE_NEURONS;
         float* outputs=softmax->getOutputs(env, BATCH_SIZE, DENSE_NEURONS, 1, 1, NULL);
 
-        delete[]inputValues;
-        delete[]outputs;
-
         Result result;
         result.setPath(path);
         result.setLabelsAndProb(getLabelWithProb(outputs));
         results.push_back(result);
+
+        delete[]inputValues;
+        delete[]outputs;
     }
 
     return results;
