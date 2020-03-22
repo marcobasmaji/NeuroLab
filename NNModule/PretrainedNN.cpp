@@ -30,6 +30,7 @@ void PretrainedNN::classify()
     {
         delete ov;
     }
+
     core->~Core();
 }
 
