@@ -291,7 +291,7 @@ void MainWindow::on_LoadButton_clicked()
 {
     // when load is clicked. tab names should be changed
     QStringList filesList = QFileDialog::getOpenFileNames(this,
-                                                          tr("Load Image"), "/home", tr("Image Files (*.png *.jpg *.bmp *.jpeg)"));
+                                                          tr("Load Image"), "/home", tr("Image Files (*.png *.jpg *.bmp *.jpeg *.JPG)"));
     if(filesList.isEmpty()){
         return;
     }

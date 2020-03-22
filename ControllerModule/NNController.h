@@ -16,7 +16,7 @@ public:
     vector<Result> classify();
     //list<pair<string,vector<string>>>getResults();
     void setPathList(vector<string>);
-    void setDistribution( vector<pair<string, int>> distribution);
+    void setDistribution(vector<pair<string, int>> distribution);
     void setCurrentNN(string currentNN);
     void setHardwareDistribution(vector<string>);
     void trainNeuroLab(string,string,string);
@@ -25,6 +25,7 @@ private:
     PretrainedNN pnn;
     NeuroLabNet neuroLabNet;
     vector<string> pathList;
+    vector<pair<string, int> > distribution;
     string currentNN = "ALEXNET";
 
 };

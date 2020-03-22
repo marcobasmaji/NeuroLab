@@ -40,6 +40,7 @@ SOURCES += \
     NNModule/Layers/SoftmaxLayer.cpp \
     NNModule/NeuroLabNet.cpp \
     NNModule/PretrainedNN.cpp \
+    NNModule/trainingItem.cpp \
     PredictionModule/DataResults.cpp \
     PredictionModule/Hardware.cpp \
     PredictionModule/Mode.cpp \
@@ -92,6 +93,7 @@ HEADERS += \
     NNModule/NeuralNet.h \
     NNModule/NeuroLabNet.h \
     NNModule/PretrainedNN.h \
+    NNModule/trainingItem.hpp \
     PredictionModule/DataResults.h \
     PredictionModule/Hardware.h \
     PredictionModule/Mode.h \

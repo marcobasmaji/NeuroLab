@@ -12,6 +12,10 @@ vector<Result> NNController::classify()
     cerr<<"NNController nn "<<currentNN<<endl;
     if(currentNN.compare("ALEXNET") == 0  || currentNN.compare("GOOGLENET") == 0)
     {
+        pnn.setImagePaths(pathList);
+        pnn.setNerualNet(currentNN);
+        pnn.setPlatforms(distribution);
+
          pnn.classify();
          return pnn.getResults();
     }
@@ -26,13 +30,14 @@ vector<Result> NNController::classify()
 void NNController::setPathList(vector<string> list)
 {
     this->pathList = list;
-    pnn.setImagePaths(list);
 
 }
 
-void NNController::setDistribution(vector<pair<string, int> > distribution) {
+void NNController::setDistribution(vector<pair<string, int>> distribution) {
 
-    this->pnn.setPlatforms(distribution);
+//    pnn.setImagePaths(pathList);
+//    this->pnn.setPlatforms(distribution);
+    this->distribution = distribution;
 
 }
 
@@ -49,5 +54,4 @@ void NNController::trainNeuroLab(string weightsDir, string dataSetDir, string ne
 void NNController::setCurrentNN(string currentNN)
 {
     this->currentNN = currentNN;
-    pnn.setNerualNet(currentNN);
 }

@@ -10,7 +10,7 @@ MasterController::MasterController() : viewObserver(this)
 }
 void MasterController::setPaths(vector<string> paths)
 {
-    this->nnObserver.setPathList(paths);
+    nnObserver.setPathList(paths);
     //this->imagePaths = paths;
     // cout<< imagePaths->back()
     qDebug()<<"load in master"<<endl; //ok
