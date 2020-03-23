@@ -8,8 +8,8 @@
 #include "NNModule/trainingItem.hpp"
 #include "DataModule/Result.h"
 
+#include <QString>
 #include <vector>
-#include <string>
 
 using namespace std;
 
@@ -30,6 +30,7 @@ private:
 
     vector<string> dataSet;
 
+    void deleteRessources();
     void initNeuroLabNet();
     void loadWeightsAndBiases(string weightsDir);
     void saveWeightsAndBiases(string newWeightsDir);

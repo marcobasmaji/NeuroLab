@@ -10,6 +10,7 @@
 
 class OpenCLLayer {
 private:
+    bool isPreviousLayerSet=false;
 
 	cl_mem memInputs = nullptr;			/**This attribute holds the buffer on the hardware device for the input data of the layer this class represents.*/
 	cl_mem memOutputs = nullptr;		/**This attribute holds the buffer on the hardware device for the output data of the layer this class represents.*/
