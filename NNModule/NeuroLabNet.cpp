@@ -7,6 +7,12 @@
 #include <random>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <QMessageBox>
+#include <QFile>
+#include <QString>
+#include <QTextStream>
+#include<algorithm>
+#include <opencv.hpp>
 
 using namespace std;
 using namespace cv;
@@ -37,7 +43,7 @@ using namespace cv;
 
 #define DENSE_NEURONS 6
 
-#define EPOCHS 8
+#define EPOCHS 6
 
 //in total at least 60.000 images are recommended
 
@@ -46,6 +52,10 @@ NeuroLabNet::NeuroLabNet(){
 }
 
 NeuroLabNet::~NeuroLabNet(){
+    deleteRessources();
+}
+
+void NeuroLabNet::deleteRessources(){
     delete env;
     delete envCreator;
     delete layerCreator;
@@ -64,7 +74,7 @@ void NeuroLabNet::initNeuroLabNet(){
     envCreator=new OpenCLEnvironmentCreator();
     env=envCreator->createOpenCLEnvironment(HardwareType::CPU);
 
-    OpenCLLayerCreator* layerCreator=new OpenCLLayerCreator();
+    layerCreator=new OpenCLLayerCreator();
 
     conv1=layerCreator->createConvLayer(env, BATCH_SIZE, INPUT_MAPS, CONV_1_INPUT_SIZE, CONV_1_INPUT_SIZE, CONV_1_OUTPUT_MAPS, CONV_1_OUTPUT_SIZE, CONV_1_OUTPUT_SIZE, CONV_1_KERNEL_SIZE, CONV_1_KERNEL_SIZE, CONV_1_STRIDE_SIZE, CONV_1_STRIDE_SIZE);
     relu1=layerCreator->createReluLayer(env, BATCH_SIZE, CONV_1_OUTPUT_MAPS, CONV_1_OUTPUT_SIZE, CONV_1_OUTPUT_SIZE);
@@ -84,6 +94,7 @@ void NeuroLabNet::initNeuroLabNet(){
     softmax->setPreviousOpenCLLayer(dense);
 }
 
+#include <QApplication>
 vector<Result> NeuroLabNet::classify(){
     vector<Result> results;
 
@@ -112,6 +123,10 @@ vector<Result> NeuroLabNet::classify(){
         length=BATCH_SIZE*DENSE_NEURONS;
         float* outputs=softmax->getOutputs(env, BATCH_SIZE, DENSE_NEURONS, 1, 1, NULL);
 
+        for(int i=0;i<6;i++){
+            cout<<outputs[i]<<"    ";
+        }cout<<endl;
+
         Result result;
         result.setPath(path);
         result.setLabelsAndProb(getLabelWithProb(outputs));
@@ -134,10 +149,10 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
     vector<TrainingItem>trainingItems=getAllTrainingItems(dataSetDir);
 
     for(int epoch=0;epoch<EPOCHS;epoch++){
-        if(epoch>0 && epoch%2==0){
-            conv1->setLearningRate(0.03/4.0);
-            conv2->setLearningRate(0.03/4.0);
-            dense->setLearningRate(0.03/4.0);
+        if(epoch!=0 && epoch%2==0){
+            conv1->setLearningRate(0.03/5.0);
+            conv2->setLearningRate(0.03/5.0);
+            dense->setLearningRate(0.03/5.0);
         }
 
         trainingItems=shuffleDataset(trainingItems);
@@ -148,6 +163,7 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
 
             string path=trainingItems[image].getPath();
             int label=trainingItems[image].getLabel();
+            label=3;
 
             //calculate forward
             int length=INPUT_MAPS*INPUT_SIZE*INPUT_SIZE*BATCH_SIZE;
@@ -171,6 +187,10 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
             calculateOutputErrors(label, errors, outputs);
             softmax->setOutputErrors(env, errors, DENSE_NEURONS*BATCH_SIZE);
 
+            for(int i=0;i<6;i++) cout<<outputs[i]<<"  ";
+            cout<<endl;
+
+
             softmax->computeErrorComp(env, BATCH_SIZE);
             dense->computeErrorComp(env, BATCH_SIZE);
             max2->computeErrorComp(env, BATCH_SIZE);
@@ -187,15 +207,20 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
 
             if(image%50==0){
                 float percentage=(float)image/(float)trainingItems.size()*100.0;
-                float percentageWrong=(float)wrong/(float)(image%10000);
-                float percentageCorrect=(float)correct/(float)(image%10000);
+                float percentageWrong=(float)wrong/(float)(image%10000)*100;
+                float percentageCorrect=(float)correct/(float)(image%10000)*100;
                 cout<<"Epoch: "<<epoch<<"\tImage: "<<image<<"\tProgress: "<<percentage<<"%\tCorrect: "<<percentageCorrect<<"%\tWrong: "<<percentageWrong<<"%"<<endl;
 
                 if(image%10000==0){correct=0;wrong=0;}
             }
 
-            if(label==predictedLabel(outputs))  correct++;
-            else                                wrong++;
+
+
+            if(label==predictedLabel(outputs)){
+                correct++;
+            }else{
+                wrong++;
+            }
 
             delete[]inputValues;
             delete[]errors;
@@ -231,32 +256,34 @@ void NeuroLabNet::calculateOutputErrors(int label, float* errors, float* outputs
 }
 
 void NeuroLabNet::loadImageToArray(float* inputValues, string path){
-    Mat image;
-    image = imread(path, 1);   // Read the file
+    Mat image,imgResized;
+    image = imread(path);   // Read the file
 
-    int i=0;
-    for(int y = 0; y < image.rows; y++){
-        for(int x = 0; x < image.cols; x++){
-            Vec3b bgrPixel = image.at<Vec3b>(y, x);
-            int col=bgrPixel[0];
-            float value=(float)col/255.0;
-            inputValues[i++]=value;
-        }
+    int width=82;
+    int height=(float)image.rows/((float)image.cols/82.0);
+
+    if(image.rows>image.cols){
+        height=82;
+        width=(float)image.cols/((float)image.rows/82.0);
     }
-    for(int y = 0; y < image.rows; y++){
-        for(int x = 0; x < image.cols; x++){
-            Vec3b bgrPixel = image.at<Vec3b>(y, x);
-            int col=bgrPixel[1];
-            float value=(float)col/255.0;
-            inputValues[i++]=value;
-        }
-    }
-    for(int y = 0; y < image.rows; y++){
-        for(int x = 0; x < image.cols; x++){
-            Vec3b bgrPixel = image.at<Vec3b>(y, x);
-            int col=bgrPixel[2];
-            float value=(float)col/255.0;
-            inputValues[i++]=value;
+    Size size(width,height);
+    resize(image,imgResized,size,INTER_LINEAR);
+
+    for(int i=0;i<82*82*3;i++)  inputValues[i]=0;
+
+    int xOffset=(82-width)/2;
+    int yOffset=(82-height)/2;
+
+    for(int y = 0; y < height; y++){
+        for(int x = 0; x < width; x++){
+            Vec3b bgrPixel = imgResized.at<Vec3b>(y, x);
+            float red=(float)bgrPixel[0]/255.0;
+            float green=(float)bgrPixel[1]/255.0;
+            float blue=(float)bgrPixel[2]/255.0;
+
+            inputValues[0*82*82+(y+yOffset)*82+x+xOffset]=red;
+            inputValues[1*82*82+(y+yOffset)*82+x+xOffset]=green;
+            inputValues[2*82*82+(y+yOffset)*82+x+xOffset]=blue;
         }
     }
 }
@@ -303,6 +330,7 @@ vector<TrainingItem> NeuroLabNet::getAllTrainingItems(string dataSetDir){
 void NeuroLabNet::loadWeightsAndBiases(string weightsDir){
     int length;
 
+
     //load conv1 parameters
     length=INPUT_MAPS*CONV_1_OUTPUT_MAPS*CONV_1_KERNEL_SIZE*CONV_1_KERNEL_SIZE;
     float* conv1Weights=(float*)malloc(sizeof(float)*length);
@@ -335,6 +363,7 @@ void NeuroLabNet::loadWeightsAndBiases(string weightsDir){
     float* denseBiases=(float*)malloc(sizeof(float)*length);
     loadArray(denseBiases, length, weightsDir+"/dense_biases.txt");
     dense->setBiases(env, denseBiases, length);
+
 }
 
 void NeuroLabNet::saveWeightsAndBiases(string newWeightsDir){
@@ -386,30 +415,41 @@ void NeuroLabNet::saveArray(float* array, int length, string dir){
 }
 
 void NeuroLabNet::loadArray(float* array, int length, string dir){
-    ifstream in(dir);
 
-    for(int i=0;i<length;i++){
-        string value;
-        in>>value;
-        array[i]=stof(value);
+    QString Hfilename=dir.c_str();
+    QFile fileH( Hfilename );
+    if ( fileH.open(QIODevice::ReadWrite)){
+        QTextStream stream( &fileH );
+
+        for(int i=0;i<length;i++){
+            float value;
+            stream>>value;
+            array[i]=value;
+        }
     }
 
-    in.close();
+    fileH.close();
 }
 
 void NeuroLabNet::updateDataSet(vector<string> dataSet){
     this->dataSet = dataSet;
 }
 
+#include <QDebug>
+
 vector<pair<string,float>> NeuroLabNet::getLabelWithProb(float*outputs){
     vector<pair<string,float>>prop;
 
     prop.push_back(pair<string,float>("bianca",outputs[0]));
-    prop.push_back(pair<string,float>("bonny",outputs[1]));
+    prop.push_back(pair<string,float>("other",outputs[1]));
     prop.push_back(pair<string,float>("jens",outputs[2]));
-    prop.push_back(pair<string,float>("mohamad",outputs[3]));
+    prop.push_back(pair<string,float>("bonny",outputs[3]));
     prop.push_back(pair<string,float>("niklas",outputs[4]));
-    prop.push_back(pair<string,float>("other",outputs[5]));
+    prop.push_back(pair<string,float>("mohamad",outputs[5]));
+
+    sort(prop.begin(), prop.end(), [](pair<string,float> lhs, pair<string,float>& rhs) {
+        return lhs.second>rhs.second;
+    });
 
     return prop;
 }
