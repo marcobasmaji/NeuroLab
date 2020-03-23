@@ -153,18 +153,18 @@ void OpenCLLayer::executeKernel(cl_command_queue commandQueue, cl_kernel kernel,
 }
 
 void OpenCLLayer::releaseResources() {
-    if(memInputs!=nullptr)          releaseCLObjectsManager->releaseMemObject(memInputs);
+    if(!isPreviousLayerSet ){if(memInputs!=nullptr)          releaseCLObjectsManager->releaseMemObject(memInputs);}
     if(memOutputs!=nullptr)         releaseCLObjectsManager->releaseMemObject(memOutputs);
     if(memBiases!=nullptr)          releaseCLObjectsManager->releaseMemObject(memBiases);
     if(memWeights!=nullptr)         releaseCLObjectsManager->releaseMemObject(memWeights);
-    if(memErrorInputs!=nullptr)     releaseCLObjectsManager->releaseMemObject(memErrorInputs);
+    if(!isPreviousLayerSet){if(memErrorInputs!=nullptr)     releaseCLObjectsManager->releaseMemObject(memErrorInputs);}
     if(memErrorOutputs!=nullptr)    releaseCLObjectsManager->releaseMemObject(memErrorOutputs);
 
-	releaseCLObjectsManager->releaseKernel(kernelFeedforward);
-	releaseCLObjectsManager->releaseKernel(kernelErrorComp);
+    releaseCLObjectsManager->releaseKernel(kernelFeedforward);
+    releaseCLObjectsManager->releaseKernel(kernelErrorComp);
     if(kernelWeightsUpdate!=nullptr)  releaseCLObjectsManager->releaseKernel(kernelWeightsUpdate);
 
-	releaseCLObjectsManager->releaseProgram(program);
+    releaseCLObjectsManager->releaseProgram(program);
 }
 
 //setters
@@ -296,7 +296,7 @@ void OpenCLLayer::setKernelArg(cl_kernel kernel, cl_uint index, size_t argSize, 
 }
 
 void OpenCLLayer::setLearningRate(float learningRate) {
-	setKernelArg(kernelWeightsUpdate, 0, sizeof(cl_float), &learningRate);
+    setKernelArg(kernelWeightsUpdate, 0, sizeof(float), &learningRate);
 }
 
 void OpenCLLayer::setPreviousOpenCLLayer(OpenCLLayer* previousOpenCLLayer) {
@@ -309,6 +309,8 @@ void OpenCLLayer::setPreviousOpenCLLayer(OpenCLLayer* previousOpenCLLayer) {
 	cl_mem memErrorInputs = this->getMemErrorInputs();
 	previousOpenCLLayer->setKernelArg(previousOpenCLLayer->getKernelErrorComp(), 1, sizeof(cl_mem),&memErrorInputs);
 	if (previousOpenCLLayer->getKernelUpdateWeights()) { previousOpenCLLayer->setKernelArg(previousOpenCLLayer->getKernelUpdateWeights(), 2, sizeof(cl_mem), &memErrorInputs); }
+
+    isPreviousLayerSet=true;
 }
 
 //getters
