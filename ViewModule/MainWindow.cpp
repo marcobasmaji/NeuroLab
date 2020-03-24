@@ -315,27 +315,29 @@ void MainWindow::on_LoadButton_clicked()
 
 void MainWindow::on_previewArea_itemClicked(QListWidgetItem *item)
 {
-    ui->DeleteButton->setEnabled(true);
-    imageToBeRemoved = item;
+//    ui->DeleteButton->setEnabled(true);
+//    imageToBeRemoved = item;
 }
 
 void MainWindow::on_DeleteButton_clicked()
 {
-    if(imageToBeRemoved == NULL){
+    QList<QListWidgetItem *> selectedItems = ui->previewArea->selectedItems();
+    if(selectedItems.empty()){
          //nothing to delete
         return;
     }
-    string imagePath = imageToBeRemoved->text().toStdString();
+    for (QListWidgetItem *imageToBeRemoved: selectedItems){
+        string imagePath = imageToBeRemoved->text().toStdString();
 
-    //remove image from main window
-    int row = ui->previewArea->row(imageToBeRemoved);
-    ui->previewArea->takeItem(row);
+        //remove image from main window
+        int row = ui->previewArea->row(imageToBeRemoved);
+        ui->previewArea->takeItem(row);
 
-    //decrease total nr of images stored in guiSettings
-    guiSettings.removePath(imagePath);
+        //decrease total nr of images stored in guiSettings
+        guiSettings.removePath(imagePath);
+    }
 
-    imageToBeRemoved = NULL;
-    ui->DeleteButton->setEnabled(false);
+    selectedItems.clear();
 
     //if there are no more images left, gray out classify button
     if(guiSettings.getPaths().empty()){
