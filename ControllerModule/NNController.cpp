@@ -35,14 +35,7 @@ void NNController::setPathList(vector<string> list)
 
 void NNController::setDistribution(vector<pair<string, int>> distribution) {
 
-//    pnn.setImagePaths(pathList);
-//    this->pnn.setPlatforms(distribution);
     this->distribution = distribution;
-
-}
-
-void NNController::setHardwareDistribution(vector<string> distr)
-{
 
 }
 
