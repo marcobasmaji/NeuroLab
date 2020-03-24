@@ -43,19 +43,18 @@ void OpenVinoEnv::classify() {
     // creating infer requests on the provided hardware platforms
     try {
         createRequestsWithInput();
-    } catch (const InferenceEngine::details::InferenceEngineException &e) {
+    } catch (...) {
         Result r;
         r.setPath("ERROR loading the network on the hardware plugin(s)");
         endResults.push_back(r);
-        // when plugin not loaded, the function infer() is still called. So must return.
+        // when plugin n Result r;
+        r.setPath("ERROR in createRequestWithInput loading the network on the hardware plugin(s)");
+        endResults.push_back(r);
         return;
     }
     // starting classifcation
     try {
-        //mutex en_mutex;
-        //en_mutex.lock();
         infer();
-        //en_mutex.unlock();
 
     } catch (const InferenceEngine::details::InferenceEngineException &e) {
         Result r;
@@ -73,11 +72,6 @@ void OpenVinoEnv::readIR()
 {
     cerr<<"readIR in OpenVino called"<<endl;
     InferenceEngine::CNNNetReader network_reader;
-    //QString s = QString::fromStdString(structurePath);
-    //QFileInfo file1("../"+s);
-
-    // network_reader.ReadNetwork( file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/" + structurePath);
-    //network_reader.ReadWeights(file1.absolutePath().toStdString()+"/NeuroLab/HardwareModule/" + weightsPath);
     network_reader.ReadNetwork("Networks/"+ this->structurePath);
     network_reader.ReadWeights("Networks/" + this->weightsPath);
     this->cnnnetwork = network_reader.getNetwork();
@@ -86,49 +80,37 @@ void OpenVinoEnv::configureInputAndOutput()
 {
     cerr<<"configureInputand Output in OpenVino called"<<endl;
     InferenceEngine::InputsDataMap input_info(cnnnetwork.getInputsInfo());
-    cerr<<"1"<<endl;
     this->inputInfo = input_info;
-    cerr<<"2"<<endl;
     auto inputInfoItem = *input_info.begin();
-    cerr<<"3"<<endl;
     inputInfoItem.second->setPrecision(InferenceEngine::Precision::U8);
-    cerr<<"4"<<endl;
     inputInfoItem.second->setLayout(InferenceEngine::Layout::NCHW);
-    cerr<<"5"<<endl;
     std::vector<std::shared_ptr<unsigned char>> imagesData = {};
-    cerr<<"6"<<endl;
-    std::vector<std::string> validImageNames = {};
-    cerr << "size of image Names is " << imageNames.size() << endl;
-    for (const auto & i : imageNames) {
-        FormatReader::ReaderPtr reader(i.c_str());
-        if (reader.get() == nullptr) {
-            std::cerr << "Image " + i + " cannot be read!" << std::endl;
-            continue;
+        std::vector<std::string> validImageNames = {};
+        cerr << "size of image Names is " << imageNames.size() << endl;
+        for (const auto & i : imageNames) {
+            FormatReader::ReaderPtr reader(i.c_str());
+            if (reader.get() == nullptr) {
+                std::cerr << "Image " + i + " cannot be read!" << std::endl;
+                continue;
+            }
+            /* Store image data */
+            std::shared_ptr<unsigned char> data(
+                        reader->getData(inputInfoItem.second->getTensorDesc().getDims()[3],
+                        inputInfoItem.second->getTensorDesc().getDims()[2]));
+            if (data != nullptr) {
+                imagesData.push_back(data);
+                validImageNames.push_back(i);
+            }
         }
-        /* Store image data */
-        std::shared_ptr<unsigned char> data(
-                    reader->getData(inputInfoItem.second->getTensorDesc().getDims()[3],
-                    inputInfoItem.second->getTensorDesc().getDims()[2]));
-        if (data != nullptr) {
-            imagesData.push_back(data);
-            validImageNames.push_back(i);
-        }
-    }
-    if (imagesData.empty()) throw std::logic_error("Valid input images were not found!");
-    this->imagesData = imagesData;
-    this->validImageNames = validImageNames;
+        if (imagesData.empty()) throw std::logic_error("Valid input images were not found!");
+        this->imagesData = imagesData;
+        this->validImageNames = validImageNames;
+
     /* Setting batch size using image count */
     cnnnetwork.setBatchSize(imagesData.size());
     size_t batchSize = cnnnetwork.getBatchSize();
     std::cerr << "Batch size is " << std::to_string(batchSize) << std::endl;
     this->batchSize = batchSize;
-//    InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
-//    for (auto &item : output_info) {
-//        auto output_data = item.second;
-//        output_data->setPrecision(InferenceEngine::Precision::U8);
-//        output_data->setLayout(InferenceEngine::Layout::NCHW);
-//    }
-//    this->outputInfo = output_info;
 }
 
 void OpenVinoEnv::createRequestsWithInput()
@@ -137,15 +119,19 @@ void OpenVinoEnv::createRequestsWithInput()
     mutex en_mutex;
     en_mutex.lock();
     InferenceEngine::ExecutableNetwork en;
-    //    InferenceEngine::Core core;
     cerr<<"Inferrequest on "<<cnnnetwork.getName()<<" on platform "<<deviceName<<" with nr of imgs "<< imagesData.size()<<endl;
-    for (int i=1; i<10; i++) {
+    for (int i=1; i<10; i++) {   
         try {
             en = core->LoadNetwork(cnnnetwork, deviceName);
             break;
-        } catch (InferenceEngine::details::InferenceEngineException) {
 
+        } catch (...) {
+            cerr<<"Attempt number " << i << endl;
         }
+        if (i ==9 ){
+            throw std::logic_error("Not successful after 10 Attempts !!");
+        }
+
     }
 
     en_mutex.unlock();
@@ -183,15 +169,7 @@ vector<Result> OpenVinoEnv::processOutput()
 {
     cerr<<"processOutput in OpenVino called"<<endl;
     InferenceEngine::OutputsDataMap output_info(cnnnetwork.getOutputsInfo());
-//    for (auto &item : output_info) {
-//        auto output_data = item.second;
-//        output_data->setPrecision(InferenceEngine::Precision::U8);
-//        output_data->setLayout(InferenceEngine::Layout::NCHW);
-//    }
     this->outputInfo = output_info;
-
-    //QFileInfo file2("../alexnetLabels.txt");
-    //std::string labelFileName = file2.absolutePath().toStdString()+"/NeuroLab/HardwareModule/alexnetLabels.txt";
     string labelFileName = "Networks/alexnetLabels.txt";
     std::vector<std::string> labels;
     std::ifstream inputFile;

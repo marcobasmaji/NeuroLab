@@ -25,10 +25,6 @@ ViewController::ViewController(MasterController* partner)
 }
 
 
-void ViewController::removeImage(string imagePath){
-    qDebug()<<"remove image "<<endl;
-}
-
 void ViewController::handleClassifyRequest(GUISettings settings)
 {
     vector<string> paths = settings.getPaths();
