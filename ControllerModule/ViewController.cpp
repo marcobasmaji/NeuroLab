@@ -168,7 +168,7 @@ void ViewController::train(string weightsDir, string dataSetDir, string newWeigh
    master->train(weightsDir, dataSetDir, newWeightsDir);
 
 
-   mainWindow->displayTrainingResults();
+   //mainWindow->displayTrainingResults();
 
 }
 

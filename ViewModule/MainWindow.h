@@ -15,6 +15,15 @@
 #include <QProgressDialog>
 #include <QTimer>
 #include "TrainingPanel.h"
+#include <ControllerModule/ViewController.h>
+#include <ControllerModule/HardwareElement.h>
+#include <QFileDialog>
+#include <QDebug>
+#include <QScrollArea>
+#include <QVBoxLayout>
+#include <QProgressBar>
+#include <thread>
+#include <stdlib.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -66,7 +75,7 @@ private slots:
 
     void on_prediction_button_clicked();
 
-    int createTab();
+    //int createTab();
 
     //void on_comboBox_currentTextChanged(const QString &arg1);
 
@@ -108,7 +117,9 @@ private slots:
     void on_train_tab_widget_tabCloseRequested(int index);
 
     void on_new_weights_dir_button_clicked();
+public slots:
 
+    void training_running(QProgressBar *progress_bar);
 private:
 
     Ui::MainWindow *ui;
@@ -136,6 +147,5 @@ private:
     void setBackgroundImage(string imagePath);
     void setBackgroundImage();
     void setAllExistingHardwareUnchecked();
-    void training_running(QProgressBar *progress_bar);
 };
 #endif // MAINWINDOW_H(imageToBeRemoved)

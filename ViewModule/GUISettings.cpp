@@ -24,6 +24,10 @@ void GUISettings::setPaths(const vector<string> &newPaths){
     }
 }
 
+void GUISettings::clearPaths(){
+    paths.clear();
+}
+
 void GUISettings::removePath(string value){
     std::vector<string>::iterator foundvalue = std::find(paths.begin(), paths.end(), value);
     if (foundvalue != paths.end()){
