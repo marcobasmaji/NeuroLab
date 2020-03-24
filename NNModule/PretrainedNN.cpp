@@ -73,7 +73,7 @@ void PretrainedNN::setPlatforms(vector<pair<string, int> > platforms)
         count += dist.second;
 
         env->setImageNames(imagesToDeploy);
-
+        cerr<<"env for distribution "<<dist.first<<", "<<dist.second<<"images to deploy size "<<imagesToDeploy.size()<<endl;
         envs.push_back(env);
     }
 }

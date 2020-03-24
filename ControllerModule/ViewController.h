@@ -30,7 +30,6 @@ public:
     list<HardwareElement> availableHardware;
     void setAvailableHardware(vector<string> &hardwareElements);
     void displayAvailableHardware();
-    void removeImage(string imagePath);
     void train(string weightsDir, string dataSetDir, string newWeightsDir);
 
     void showErrorMessage(string mes);
