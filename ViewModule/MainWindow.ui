@@ -707,13 +707,16 @@
       <property name="geometry">
        <rect>
         <x>410</x>
-        <y>410</y>
-        <width>431</width>
-        <height>41</height>
+        <y>370</y>
+        <width>581</width>
+        <height>81</height>
        </rect>
       </property>
       <property name="text">
        <string/>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QPushButton" name="new_weights_dir_button">
