@@ -45,9 +45,6 @@ void OpenVinoEnv::classify() {
         createRequestsWithInput();
     } catch (...) {
         Result r;
-        r.setPath("ERROR loading the network on the hardware plugin(s)");
-        endResults.push_back(r);
-        // when plugin n Result r;
         r.setPath("ERROR in createRequestWithInput loading the network on the hardware plugin(s)");
         endResults.push_back(r);
         return;
@@ -56,7 +53,7 @@ void OpenVinoEnv::classify() {
     try {
         infer();
 
-    } catch (const InferenceEngine::details::InferenceEngineException &e) {
+    } catch (...) {
         Result r;
         r.setPath("ERROR infer not successfull");
         endResults.push_back(r);

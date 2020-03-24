@@ -435,7 +435,6 @@ void NeuroLabNet::updateDataSet(vector<string> dataSet){
     this->dataSet = dataSet;
 }
 
-#include <QDebug>
 
 vector<pair<string,float>> NeuroLabNet::getLabelWithProb(float*outputs){
     vector<pair<string,float>>prop;
