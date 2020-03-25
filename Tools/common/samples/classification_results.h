@@ -92,14 +92,6 @@ public:
                         as<InferenceEngine::PrecisionTrait<InferenceEngine::Precision::FP32>::value_type*>()
                 [results[id] + image_id * (_outBlob->size() / _batchSize)];
 
-                //std::cout << std::setw(static_cast<int>(_classidStr.length())) << std::left << results[id] << " ";
-                //std::cout << std::left << std::setw(static_cast<int>(_probabilityStr.length())) << std::fixed << result;
-
-
-                if (!_labels.empty()) {
-                    //std::cout << " " + _labels[results[id]];
-                }
-                //std::cout << std::endl;
                 // for NeuroLab
                 pair<string,float> tmp;
                 tmp.first = _labels[results[id]];
@@ -107,7 +99,6 @@ public:
                 r.pushLabelsAndProb(tmp);
 
             }
-            //std::cout << std::endl;
         this->endResults.push_back(r);
         }
     }
