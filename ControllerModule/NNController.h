@@ -19,6 +19,7 @@ public:
     void setDistribution(vector<pair<string, int>> distribution);
     void setCurrentNN(string currentNN);
     void trainNeuroLab(string,string,string);
+    //bool trainNeuroLab(string,string,string);
 
 private:
     PretrainedNN pnn;

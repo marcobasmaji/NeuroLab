@@ -9,10 +9,10 @@
 ViewController::ViewController(MasterController* partner)
 {
     char amessage[] = "this is it";
-        char *pmessage = amessage;
-        int argc = 0;
-        char **argv = &pmessage;
-        QApplication app(argc,argv);
+    char *pmessage = amessage;
+    int argc = 0;
+    char **argv = &pmessage;
+    QApplication app(argc,argv);
 
     this->master= partner;
     mainWindow = new MainWindow(nullptr,this);
@@ -159,19 +159,21 @@ void ViewController::displayAvailableHardware()
     setAvailableHardware(test);
     mainWindow->disableHWCheckboxes();
     for(HardwareElement element : availableHardware){
-       mainWindow->enableCheckbox(element);
+        mainWindow->enableCheckbox(element);
     }
 }
 
-void ViewController::train(string weightsDir, string dataSetDir, string newWeightsDir){
+//void ViewController::train(string weightsDir, string dataSetDir, string newWeightsDir){
 
-   master->train(weightsDir, dataSetDir, newWeightsDir);
+//   master->train(weightsDir, dataSetDir, newWeightsDir);
 
+//}
 
-   mainWindow->displayTrainingResults();
+bool ViewController::train(string weightsDir, string dataSetDir, string newWeightsDir){
 
+    master->train(weightsDir, dataSetDir, newWeightsDir);
+    return true;
 }
-
 void ViewController::showErrorMessage(string mes) {
     mainWindow->showErrorMessage(mes);
 }
