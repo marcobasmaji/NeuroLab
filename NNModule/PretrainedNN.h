@@ -13,12 +13,11 @@ using namespace std;
 class PretrainedNN
 {
 public:
-    InferenceEngine::Core* core;
     PretrainedNN();
     void setImagePaths(vector<string> imagePaths);
     void setPlatforms(vector<pair<string, int> > platforms);
     void classify();
-    void setNerualNet(string nn);
+    void setNeuralNet(string nn);
     void threading(OpenVinoEnv *env);
     vector<Result> getResults();
 private:
@@ -29,5 +28,4 @@ private:
     vector<OpenVinoEnv*> envs;
 
 };
-
 #endif // PRETRAINEDNN_H

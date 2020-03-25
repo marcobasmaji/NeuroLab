@@ -13,7 +13,7 @@ vector<Result> NNController::classify()
     if(currentNN.compare("ALEXNET") == 0  || currentNN.compare("GOOGLENET") == 0)
     {
         pnn.setImagePaths(pathList);
-        pnn.setNerualNet(currentNN);
+        pnn.setNeuralNet(currentNN);
         pnn.setPlatforms(distribution);
 
          pnn.classify();
