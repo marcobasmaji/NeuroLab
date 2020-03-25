@@ -764,7 +764,22 @@
         <height>101</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="loading_layout"/>
+      <layout class="QVBoxLayout" name="loading_layout">
+       <item>
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="training_label">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>
@@ -781,7 +796,7 @@
      <x>0</x>
      <y>0</y>
      <width>1032</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

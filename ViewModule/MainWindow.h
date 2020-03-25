@@ -123,15 +123,12 @@ public slots:
 private:
 
     Ui::MainWindow *ui;
+    ViewController* viewController;
     QList<QImage> imageList;
     void displayPreview(const QIcon imageIcon, const QString imagePath);
-    QGroupBox *gridGroupBox;
-    QGridLayout *gridLayout;
     QList<QLabel> imagesPreviews;
-    ViewController* viewController;
     GUISettings guiSettings;
     int resultsCounter;
-    QListWidgetItem *imageToBeRemoved;
     void setPredictionValue(PredictionValues *values);
     void addHardwareToCombobox(HardwareElement element);
     void bindCheckbox(int arg, string hardwareElement, QString nameHardwareElement, int indexCombobox);

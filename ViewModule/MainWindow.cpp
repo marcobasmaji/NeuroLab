@@ -1,5 +1,8 @@
 #include "MainWindow.h"
+#include "Worker.h"
 #include "ui_MainWindow.h"
+
+#include <QThread>
 
 
 
@@ -25,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete viewController;
 }
 
 void MainWindow::uncheckAllHardware(){
@@ -242,9 +246,9 @@ void MainWindow::on_AlexNet_radio_button_clicked()
     viewController->displayAvailableHardware();
     uncheckAllHardware();
     enableClassifyIfPossible();
-    //    if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
-    //        on_LPC_radio_button_clicked();
-    //    }
+    if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
+        on_LPC_radio_button_clicked();
+    }
 }
 
 void MainWindow::on_NeuroLabNet_radio_button_clicked()
@@ -269,9 +273,9 @@ void MainWindow::on_GoogleNet_radio_button_clicked()
     setEnabledModes(true);
     viewController->displayAvailableHardware();
     uncheckAllHardware();
-    //    if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
-    //        on_LPC_radio_button_clicked();
-    //    }
+    if(guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION"){
+        on_LPC_radio_button_clicked();
+    }
 }
 
 void MainWindow::displayPreview(const QIcon imageIcon, const QString imagePath) {
@@ -351,20 +355,6 @@ void MainWindow::on_ClassifyButton_clicked()
     this->viewController->handleClassifyRequest(guiSettings);
 
 }
-
-//int MainWindow::createTab(){
-
-//    QVBoxLayout *layout = new QVBoxLayout();
-//    QScrollArea *scrollArea = new QScrollArea(this);
-//    scrollArea->setLayout(layout);
-
-//    int currentIndex = ui->tabWidget->currentIndex();
-//    currentIndex++;
-//    ui->tabWidget->insertTab(currentIndex, scrollArea, "Results");
-//    ui->tabWidget->setCurrentIndex(currentIndex);
-
-//    return currentIndex;
-//}
 
 void MainWindow::displayResults(vector<Result> results)
 {
@@ -674,6 +664,8 @@ void MainWindow::enableClassifyIfPossible() {
 void MainWindow::on_trainMenu_clicked()
 {
 
+    ui->progressBar->hide();
+    ui->training_label->hide();
     ui->train_tab_widget->show();
     resetPalette();
 }
@@ -703,40 +695,66 @@ void MainWindow::on_select_weights_button_clicked()
 void MainWindow::on_train_button_clicked()
 {
     ui->train_button->setEnabled(false);
+    ui->train_tab_widget->setTabsClosable(false);
+    ui->progressBar->show();
+    ui->training_label->show();
+
     QProgressBar *progress_bar;
-    progress_bar = new QProgressBar(this) ;
-    progress_bar->setMinimum(0);
-    progress_bar->setMaximum(100);
-    progress_bar->setValue(1);
-    progress_bar->setTextVisible(false);
+    progress_bar = ui->progressBar;
 
     QLabel *progressLabel;
-    progressLabel= new QLabel(this);
-    progressLabel->setText("Training is in progress. Please do not close the window!");
+    progressLabel= ui->training_label;
+//    //create progress bar and label
+//    QProgressBar *progress_bar;
+//    progress_bar = new QProgressBar(this) ;
+//    progress_bar->setMinimum(0);
+//    progress_bar->setMaximum(100);
+//    progress_bar->setValue(1);
+//    progress_bar->setTextVisible(false);
 
+//    QLabel *progressLabel;
+//    progressLabel= new QLabel(this);
+//    progressLabel->setText("Training is in progress. Please do not close the window!");
 
-    ui->loading_layout->addWidget(progress_bar);
-    ui->loading_layout->addWidget(progressLabel);
-    QTimer *timer = new QTimer(this);
+//    //show progress bar and label
+//    ui->loading_layout->addWidget(progress_bar);
+//    ui->loading_layout->addWidget(progressLabel);
+
+    //prepare for parallel computation
+    QThread *thread = new QThread;
+    QTimer *timer = new QTimer;
+    Worker *worker = new Worker(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory(), viewController);
+
+    worker->moveToThread(thread);
+    //connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
+    connect(thread, SIGNAL(started()), worker, SLOT(process()));
+    connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
+
+    connect(thread, SIGNAL(started()), timer, SLOT(start()));
+    connect(thread, SIGNAL(finished()), timer, SLOT(stop()));
+    connect(timer, &QTimer::timeout, this, [this,progress_bar]() { training_running(progress_bar); });
+
+    thread->start();
 
     //    connect(timer, &QTimer::timeout, [progress_bar] {
     //                progress_bar->setValue((progress_bar->value() + 1)%100);
     //            });
     //   connect(timer, SIGNAL(timeout()), this, SLOT(training_running(QProgressBar *)));
-    connect(timer, &QTimer::timeout, this, [this,progress_bar]() { training_running(progress_bar); });
-    timer->start(1000);
 
 
-    viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory());
+//    viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory());
 
-    timer->stop();
-    progress_bar->setValue(100);
+//    timer->stop();
+//    progress_bar->setValue(100);
     progressLabel->setText("Training successfull. Updated weights file saved in " +
                            QString::fromStdString(guiSettings.getNewWeightsDirectory()));
+    ui->train_tab_widget->setTabsClosable(true);
 
-    delete timer;
-    delete progress_bar;
-    delete progressLabel;
+//    delete timer;
+//    delete progress_bar;
+//    delete progressLabel;
+//    delete thread;
+//    delete worker;
 
 }
 

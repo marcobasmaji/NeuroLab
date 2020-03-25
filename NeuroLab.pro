@@ -65,6 +65,7 @@ SOURCES += \
     ViewModule/GUISettings.cpp \
     ViewModule/MainWindow.cpp \
     ViewModule/TrainingPanel.cpp \
+    ViewModule/Worker.cpp \
     main.cpp
 
 HEADERS += \
@@ -117,7 +118,8 @@ HEADERS += \
     Tests/TestsView/GuiSettingsTest.hpp \
     ViewModule/GUISettings.h \
     ViewModule/MainWindow.h \
-    ViewModule/TrainingPanel.h
+    ViewModule/TrainingPanel.h \
+    ViewModule/Worker.h
 
 FORMS += \
     ViewModule/MainWindow.ui \
