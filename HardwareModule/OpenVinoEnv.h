@@ -17,32 +17,32 @@ public:
     OpenVinoEnv();
     void classify();
     void chooseNeuralNet(string nn);
-    void setImageNames(std::vector<std::string> imageNames);
+    void setImageNames(std::vector<std::string> imageNamesAttribute);
     void setDevice(string device);
     vector<Result> getResults();
 
-    void setCore(InferenceEngine::Core *core);
+    void setCore(InferenceEngine::Core core);
+    vector<Result> processOutput();
 private:
     void readIR();
     void configureInputAndOutput();
     void createRequestsWithInput();
     void infer();
-    vector<Result> processOutput();
 
-    InferenceEngine::Core* core;
-    InferenceEngine::CNNNetwork cnnnetwork;
-    InferenceEngine::InputsDataMap inputInfo;
-    InferenceEngine::OutputsDataMap outputInfo;
+    InferenceEngine::Core core;
+    InferenceEngine::CNNNetwork cnnnetworkAttribute;
+    InferenceEngine::InputsDataMap inputInfoAttribute;
+    InferenceEngine::OutputsDataMap outputInfoAttribute;
     string structurePath;
     string weightsPath;
-    std::vector<std::string> imageNames;
-    vector<Result> endResults;
+    std::vector<std::string> imageNamesAttribute;
+    vector<Result> endResultsAttribute;
     string deviceName;
-    std::vector<std::shared_ptr<unsigned char>> imagesData;
-    std::vector<std::string> validImageNames;
-    size_t batchSize;
-    InferenceEngine::InferRequest inferRequest;
-    vector<pair<string, int> > distribution;
+    std::vector<std::shared_ptr<unsigned char>> imagesDataAttribute;
+    std::vector<std::string> validImageNamesAttribute;
+    size_t batchSizeAttribute;
+    InferenceEngine::InferRequest inferRequestAttribute;
+    vector<pair<string, int> > distributionAttribute;
 };
 
 #endif // OPENVINOENV_H
