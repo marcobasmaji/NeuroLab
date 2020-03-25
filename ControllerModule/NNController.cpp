@@ -44,6 +44,11 @@ void NNController::trainNeuroLab(string weightsDir, string dataSetDir, string ne
     neuroLabNet.train(weightsDir, dataSetDir, newWeightsDir);
 }
 
+//bool NNController::trainNeuroLab(string weightsDir, string dataSetDir, string newWeightsDir)
+//{
+//    return neuroLabNet.train(weightsDir, dataSetDir, newWeightsDir);
+//}
+
 void NNController::setCurrentNN(string currentNN)
 {
     this->currentNN = currentNN;

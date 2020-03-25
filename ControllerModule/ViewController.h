@@ -30,7 +30,7 @@ public:
     list<HardwareElement> availableHardware;
     void setAvailableHardware(vector<string> &hardwareElements);
     void displayAvailableHardware();
-    void train(string weightsDir, string dataSetDir, string newWeightsDir);
+    bool train(string weightsDir, string dataSetDir, string newWeightsDir);
 
     void showErrorMessage(string mes);
 private:

@@ -1,8 +1,5 @@
 #include "MainWindow.h"
-#include "Worker.h"
 #include "ui_MainWindow.h"
-
-#include <QThread>
 
 
 
@@ -36,34 +33,27 @@ void MainWindow::uncheckAllHardware(){
     for (HardwareElement hw : viewController->availableHardware) {
         switch(hw){
         case MOV : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_Mov1_checkbox_stateChanged(flag);
                 ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case MOV1 : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
                 ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case MOV2 : if (ui->Mov2_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_Mov2_checkbox_stateChanged(flag);
                 ui->Mov2_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case MOV3 : if (ui->Mov3_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_Mov3_checkbox_stateChanged(flag);
                 ui->Mov3_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case MOV4 : if (ui->Mov4_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_Mov4_checkbox_stateChanged(flag);
                 ui->Mov4_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case CPU : if (ui->CPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_CPU_checkbox_stateChanged(flag);
                 ui->CPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case GPU : if (ui->GPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_GPU_checkbox_stateChanged(flag);
                 ui->GPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case FPGA : if (ui->FPGA_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_FPGA_checkbox_stateChanged(flag);
                 ui->FPGA_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         }
@@ -169,10 +159,6 @@ void MainWindow::disableHWCheckboxes()
 
 void MainWindow::on_LPC_radio_button_clicked()
 {
-    //    if(guiSettings.getNn().compare("NEUROLABNET") == 0){
-    //        return;
-    //    }
-
     guiSettings.setMode("LOWEST_POWER_CONSUMPTION");
     bool hasMovidius = false;
     uncheckAllHardware();
@@ -182,25 +168,21 @@ void MainWindow::on_LPC_radio_button_clicked()
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov1_checkbox->setCheckState(Qt::Checked);
-            //guiSettings.setSelectedHardware({MOV1});
             break;
         case MOV2 : hasMovidius = true;
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov2_checkbox->setCheckState(Qt::Checked);
-            //guiSettings.setSelectedHardware({MOV2});
             break;
         case MOV3: hasMovidius = true;
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov3_checkbox->setCheckState(Qt::Checked);
-            //guiSettings.setSelectedHardware({MOV3});
             break;
         case MOV4 : hasMovidius = true;
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov4_checkbox->setCheckState(Qt::Checked);
-            //guiSettings.setSelectedHardware({MOV4});
             break;
         default:    this->disableHWCheckboxes();
             this->uncheckAllHardware();
@@ -229,10 +211,6 @@ void MainWindow::on_HP_radio_button_clicked()
 
 void MainWindow::on_HEE_radio_button_clicked()
 {
-    //    if(guiSettings.getNn().compare("NEUROLABNET")==0){
-    //        return;
-    //    }
-
     guiSettings.setMode("HIGHEST_EFFICIENCY");
     viewController->displayAvailableHardware();
     uncheckAllHardware();
@@ -311,12 +289,6 @@ void MainWindow::on_LoadButton_clicked()
     //load in mainwindow
     this->guiSettings.setPaths(vec);
     enableClassifyIfPossible();
-}
-
-void MainWindow::on_previewArea_itemClicked(QListWidgetItem *item)
-{
-    //    ui->DeleteButton->setEnabled(true);
-    //    imageToBeRemoved = item;
 }
 
 void MainWindow::on_DeleteButton_clicked()
@@ -715,7 +687,7 @@ void MainWindow::on_train_button_clicked()
     Worker *worker = new Worker(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory(), viewController);
 
     worker->moveToThread(thread);
-    //connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
+    connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
     connect(thread, SIGNAL(started()), worker, SLOT(process()));
     connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
 
@@ -723,6 +695,11 @@ void MainWindow::on_train_button_clicked()
     connect(thread, SIGNAL(finished()), timer, SLOT(stop()));
     connect(timer, SIGNAL(timeout()), this, SLOT(training_running()));
     connect(thread, SIGNAL(finished()), this, SLOT(stop_training()));
+
+    connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+
+
     thread->start();
     timer->start(1000);
 
@@ -731,22 +708,23 @@ void MainWindow::on_train_button_clicked()
 void MainWindow::training_running()
 {
     cerr<<"update progressbar"<<endl;
+
     ui->progressBar->setValue((ui->progressBar->value() + 1) % 101);
 }
 
 void MainWindow::stop_training(){
-
     ui->progressBar->setValue(100);
     ui->training_label->setText("Training successfull. Updated weights file saved in " +
                                 QString::fromStdString(guiSettings.getNewWeightsDirectory()));
     ui->train_tab_widget->setTabsClosable(true);
 }
 
-
-void MainWindow::displayTrainingResults() {
-    //ui->train_success_label->setText("Training successfull. Updated weights file saved in " +
-    //QString::fromStdString(guiSettings.getNewWeightsDirectory()));
+void MainWindow::errorString(QString message){
+    ui->progressBar->setValue(0);
+    ui->training_label->setText("Error");
+    showErrorMessage(message.toStdString());
 }
+
 
 void MainWindow::enableTrainIfPossible() {
 

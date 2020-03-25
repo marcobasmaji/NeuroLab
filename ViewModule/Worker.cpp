@@ -20,7 +20,11 @@ Worker::~Worker() {
 // Start processing data.
 void Worker::process() {
 
-    viewController->train(dataSetDir, weightsDir, newWeightsDir);
+    bool res;
+    res = viewController->train(dataSetDir, weightsDir, newWeightsDir);
+    if(res == false){
+        emit error("The selected data set directory and/or weights directory are not correct. Please try again!");
+    }
 
     emit finished();
 }
