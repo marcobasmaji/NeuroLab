@@ -701,24 +701,13 @@ void MainWindow::on_train_button_clicked()
 
     QProgressBar *progress_bar;
     progress_bar = ui->progressBar;
+    progress_bar->setTextVisible(false);
+
 
     QLabel *progressLabel;
     progressLabel= ui->training_label;
-//    //create progress bar and label
-//    QProgressBar *progress_bar;
-//    progress_bar = new QProgressBar(this) ;
-//    progress_bar->setMinimum(0);
-//    progress_bar->setMaximum(100);
-//    progress_bar->setValue(1);
-//    progress_bar->setTextVisible(false);
+    progressLabel->setText("Training is in progress. Please do not close the window!");
 
-//    QLabel *progressLabel;
-//    progressLabel= new QLabel(this);
-//    progressLabel->setText("Training is in progress. Please do not close the window!");
-
-//    //show progress bar and label
-//    ui->loading_layout->addWidget(progress_bar);
-//    ui->loading_layout->addWidget(progressLabel);
 
     //prepare for parallel computation
     QThread *thread = new QThread;
@@ -732,37 +721,25 @@ void MainWindow::on_train_button_clicked()
 
     connect(thread, SIGNAL(started()), timer, SLOT(start()));
     connect(thread, SIGNAL(finished()), timer, SLOT(stop()));
-    connect(timer, &QTimer::timeout, this, [this,progress_bar]() { training_running(progress_bar); });
-
+    connect(timer, SIGNAL(timeout()), this, SLOT(training_running()));
+    connect(thread, SIGNAL(finished()), this, SLOT(stop_training()));
     thread->start();
-
-    //    connect(timer, &QTimer::timeout, [progress_bar] {
-    //                progress_bar->setValue((progress_bar->value() + 1)%100);
-    //            });
-    //   connect(timer, SIGNAL(timeout()), this, SLOT(training_running(QProgressBar *)));
-
-
-//    viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory());
-
-//    timer->stop();
-//    progress_bar->setValue(100);
-    progressLabel->setText("Training successfull. Updated weights file saved in " +
-                           QString::fromStdString(guiSettings.getNewWeightsDirectory()));
-    ui->train_tab_widget->setTabsClosable(true);
-
-//    delete timer;
-//    delete progress_bar;
-//    delete progressLabel;
-//    delete thread;
-//    delete worker;
+    timer->start(1000);
 
 }
 
-void MainWindow::training_running(QProgressBar *progress_bar)
+void MainWindow::training_running()
 {
     cerr<<"update progressbar"<<endl;
-    progress_bar->setValue((progress_bar->value() + 1)%100);
-    qApp->processEvents();
+    ui->progressBar->setValue((ui->progressBar->value() + 1) % 101);
+}
+
+void MainWindow::stop_training(){
+
+    ui->progressBar->setValue(100);
+    ui->training_label->setText("Training successfull. Updated weights file saved in " +
+                                QString::fromStdString(guiSettings.getNewWeightsDirectory()));
+    ui->train_tab_widget->setTabsClosable(true);
 }
 
 

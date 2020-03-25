@@ -119,7 +119,8 @@ private slots:
     void on_new_weights_dir_button_clicked();
 public slots:
 
-    void training_running(QProgressBar *progress_bar);
+    void training_running();
+    void stop_training();
 private:
 
     Ui::MainWindow *ui;
