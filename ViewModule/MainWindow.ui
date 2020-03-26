@@ -703,6 +703,22 @@
        <string>Select Weights directory</string>
       </property>
      </widget>
+     <widget class="QLabel" name="train_success_label">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>370</y>
+        <width>581</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
      <widget class="QPushButton" name="new_weights_dir_button">
       <property name="geometry">
        <rect>
@@ -764,7 +780,25 @@
         <height>101</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="loading_layout"/>
+      <layout class="QVBoxLayout" name="loading_layout">
+       <item>
+        <widget class="QProgressBar" name="progress_bar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="training_label">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </widget>
@@ -781,7 +815,7 @@
      <x>0</x>
      <y>0</y>
      <width>1032</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

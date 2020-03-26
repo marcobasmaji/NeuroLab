@@ -13,7 +13,7 @@ vector<Result> NNController::classify()
     if(currentNN.compare("ALEXNET") == 0  || currentNN.compare("GOOGLENET") == 0)
     {
         pnn.setImagePaths(pathList);
-        pnn.setNerualNet(currentNN);
+        pnn.setNeuralNet(currentNN);
         pnn.setPlatforms(distribution);
 
          pnn.classify();
@@ -43,6 +43,11 @@ void NNController::trainNeuroLab(string weightsDir, string dataSetDir, string ne
 {
     neuroLabNet.train(weightsDir, dataSetDir, newWeightsDir);
 }
+
+//bool NNController::trainNeuroLab(string weightsDir, string dataSetDir, string newWeightsDir)
+//{
+//    return neuroLabNet.train(weightsDir, dataSetDir, newWeightsDir);
+//}
 
 void NNController::setCurrentNN(string currentNN)
 {

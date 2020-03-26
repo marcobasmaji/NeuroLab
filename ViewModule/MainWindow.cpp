@@ -1,13 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include <ControllerModule/ViewController.h>
-#include <ControllerModule/HardwareElement.h>
-#include <QFileDialog>
-#include <QDebug>
-#include <QScrollArea>
-#include <QVBoxLayout>
-#include <QProgressBar>
-#include <thread>
+
 
 
 MainWindow::MainWindow(QWidget *parent, ViewController *partner)
@@ -32,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent, ViewController *partner)
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete viewController;
 }
 
 void MainWindow::uncheckAllHardware(){
@@ -39,35 +33,28 @@ void MainWindow::uncheckAllHardware(){
     for (HardwareElement hw : viewController->availableHardware) {
         switch(hw){
         case MOV : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_Mov1_checkbox_stateChanged(flag);
-            ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+                ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case MOV1 : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
-            ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+                ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case MOV2 : if (ui->Mov2_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_Mov2_checkbox_stateChanged(flag);
-            ui->Mov2_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+                ui->Mov2_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case MOV3 : if (ui->Mov3_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_Mov3_checkbox_stateChanged(flag);
-            ui->Mov3_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+                ui->Mov3_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case MOV4 : if (ui->Mov4_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_Mov4_checkbox_stateChanged(flag);
-            ui->Mov4_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+                ui->Mov4_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case CPU : if (ui->CPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_CPU_checkbox_stateChanged(flag);
-            ui->CPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+                ui->CPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case GPU : if (ui->GPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_GPU_checkbox_stateChanged(flag);
-            ui->GPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+                ui->GPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         case FPGA : if (ui->FPGA_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                //on_FPGA_checkbox_stateChanged(flag);
-            ui->FPGA_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+                ui->FPGA_checkbox->setCheckState(Qt::CheckState::Unchecked);}
             break;
         }
     }
@@ -75,23 +62,24 @@ void MainWindow::uncheckAllHardware(){
 
 void MainWindow::setAllExistingHardwareUnchecked() {
     if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+        ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
     if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+        ui->Mov1_checkbox->setCheckState(Qt::CheckState::Unchecked);}
     if (ui->Mov2_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                ui->Mov2_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+        ui->Mov2_checkbox->setCheckState(Qt::CheckState::Unchecked);}
     if (ui->Mov3_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                ui->Mov3_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+        ui->Mov3_checkbox->setCheckState(Qt::CheckState::Unchecked);}
     if (ui->Mov4_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                ui->Mov4_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+        ui->Mov4_checkbox->setCheckState(Qt::CheckState::Unchecked);}
     if (ui->CPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                ui->CPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+        ui->CPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
     if (ui->GPU_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                ui->GPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+        ui->GPU_checkbox->setCheckState(Qt::CheckState::Unchecked);}
     if (ui->FPGA_checkbox->checkState() != Qt::CheckState::Unchecked) {
-                ui->FPGA_checkbox->setCheckState(Qt::CheckState::Unchecked);}
+        ui->FPGA_checkbox->setCheckState(Qt::CheckState::Unchecked);}
 
 }
+
 
 void MainWindow::selectAllHardware() {
     if (guiSettings.getMode() == "LOWEST_POWER_CONSUMPTION") {
@@ -100,29 +88,29 @@ void MainWindow::selectAllHardware() {
     for (HardwareElement hw : viewController->availableHardware) {
         switch(hw){
         case MOV : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Checked) {
-            ui->Mov1_checkbox->setCheckState(Qt::CheckState::Checked);
+                ui->Mov1_checkbox->setCheckState(Qt::CheckState::Checked);
             }
             break;
         case MOV1 : if (ui->Mov1_checkbox->checkState() != Qt::CheckState::Checked) {
-            ui->Mov1_checkbox->setCheckState(Qt::CheckState::Checked);}
+                ui->Mov1_checkbox->setCheckState(Qt::CheckState::Checked);}
             break;
         case MOV2 : if (ui->Mov2_checkbox->checkState() != Qt::CheckState::Checked) {
-            ui->Mov2_checkbox->setCheckState(Qt::CheckState::Checked);}
+                ui->Mov2_checkbox->setCheckState(Qt::CheckState::Checked);}
             break;
         case MOV3 : if (ui->Mov3_checkbox->checkState() != Qt::CheckState::Checked) {
-            ui->Mov3_checkbox->setCheckState(Qt::CheckState::Checked);}
+                ui->Mov3_checkbox->setCheckState(Qt::CheckState::Checked);}
             break;
         case MOV4 : if (ui->Mov4_checkbox->checkState() != Qt::CheckState::Checked) {
-            ui->Mov4_checkbox->setCheckState(Qt::CheckState::Checked);}
+                ui->Mov4_checkbox->setCheckState(Qt::CheckState::Checked);}
             break;
         case CPU : if (ui->CPU_checkbox->checkState() != Qt::CheckState::Checked) {
-            ui->CPU_checkbox->setCheckState(Qt::CheckState::Checked);}
+                ui->CPU_checkbox->setCheckState(Qt::CheckState::Checked);}
             break;
         case GPU : if (ui->GPU_checkbox->checkState() != Qt::CheckState::Checked) {
-            ui->GPU_checkbox->setCheckState(Qt::CheckState::Checked);}
+                ui->GPU_checkbox->setCheckState(Qt::CheckState::Checked);}
             break;
         case FPGA : if (ui->FPGA_checkbox->checkState() != Qt::CheckState::Checked) {
-            ui->FPGA_checkbox->setCheckState(Qt::CheckState::Checked);}
+                ui->FPGA_checkbox->setCheckState(Qt::CheckState::Checked);}
             break;
         }
     }
@@ -171,10 +159,6 @@ void MainWindow::disableHWCheckboxes()
 
 void MainWindow::on_LPC_radio_button_clicked()
 {
-    if(guiSettings.getNn().compare("NEUROLABNET") == 0){
-        return;
-    }
-
     guiSettings.setMode("LOWEST_POWER_CONSUMPTION");
     bool hasMovidius = false;
     uncheckAllHardware();
@@ -184,25 +168,21 @@ void MainWindow::on_LPC_radio_button_clicked()
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov1_checkbox->setCheckState(Qt::Checked);
-            //guiSettings.setSelectedHardware({MOV1});
             break;
         case MOV2 : hasMovidius = true;
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov2_checkbox->setCheckState(Qt::Checked);
-            //guiSettings.setSelectedHardware({MOV2});
             break;
         case MOV3: hasMovidius = true;
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov3_checkbox->setCheckState(Qt::Checked);
-            //guiSettings.setSelectedHardware({MOV3});
             break;
         case MOV4 : hasMovidius = true;
             this->disableHWCheckboxes();
             this->uncheckAllHardware();
             ui->Mov4_checkbox->setCheckState(Qt::Checked);
-            //guiSettings.setSelectedHardware({MOV4});
             break;
         default:    this->disableHWCheckboxes();
             this->uncheckAllHardware();
@@ -219,9 +199,9 @@ void MainWindow::on_LPC_radio_button_clicked()
 
 void MainWindow::on_HP_radio_button_clicked()
 {
-    if(guiSettings.getNn().compare("NEUROLABNET")==0){
-        return;
-    }
+    //    if(guiSettings.getNn().compare("NEUROLABNET")==0){
+    //        return;
+    //    }
     guiSettings.setMode("HIGHEST_PERFOMANCE");
     viewController->displayAvailableHardware();
     uncheckAllHardware();
@@ -231,10 +211,6 @@ void MainWindow::on_HP_radio_button_clicked()
 
 void MainWindow::on_HEE_radio_button_clicked()
 {
-    if(guiSettings.getNn().compare("NEUROLABNET")==0){
-        return;
-    }
-
     guiSettings.setMode("HIGHEST_EFFICIENCY");
     viewController->displayAvailableHardware();
     uncheckAllHardware();
@@ -256,10 +232,11 @@ void MainWindow::on_AlexNet_radio_button_clicked()
 void MainWindow::on_NeuroLabNet_radio_button_clicked()
 {
     guiSettings.setNn("NEUROLABNET");
+    on_HP_radio_button_clicked();
+    ui->HP_radio_button->toggle();
     uncheckAllHardware();
     disableHWCheckboxes();
     setEnabledModes(false);
-
     ui->CPU_checkbox->setCheckState(Qt::Checked);
     qDebug()<<QString::fromStdString(guiSettings.getNn())<<endl;
     for (string hw : guiSettings.getSelectedHardware()) {
@@ -279,11 +256,17 @@ void MainWindow::on_GoogleNet_radio_button_clicked()
     }
 }
 
-void MainWindow::displayPreview(const QIcon imageIcon, const QString imagePath) {
+bool MainWindow::displayPreview(const QIcon imageIcon, const QString imagePath) {
 
+    if(ui->previewArea->count() > 150){
+        ui->LoadButton->setEnabled(false);
+        showErrorMessage("The maximum number of images was reached!");
+        return false;
+    }
     QListWidgetItem *newItem;
     newItem  = new QListWidgetItem(imageIcon, imagePath);
     ui->previewArea->addItem(newItem);
+    return true;
 }
 
 
@@ -298,33 +281,30 @@ void MainWindow::on_LoadButton_clicked()
 
     qDebug()<<"Images Loaded"<<endl;
 
-
-    for(int i = 0; i < filesList.length() && !filesList.isEmpty(); i++){
+    int lenght = filesList.length();
+    for(int i = 0; i < lenght && !filesList.isEmpty(); i++){
         qDebug()<<"1 Image added to list: "<<filesList.at(i)<<endl;
         QIcon newIcon = QIcon(filesList.at(i));
-        displayPreview(newIcon, filesList.at(i));
+        if(!displayPreview(newIcon, filesList.at(i))){
+            lenght = i;
+         }
     }
     // turning Qstrings into std strings
     vector<string> vec;
-    for(int i = 0; i < filesList.length(); i++) {
+    for(int i = 0; i < lenght; i++) {
         vec.push_back(filesList.at(i).toStdString());
     }
     //load in mainwindow
     this->guiSettings.setPaths(vec);
     enableClassifyIfPossible();
-}
 
-void MainWindow::on_previewArea_itemClicked(QListWidgetItem *item)
-{
-//    ui->DeleteButton->setEnabled(true);
-//    imageToBeRemoved = item;
 }
 
 void MainWindow::on_DeleteButton_clicked()
 {
     QList<QListWidgetItem *> selectedItems = ui->previewArea->selectedItems();
     if(selectedItems.empty()){
-         //nothing to delete
+        //nothing to delete
         return;
     }
     for (QListWidgetItem *imageToBeRemoved: selectedItems){
@@ -344,31 +324,21 @@ void MainWindow::on_DeleteButton_clicked()
     if(guiSettings.getPaths().empty()){
         ui->ClassifyButton->setEnabled(false);
     }
+
+    if(ui->previewArea->count() <= 150){
+        ui->LoadButton->setEnabled(true);
+    }
 }
 
 void MainWindow::on_ClassifyButton_clicked()
 {
     // calling classify in GUI
-    qDebug()<<"MAinWindow gui setting in classify"<<endl;
+    qDebug()<<"MainWindow gui setting in classify"<<endl;
     for(string hw : guiSettings.getSelectedHardware()){
         qDebug()<<QString::fromStdString(hw)<<endl;
     }
     this->viewController->handleClassifyRequest(guiSettings);
 
-}
-
-int MainWindow::createTab(){
-
-    QVBoxLayout *layout = new QVBoxLayout();
-    QScrollArea *scrollArea = new QScrollArea(this);
-    scrollArea->setLayout(layout);
-
-    int currentIndex = ui->tabWidget->currentIndex();
-    currentIndex++;
-    ui->tabWidget->insertTab(currentIndex, scrollArea, "Results");
-    ui->tabWidget->setCurrentIndex(currentIndex);
-
-    return currentIndex;
 }
 
 void MainWindow::displayResults(vector<Result> results)
@@ -381,10 +351,9 @@ void MainWindow::displayResults(vector<Result> results)
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    int currentIndex = ui->tabWidget->currentIndex();
-    currentIndex++;
-    ui->tabWidget->insertTab(currentIndex, scrollArea, "Results");
-    ui->tabWidget->setCurrentIndex(currentIndex);
+    int newIndex = ui->tabWidget->count();
+    ui->tabWidget->insertTab(newIndex, scrollArea, "Results");
+    ui->tabWidget->setCurrentIndex(newIndex);
 
 
     for(Result result : results){
@@ -467,45 +436,45 @@ void MainWindow::displayPrediction(string totalTime, string totalPowerConsumptio
     ui->totalTime_label->setText(QString::fromStdString(totalTime));
     ui->totalPower_label->setText(QString::fromStdString(totalPowerConsumption));
     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 1")) {
-         showHwNotUsedMessage(mov1);
-         setPredictionValue(mov1);
-         return;
+        showHwNotUsedMessage(mov1);
+        setPredictionValue(mov1);
+        return;
     }
-     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 2")) {
-         showHwNotUsedMessage(mov2);
-         setPredictionValue(mov2);
-         return;
-     }
-     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 3")) {
-         showHwNotUsedMessage(mov3);
-         setPredictionValue(mov3);
-         return ;
-     }
-     if (ui->comboBox->currentText() == QString::fromStdString("Movidius 4")) {
-         showHwNotUsedMessage(mov4);
-         setPredictionValue(mov4);
-         return;
-     }
-     if (ui->comboBox->currentText() == QString::fromStdString("CPU")) {
-         showHwNotUsedMessage(cpu);
-         setPredictionValue(cpu);
-         return;
-     }
-     if (ui->comboBox->currentText() == QString::fromStdString("GPU")) {
-         showHwNotUsedMessage(gpu);
-         setPredictionValue(gpu);
-         return;
+    if (ui->comboBox->currentText() == QString::fromStdString("Movidius 2")) {
+        showHwNotUsedMessage(mov2);
+        setPredictionValue(mov2);
+        return;
     }
-     if (ui->comboBox->currentText() == QString::fromStdString("FPGA")){
-         showHwNotUsedMessage(fpga);
-         setPredictionValue(fpga);
-         return;
+    if (ui->comboBox->currentText() == QString::fromStdString("Movidius 3")) {
+        showHwNotUsedMessage(mov3);
+        setPredictionValue(mov3);
+        return ;
+    }
+    if (ui->comboBox->currentText() == QString::fromStdString("Movidius 4")) {
+        showHwNotUsedMessage(mov4);
+        setPredictionValue(mov4);
+        return;
+    }
+    if (ui->comboBox->currentText() == QString::fromStdString("CPU")) {
+        showHwNotUsedMessage(cpu);
+        setPredictionValue(cpu);
+        return;
+    }
+    if (ui->comboBox->currentText() == QString::fromStdString("GPU")) {
+        showHwNotUsedMessage(gpu);
+        setPredictionValue(gpu);
+        return;
+    }
+    if (ui->comboBox->currentText() == QString::fromStdString("FPGA")){
+        showHwNotUsedMessage(fpga);
+        setPredictionValue(fpga);
+        return;
     }
 
-        ui->flops_value->clear();
-        ui->bandwidth_value->clear();
-        ui->powerCons_value->clear();
-        ui->time_value->clear();
+    ui->flops_value->clear();
+    ui->bandwidth_value->clear();
+    ui->powerCons_value->clear();
+    ui->time_value->clear();
 
 }
 
@@ -634,12 +603,28 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     if (index == 0) {
         ui->tabWidget->hide();
         ui->HardwareOptions->hide();
+        on_Refresh_hardware_clicked();
         ui->NeuralNetOptions->hide();
+        on_AlexNet_radio_button_clicked();
+        ui->AlexNet_radio_button->toggle();
         ui->ModeOptions->hide();
+        on_HP_radio_button_clicked();
+        ui->HP_radio_button->toggle();
+        ui->previewArea->clear();
+        guiSettings.clearPaths();
+        ui->totalTime_label->clear();
+        ui->totalPower_label->clear();
         setBackgroundImage();
         ui->verticalWidget->show();
+        index++;
+        int count = ui->tabWidget->count();
+        while(index < count){
+            on_tabWidget_tabCloseRequested(1);
+            index++;
+        }
     } else {
-    ui->tabWidget->removeTab(index);}
+        ui->tabWidget->removeTab(index);
+    }
 }
 
 void MainWindow::on_classificationMenu_clicked()
@@ -664,6 +649,8 @@ void MainWindow::enableClassifyIfPossible() {
 void MainWindow::on_trainMenu_clicked()
 {
 
+    ui->progress_bar->hide();
+    ui->training_label->hide();
     ui->train_tab_widget->show();
     resetPalette();
 }
@@ -671,9 +658,9 @@ void MainWindow::on_trainMenu_clicked()
 void MainWindow::on_load_dataset_button_clicked()
 {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Load Dataset"),
-                                                         "/home",
-                                                         QFileDialog::ShowDirsOnly
-                                                         | QFileDialog::DontResolveSymlinks);
+                                                    "/home",
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
     ui->dataset_path_label->setText(dir);
     guiSettings.setDataSetDirectory(dir.toStdString());
     enableTrainIfPossible();
@@ -682,49 +669,75 @@ void MainWindow::on_load_dataset_button_clicked()
 void MainWindow::on_select_weights_button_clicked()
 {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Select weights folder"),
-                                                         "/home",
-                                                         QFileDialog::ShowDirsOnly
-                                                         | QFileDialog::DontResolveSymlinks);
+                                                    "/home",
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
     ui->weights_path_label->setText(dir);
     guiSettings.setWeightsDirectory(dir.toStdString());
     enableTrainIfPossible();
 
 }
-
 void MainWindow::on_train_button_clicked()
 {
     ui->train_button->setEnabled(false);
+    ui->train_tab_widget->setTabsClosable(false);
+    ui->progress_bar->show();
+    ui->training_label->show();
+
     QProgressBar *progress_bar;
-    progress_bar = new QProgressBar(ui->train_button) ;
+    progress_bar = ui->progress_bar;
     progress_bar->setTextVisible(false);
 
-    QLabel *inProgressLabel;
-    inProgressLabel = new QLabel("Training is in progress. Please do not close the window!");
 
-    ui->loading_layout->addWidget(progress_bar);
-    ui->loading_layout->addWidget(inProgressLabel);
+    QLabel *progressLabel;
+    progressLabel= ui->training_label;
+    progressLabel->setText("Training is in progress. Please do not close the window!");
 
-//    QTimer *timer = new QTimer(progress_bar);
-//    connect(timer, &QTimer::timeout, this, &MainWindow::training_running);
-//    timer->start(1000);
 
-    //std::thread thread(&MainWindow::training_running, this, progress_bar);
+    //prepare for parallel computation
+    QThread *thread = new QThread;
+    QTimer *timer = new QTimer;
+    Worker *worker = new Worker(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory(), viewController);
 
-    //viewController->train(guiSettings.getWeightsDirectory(), guiSettings.getDataSetDirectory(), guiSettings.getNewWeightsDirectory());
+    worker->moveToThread(thread);
+    connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
+    connect(thread, SIGNAL(started()), worker, SLOT(process()));
+    connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
 
-    //thread.join();
+    connect(thread, SIGNAL(started()), timer, SLOT(start()));
+    connect(thread, SIGNAL(finished()), timer, SLOT(stop()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(training_running()));
+    connect(thread, SIGNAL(finished()), this, SLOT(stop_training()));
+
+    connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+
+
+    thread->start();
+    timer->start(1000);
+
 }
 
-void MainWindow::training_running(QProgressBar *progress_bar) {
-    if(progress_bar->value() > 100){
-        progress_bar->setValue(0);
-        return;
-    }
+void MainWindow::training_running()
+{
+    cerr<<"update progressbar"<<endl;
 
-    progress_bar->setValue(progress_bar->value() + 1);
-
-
+    ui->progress_bar->setValue((ui->progress_bar->value() + 1) % 101);
 }
+
+void MainWindow::stop_training(){
+    ui->progress_bar->setValue(100);
+    ui->training_label->setText("Training successfull. Updated weights file saved in " +
+                                QString::fromStdString(guiSettings.getNewWeightsDirectory()));
+    ui->train_tab_widget->setTabsClosable(true);
+}
+
+void MainWindow::errorString(QString message){
+    ui->progress_bar->setValue(0);
+    ui->training_label->setText("Error");
+    showErrorMessage(message.toStdString());
+}
+
 
 void MainWindow::enableTrainIfPossible() {
 
@@ -738,6 +751,9 @@ void MainWindow::enableTrainIfPossible() {
 void MainWindow::on_train_tab_widget_tabCloseRequested(int index)
 {
     ui->train_tab_widget->hide();
+    ui->dataset_path_label->clear();
+    ui->new_weights_dir_label->clear();
+    ui->weights_path_label->clear();
     setBackgroundImage();
 }
 
@@ -762,10 +778,6 @@ void MainWindow::setBackgroundImage(){
     this->setPalette(palette);
 }
 
-void MainWindow::displayTrainingResults() {
-    //ui->train_success_label->setText("Training successfull. Updated weights file saved in " +
-                                     //QString::fromStdString(guiSettings.getNewWeightsDirectory()));
-}
 
 void MainWindow::showErrorMessage(string mes){
     TrainingPanel *popUp = new TrainingPanel(this);
@@ -776,9 +788,9 @@ void MainWindow::showErrorMessage(string mes){
 void MainWindow::on_new_weights_dir_button_clicked()
 {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Select folder for new train"),
-                                                         "/home",
-                                                         QFileDialog::ShowDirsOnly
-                                                         | QFileDialog::DontResolveSymlinks);
+                                                    "/home",
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
     ui->new_weights_dir_label->setText(dir);
     guiSettings.setNewWeightsDirectory(dir.toStdString());
     enableTrainIfPossible();

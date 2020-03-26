@@ -41,6 +41,7 @@ public:
     string getNewWeightsDirectory() const;
     void setNewWeightsDirectory(string value);
 
+    void clearPaths();
 private:
     string nn;
     string mode;

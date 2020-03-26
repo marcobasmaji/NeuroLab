@@ -23,6 +23,7 @@ public:
     void setPaths(vector<string> paths);
     void classify(string nn, string mode, vector<string> selectedHardware, int nrImages);
     void train(string weightsDir, string dataSetDir, string newWeightsDir);
+//    bool train(string weightsDir, string dataSetDir, string newWeightsDir);
     void getPrediction(const string net, const string mode, vector<string> hardware, int nrImages);
     void setNNType(string nn);
     void setMode(string mode);

@@ -163,7 +163,6 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
 
             string path=trainingItems[image].getPath();
             int label=trainingItems[image].getLabel();
-            label=3;
 
             //calculate forward
             int length=INPUT_MAPS*INPUT_SIZE*INPUT_SIZE*BATCH_SIZE;

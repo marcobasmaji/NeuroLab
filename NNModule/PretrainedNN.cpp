@@ -11,27 +11,31 @@ void PretrainedNN::classify()
 
     // thread per hardware. Then set images in an openVinoEnv on this hardware
     results.clear();
-    vector<thread> threads;
-    for(int i = 0; i < (int) envs.size(); i++){
-        threads.push_back(thread(&PretrainedNN::threading, this, envs[i]));
+    int number_threads = envs.size();
+    thread threads[number_threads];
+    for(int i = 0; i < number_threads; i++){
+        threads[i] = thread(&PretrainedNN::threading, this, envs[i]);
         cerr<<"Threads created"<<endl;
     }
-    for (auto& thread : threads) thread.join();
+    for (int i = 0; i < number_threads; i++) {
+        threads[i].join();
+    }
     cerr<<"Threads joined"<<endl;
 
     // erst nach join get reuslts
-    for(auto & ov : envs)
+    for(int i = 0; i < number_threads; i++)
     {
-        vector<Result> envResults = ov->getResults();
+        vector<Result> envResults = envs[i]->getResults();
         this->results.insert(results.end(), envResults.begin(), envResults.end());
     }
 
-    for(auto & ov : envs)
+    for(int i = 0; i < number_threads; i++)
     {
-        delete ov;
+        delete envs[i];
     }
+    envs.clear();
 
-    core->~Core();
+    //core->~Core();
 }
 
 void PretrainedNN::threading(OpenVinoEnv *env){
@@ -52,16 +56,17 @@ void PretrainedNN::setImagePaths(vector<string> imagePaths)
 
 void PretrainedNN::setPlatforms(vector<pair<string, int> > platforms)
 {
-    this->core = new InferenceEngine::Core();
+//    this->core = new InferenceEngine::Core();
     envs.clear();
     int count = 0;
     vector<string> imagesToDeploy;
     for(pair<string, int> dist : platforms){
+        InferenceEngine::Core envCore;
         OpenVinoEnv *env;
         env = new OpenVinoEnv();
         env->setDevice(dist.first);
         env->chooseNeuralNet(currentNN);
-        env->setCore(core);
+        env->setCore(envCore);
         int dif = dist.second + count;
         imagesToDeploy.clear();
         for(int i = count; i < dif && (int)allImages.size() >= dif; i++)
@@ -78,9 +83,7 @@ void PretrainedNN::setPlatforms(vector<pair<string, int> > platforms)
     }
 }
 
-void PretrainedNN::setNerualNet(string nn)
+void PretrainedNN::setNeuralNet(string nn)
 {
     currentNN = nn;
 }
-
-

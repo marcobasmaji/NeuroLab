@@ -27,7 +27,7 @@
      <item>
       <widget class="QLabel" name="sorry">
        <property name="text">
-        <string>Sorry! An unexpected error occured :(</string>
+        <string>Warning!</string>
        </property>
       </widget>
      </item>
