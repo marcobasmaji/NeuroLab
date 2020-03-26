@@ -22,8 +22,8 @@ void Worker::process() {
 
     bool res;
     res = viewController->train(dataSetDir, weightsDir, newWeightsDir);
-    if(res == false){
-        emit error("The selected data set directory and/or weights directory are not correct. Please try again!");
+    if(res == 0){
+        emit error("The selected data set directory and/or weights directory are not correct. Make sure your directory can be written into! Please try again! ");
     }
 
     emit finished();
