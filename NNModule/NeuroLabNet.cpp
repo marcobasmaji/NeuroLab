@@ -13,6 +13,7 @@
 #include <QTextStream>
 #include<algorithm>
 #include <opencv.hpp>
+#include <QFileInfo>
 
 using namespace std;
 using namespace cv;
@@ -138,12 +139,25 @@ vector<Result> NeuroLabNet::classify(){
     return results;
 }
 
-void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsDir){
+bool NeuroLabNet::isDir(string dir){
+    const QFileInfo outputDir(dir.c_str());
+        if ((!outputDir.exists()) || (!outputDir.isDir()) || (!outputDir.isWritable())) {
+
+            return false;
+        }
+        return true;
+}
+
+bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsDir){
+    if(!isDir(weightsDir))      return false;
+    if(!isDir(newWeightsDir))   return false;
+
     conv1->setLearningRate(0.03);
     conv2->setLearningRate(0.03);
     dense->setLearningRate(0.03);
 
-    loadWeightsAndBiases(weightsDir);
+    bool worked=loadWeightsAndBiases(weightsDir);
+    if(!worked) return false;
 
     vector<TrainingItem>trainingItems=getAllTrainingItems(dataSetDir);
 
@@ -227,6 +241,8 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
             delete[]outputs;
         }
     }
+
+    return true;
 }
 
 int NeuroLabNet::predictedLabel(float*outputs){
@@ -352,7 +368,17 @@ vector<TrainingItem> NeuroLabNet::getAllTrainingItems(string dataSetDir){
     return trainingItems;
 }
 
-void NeuroLabNet::loadWeightsAndBiases(string weightsDir){
+bool NeuroLabNet::fileExists(string s){
+    return QFile::exists(s.c_str());
+}
+
+bool NeuroLabNet::loadWeightsAndBiases(string weightsDir){
+    if(!fileExists(weightsDir+"/conv1_weights.txt"))   return false;
+    if(!fileExists(weightsDir+"/conv1_biases.txt"))   return false;
+    if(!fileExists(weightsDir+"/conv2_weights.txt"))   return false;
+    if(!fileExists(weightsDir+"/conv2_biases.txt"))   return false;
+    if(!fileExists(weightsDir+"/dense_weights.txt"))   return false;
+    if(!fileExists(weightsDir+"/dense_biases.txt"))   return false;
     int length;
 
     //load conv1 parameters
@@ -387,6 +413,8 @@ void NeuroLabNet::loadWeightsAndBiases(string weightsDir){
     float* denseBiases=(float*)malloc(sizeof(float)*length);
     loadArray(denseBiases, length, weightsDir+"/dense_biases.txt");
     dense->setBiases(env, denseBiases, length);
+
+    return true;
 }
 
 void NeuroLabNet::saveWeightsAndBiases(string newWeightsDir, int epoch, int image){
