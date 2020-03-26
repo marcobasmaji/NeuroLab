@@ -720,7 +720,7 @@ void MainWindow::on_train_button_clicked()
 
 void MainWindow::training_running()
 {
-    cerr<<"update progressbar"<<endl;
+    //cerr<<"update progressbar"<<endl;
 
     ui->progress_bar->setValue((ui->progress_bar->value() + 1) % 101);
 }

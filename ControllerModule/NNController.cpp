@@ -39,15 +39,17 @@ void NNController::setDistribution(vector<pair<string, int>> distribution) {
 
 }
 
-void NNController::trainNeuroLab(string weightsDir, string dataSetDir, string newWeightsDir)
-{
-    neuroLabNet.train(weightsDir, dataSetDir, newWeightsDir);
-}
-
-//bool NNController::trainNeuroLab(string weightsDir, string dataSetDir, string newWeightsDir)
+//void NNController::trainNeuroLab(string weightsDir, string dataSetDir, string newWeightsDir)
 //{
-//    return neuroLabNet.train(weightsDir, dataSetDir, newWeightsDir);
+//    neuroLabNet.train(weightsDir, dataSetDir, newWeightsDir);
 //}
+
+bool NNController::trainNeuroLab(string weightsDir, string dataSetDir, string newWeightsDir)
+{
+    bool res = neuroLabNet.train(weightsDir, dataSetDir, newWeightsDir);
+    cerr<<res<<" nncontroller"<<endl;
+    return res;
+}
 
 void NNController::setCurrentNN(string currentNN)
 {

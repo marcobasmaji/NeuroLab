@@ -74,17 +74,19 @@ string MasterController::transfer(string guiName) {
     }
 }
 
-void MasterController::train(string weightsDir, string dataSetDir, string newWeightsDir){
+//void MasterController::train(string weightsDir, string dataSetDir, string newWeightsDir){
 
-    nnObserver.trainNeuroLab(weightsDir,dataSetDir,newWeightsDir);
-
-}
-
-//bool MasterController::train(string weightsDir, string dataSetDir, string newWeightsDir){
-
-//    return nnObserver.trainNeuroLab(weightsDir,dataSetDir,newWeightsDir);
+//    nnObserver.trainNeuroLab(weightsDir,dataSetDir,newWeightsDir);
 
 //}
+
+bool MasterController::train(string weightsDir, string dataSetDir, string newWeightsDir){
+
+   bool res = nnObserver.trainNeuroLab(weightsDir,dataSetDir,newWeightsDir);
+   cerr<<res<<" master"<<endl;
+   return res;
+
+}
 
 
 void MasterController::getPrediction(const string net, const string mode, vector<string> hardware , int nrImages)
@@ -114,16 +116,6 @@ vector<string> MasterController::getAvailableHardware()
         cerr<<dev<<endl;
     }
     return d;
-    // HardwareSurveillence surv;
-     //vector<string> d = surv.checkAvailableHardware();
-    //vector<string> d = checkWithOpenVino();
-    //for(string device : d){
-         //devices.push_back(device);
-    //}
-    //d.push_back("GPU");
-    // return d;
-   /* InferenceEngine::Core core;
-    return core.GetAvailableDevices();*/
 
 }
 

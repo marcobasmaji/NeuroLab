@@ -171,8 +171,10 @@ void ViewController::displayAvailableHardware()
 
 bool ViewController::train(string weightsDir, string dataSetDir, string newWeightsDir){
 
-    master->train(weightsDir, dataSetDir, newWeightsDir);
-    return true;
+   bool res =  master->train(weightsDir, dataSetDir, newWeightsDir);
+   cerr<<res<<" viewcontroller"<<endl;
+   return res;
+
 }
 void ViewController::showErrorMessage(string mes) {
     mainWindow->showErrorMessage(mes);
