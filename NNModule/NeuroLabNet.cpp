@@ -43,7 +43,7 @@ using namespace cv;
 
 #define DENSE_NEURONS 6
 
-#define EPOCHS 6
+#define EPOCHS 3
 
 //in total at least 60.000 images are recommended
 
@@ -149,17 +149,17 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
     vector<TrainingItem>trainingItems=getAllTrainingItems(dataSetDir);
 
     for(int epoch=0;epoch<EPOCHS;epoch++){
-        if(epoch!=0 && epoch%2==0){
-            conv1->setLearningRate(0.03/5.0);
-            conv2->setLearningRate(0.03/5.0);
-            dense->setLearningRate(0.03/5.0);
-        }
+        /*if(epoch!=0 && epoch%7==0){
+            conv1->setLearningRate(0.03);
+            conv2->setLearningRate(0.03);
+            dense->setLearningRate(0.03);
+        }*/
 
         trainingItems=shuffleDataset(trainingItems);
 
         int wrong=0;
         int correct=0;
-        for(int image=0;image<trainingItems.size();image++){
+        for(int image=0;image<(int)trainingItems.size();image++){
 
             string path=trainingItems[image].getPath();
             int label=trainingItems[image].getLabel();
@@ -185,10 +185,10 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
             float* outputs=softmax->getOutputs(env, BATCH_SIZE, DENSE_NEURONS, 1, 1, NULL);
             calculateOutputErrors(label, errors, outputs);
             softmax->setOutputErrors(env, errors, DENSE_NEURONS*BATCH_SIZE);
-
-            for(int i=0;i<6;i++) cout<<outputs[i]<<"  ";
-            cout<<endl;
-
+/*
+            for(int i=0;i<6;i++){
+                cout<<outputs[i]<<"  ";
+            }cout<<endl;*/
 
             softmax->computeErrorComp(env, BATCH_SIZE);
             dense->computeErrorComp(env, BATCH_SIZE);
@@ -206,14 +206,16 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
 
             if(image%50==0){
                 float percentage=(float)image/(float)trainingItems.size()*100.0;
-                float percentageWrong=(float)wrong/(float)(image%10000)*100;
-                float percentageCorrect=(float)correct/(float)(image%10000)*100;
+                float percentageWrong=(float)wrong/(float)(image%1000)*100;
+                float percentageCorrect=(float)correct/(float)(image%1000)*100;
                 cout<<"Epoch: "<<epoch<<"\tImage: "<<image<<"\tProgress: "<<percentage<<"%\tCorrect: "<<percentageCorrect<<"%\tWrong: "<<percentageWrong<<"%"<<endl;
 
-                if(image%10000==0){correct=0;wrong=0;}
+                if(image%10000==0){
+                    correct=0;wrong=0;
+
+                    saveWeightsAndBiases(newWeightsDir,epoch,image);
+                }
             }
-
-
 
             if(label==predictedLabel(outputs)){
                 correct++;
@@ -226,8 +228,6 @@ void NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
             delete[]outputs;
         }
     }
-
-    saveWeightsAndBiases(newWeightsDir);
 }
 
 int NeuroLabNet::predictedLabel(float*outputs){
@@ -245,13 +245,40 @@ int NeuroLabNet::predictedLabel(float*outputs){
 }
 
 void NeuroLabNet::calculateOutputErrors(int label, float* errors, float* outputs){
-    float expectedOutputs[DENSE_NEURONS];
-    for(int i=0;i<DENSE_NEURONS;i++)    expectedOutputs[i]=0;
+   float expectedOutputs[6]={0,0,0,0,0,0};
     expectedOutputs[label]=1;
 
-    for(int i=0;i<DENSE_NEURONS;i++){
+    for(int i=0;i<6;i++){
         errors[i]=outputs[i]-expectedOutputs[i];
     }
+
+    /*for(int i=0;i<6;i++){
+        if(i==label){
+            errors[i]=outputs[i]-1;
+        }else{
+            errors[i]=0;
+        }
+    }*/
+
+
+                    /*float lossOutput[SOFTMAX_INPUT] ={0};
+
+                    //float * lossOutput=lossFunction->getOutputError(outputs,folder.toStdString(),dataSetDir);
+                    for(unsigned int i=0;i<SOFTMAX_INPUT;i++)
+                    {
+                        loss += targetDistribution[i]*std::log(actualDistribution[i]);
+                    }
+                    // save loss in case needed
+                    this->loss = -log(outputs[label]);
+                    // calculate derivative
+                    for (size_t j=0; j<5;j++)
+                    {
+                        errors[j] =-(targetDistribution[j]/outputs[j]);
+                    }*/
+
+
+    /*for(int i=0;i<DENSE_NEURONS;i++)    errors[i]=0;
+    errors[label]=outputs[label]-1;*/
 }
 
 void NeuroLabNet::loadImageToArray(float* inputValues, string path){
@@ -329,7 +356,6 @@ vector<TrainingItem> NeuroLabNet::getAllTrainingItems(string dataSetDir){
 void NeuroLabNet::loadWeightsAndBiases(string weightsDir){
     int length;
 
-
     //load conv1 parameters
     length=INPUT_MAPS*CONV_1_OUTPUT_MAPS*CONV_1_KERNEL_SIZE*CONV_1_KERNEL_SIZE;
     float* conv1Weights=(float*)malloc(sizeof(float)*length);
@@ -362,38 +388,37 @@ void NeuroLabNet::loadWeightsAndBiases(string weightsDir){
     float* denseBiases=(float*)malloc(sizeof(float)*length);
     loadArray(denseBiases, length, weightsDir+"/dense_biases.txt");
     dense->setBiases(env, denseBiases, length);
-
 }
 
-void NeuroLabNet::saveWeightsAndBiases(string newWeightsDir){
+void NeuroLabNet::saveWeightsAndBiases(string newWeightsDir, int epoch, int image){
     int length;
 
     //save conv1 parameters
     length=INPUT_MAPS*CONV_1_OUTPUT_MAPS*CONV_1_KERNEL_SIZE*CONV_1_KERNEL_SIZE;
     float* conv1Weights=conv1->getWeights(env, length);
-    saveArray(conv1Weights, length, newWeightsDir+"/conv1_weights.txt");
+    saveArray(conv1Weights, length, newWeightsDir+"/conv1_weights "+to_string(epoch)+" "+to_string(image)+".txt");
 
     length=CONV_1_OUTPUT_MAPS;
     float* conv1Biases=conv1->getBiases(env, length);
-    saveArray(conv1Biases, length, newWeightsDir+"/conv1_biases.txt");
+    saveArray(conv1Biases, length, newWeightsDir+"/conv1_biases "+to_string(epoch)+" "+to_string(image)+".txt");
 
     //save conv2 parameters
     length=CONV_1_OUTPUT_MAPS*CONV_2_OUTPUT_MAPS*CONV_2_KERNEL_SIZE*CONV_2_KERNEL_SIZE;
     float* conv2Weights=conv2->getWeights(env, length);
-    saveArray(conv2Weights, length, newWeightsDir+"/conv2_weights.txt");
+    saveArray(conv2Weights, length, newWeightsDir+"/conv2_weights "+to_string(epoch)+" "+to_string(image)+".txt");
 
     length=CONV_2_OUTPUT_MAPS;
     float* conv2Biases=conv2->getBiases(env, length);
-    saveArray(conv2Biases, length, newWeightsDir+"/conv2_biases.txt");
+    saveArray(conv2Biases, length, newWeightsDir+"/conv2_biases "+to_string(epoch)+" "+to_string(image)+".txt");
 
     //save dense parameters
     length=CONV_2_OUTPUT_MAPS*MAX_2_OUTPUT_SIZE*MAX_2_OUTPUT_SIZE*DENSE_NEURONS;
     float* denseWeights=dense->getWeights(env, length);
-    saveArray(denseWeights, length, newWeightsDir+"/dense_weights.txt");
+    saveArray(denseWeights, length, newWeightsDir+"/dense_weights "+to_string(epoch)+" "+to_string(image)+".txt");
 
     length=DENSE_NEURONS;
     float* denseBiases=dense->getBiases(env, length);
-    saveArray(denseBiases, length, newWeightsDir+"/dense_biases.txt");
+    saveArray(denseBiases, length, newWeightsDir+"/dense_biases "+to_string(epoch)+" "+to_string(image)+".txt");
 
     delete conv1Weights;
     delete conv1Biases;
@@ -414,7 +439,6 @@ void NeuroLabNet::saveArray(float* array, int length, string dir){
 }
 
 void NeuroLabNet::loadArray(float* array, int length, string dir){
-
     QString Hfilename=dir.c_str();
     QFile fileH( Hfilename );
     if ( fileH.open(QIODevice::ReadWrite)){
@@ -433,6 +457,8 @@ void NeuroLabNet::loadArray(float* array, int length, string dir){
 void NeuroLabNet::updateDataSet(vector<string> dataSet){
     this->dataSet = dataSet;
 }
+
+#include <QDebug>
 
 vector<pair<string,float>> NeuroLabNet::getLabelWithProb(float*outputs){
     vector<pair<string,float>>prop;
