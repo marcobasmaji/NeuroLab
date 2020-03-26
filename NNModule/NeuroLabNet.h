@@ -32,8 +32,9 @@ private:
 
     void deleteRessources();
     void initNeuroLabNet();
-    void loadWeightsAndBiases(string weightsDir);
-    void saveWeightsAndBiases(string newWeightsDir);
+    bool fileExists(string s);
+    bool loadWeightsAndBiases(string weightsDir);
+    void saveWeightsAndBiases(string newWeightsDir, int epoch, int image);
     void saveArray(float* array, int length, string dir);
     void loadArray(float* array, int length, string dir);
     void loadAllImagePaths(string dataSetDir);
@@ -48,7 +49,8 @@ public:
     NeuroLabNet();
     ~NeuroLabNet();
 
-    void train(string weightsDir, string dataSetDir, string newWeightsDir);
+    bool isDir(string dir);
+    bool train(string weightsDir, string dataSetDir, string newWeightsDir);
     void updateDataSet(vector<string> dataSet);
     vector<Result> classify();
 };
