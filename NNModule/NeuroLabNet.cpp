@@ -100,7 +100,7 @@ vector<Result> NeuroLabNet::classify(){
 
     loadWeightsAndBiases("team");
 
-    for(int image=0;image<dataSet.size();image++){
+    for(int image=0;image<(int)dataSet.size();image++){
 
         string path=dataSet[image];
 
@@ -151,10 +151,11 @@ bool NeuroLabNet::isDir(string dir){
 bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsDir){
     if(!isDir(weightsDir))      return false;
     if(!isDir(newWeightsDir))   return false;
+    if(!isDir(dataSetDir))      return false;
 
-    conv1->setLearningRate(0.03);
-    conv2->setLearningRate(0.03);
-    dense->setLearningRate(0.03);
+    conv1->setLearningRate(0.003);
+    conv2->setLearningRate(0.003);
+    dense->setLearningRate(0.003);
 
     bool worked=loadWeightsAndBiases(weightsDir);
     if(!worked) return false;
@@ -198,10 +199,10 @@ bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
             float* outputs=softmax->getOutputs(env, BATCH_SIZE, DENSE_NEURONS, 1, 1, NULL);
             calculateOutputErrors(label, errors, outputs);
             softmax->setOutputErrors(env, errors, DENSE_NEURONS*BATCH_SIZE);
-/*
+
             for(int i=0;i<6;i++){
                 cout<<outputs[i]<<"  ";
-            }cout<<endl;*/
+            }cout<<endl;
 
             softmax->computeErrorComp(env, BATCH_SIZE);
             dense->computeErrorComp(env, BATCH_SIZE);
@@ -223,10 +224,10 @@ bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
                 float percentageCorrect=(float)correct/(float)(image%1000)*100;
                 cout<<"Epoch: "<<epoch<<"\tImage: "<<image<<"\tProgress: "<<percentage<<"%\tCorrect: "<<percentageCorrect<<"%\tWrong: "<<percentageWrong<<"%"<<endl;
 
-                if(image%10000==0){
+                if(image%1000==0){
                     correct=0;wrong=0;
 
-                    saveWeightsAndBiases(newWeightsDir,epoch,image);
+                    //saveWeightsAndBiases(newWeightsDir,epoch,image);
                 }
             }
 
@@ -260,12 +261,22 @@ int NeuroLabNet::predictedLabel(float*outputs){
 }
 
 void NeuroLabNet::calculateOutputErrors(int label, float* errors, float* outputs){
-   float expectedOutputs[6]={0,0,0,0,0,0};
+    float expectedOutputs[6]={0,0,0,0,0,0};
     expectedOutputs[label]=1;
+
 
     for(int i=0;i<6;i++){
         errors[i]=outputs[i]-expectedOutputs[i];
     }
+
+    /*
+    for(int i=0;i<DENSE_NEURONS;i++){
+        if(i==label){
+            errors[i]=outputs[i]-expectedOutputs[i];
+        }else{
+            errors[i]=0;
+        }
+    }*/
 
     /*for(int i=0;i<6;i++){
         if(i==label){
@@ -301,14 +312,14 @@ void NeuroLabNet::loadImageToArray(float* inputValues, string path){
     image = imread(path);   // Read the file
 
     int width=82;
-    int height=(float)image.rows/((float)image.cols/82.0);
+    int height=82.0/((float)image.cols/(float)image.rows);
 
     if(image.rows>image.cols){
         height=82;
-        width=(float)image.cols/((float)image.rows/82.0);
+        width=82.0/((float)image.rows/(float)image.cols);
     }
     Size size(width,height);
-    resize(image,imgResized,size,INTER_LINEAR);
+    resize(image,imgResized,size);
 
     for(int i=0;i<82*82*3;i++)  inputValues[i]=0;
 
