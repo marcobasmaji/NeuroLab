@@ -256,11 +256,17 @@ void MainWindow::on_GoogleNet_radio_button_clicked()
     }
 }
 
-void MainWindow::displayPreview(const QIcon imageIcon, const QString imagePath) {
+bool MainWindow::displayPreview(const QIcon imageIcon, const QString imagePath) {
 
+    if(ui->previewArea->count() > 150){
+        ui->LoadButton->setEnabled(false);
+        showErrorMessage("The maximum number of images was reached!");
+        return false;
+    }
     QListWidgetItem *newItem;
     newItem  = new QListWidgetItem(imageIcon, imagePath);
     ui->previewArea->addItem(newItem);
+    return true;
 }
 
 
@@ -275,20 +281,23 @@ void MainWindow::on_LoadButton_clicked()
 
     qDebug()<<"Images Loaded"<<endl;
 
-
-    for(int i = 0; i < filesList.length() && !filesList.isEmpty(); i++){
+    int lenght = filesList.length();
+    for(int i = 0; i < lenght && !filesList.isEmpty(); i++){
         qDebug()<<"1 Image added to list: "<<filesList.at(i)<<endl;
         QIcon newIcon = QIcon(filesList.at(i));
-        displayPreview(newIcon, filesList.at(i));
+        if(!displayPreview(newIcon, filesList.at(i))){
+            lenght = i;
+         }
     }
     // turning Qstrings into std strings
     vector<string> vec;
-    for(int i = 0; i < filesList.length(); i++) {
+    for(int i = 0; i < lenght; i++) {
         vec.push_back(filesList.at(i).toStdString());
     }
     //load in mainwindow
     this->guiSettings.setPaths(vec);
     enableClassifyIfPossible();
+
 }
 
 void MainWindow::on_DeleteButton_clicked()
@@ -314,6 +323,10 @@ void MainWindow::on_DeleteButton_clicked()
     //if there are no more images left, gray out classify button
     if(guiSettings.getPaths().empty()){
         ui->ClassifyButton->setEnabled(false);
+    }
+
+    if(ui->previewArea->count() <= 150){
+        ui->LoadButton->setEnabled(true);
     }
 }
 
@@ -636,7 +649,7 @@ void MainWindow::enableClassifyIfPossible() {
 void MainWindow::on_trainMenu_clicked()
 {
 
-    ui->progressBar->hide();
+    ui->progress_bar->hide();
     ui->training_label->hide();
     ui->train_tab_widget->show();
     resetPalette();
@@ -668,11 +681,11 @@ void MainWindow::on_train_button_clicked()
 {
     ui->train_button->setEnabled(false);
     ui->train_tab_widget->setTabsClosable(false);
-    ui->progressBar->show();
+    ui->progress_bar->show();
     ui->training_label->show();
 
     QProgressBar *progress_bar;
-    progress_bar = ui->progressBar;
+    progress_bar = ui->progress_bar;
     progress_bar->setTextVisible(false);
 
 
@@ -709,18 +722,18 @@ void MainWindow::training_running()
 {
     cerr<<"update progressbar"<<endl;
 
-    ui->progressBar->setValue((ui->progressBar->value() + 1) % 101);
+    ui->progress_bar->setValue((ui->progress_bar->value() + 1) % 101);
 }
 
 void MainWindow::stop_training(){
-    ui->progressBar->setValue(100);
+    ui->progress_bar->setValue(100);
     ui->training_label->setText("Training successfull. Updated weights file saved in " +
                                 QString::fromStdString(guiSettings.getNewWeightsDirectory()));
     ui->train_tab_widget->setTabsClosable(true);
 }
 
 void MainWindow::errorString(QString message){
-    ui->progressBar->setValue(0);
+    ui->progress_bar->setValue(0);
     ui->training_label->setText("Error");
     showErrorMessage(message.toStdString());
 }

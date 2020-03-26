@@ -782,7 +782,7 @@
       </property>
       <layout class="QVBoxLayout" name="loading_layout">
        <item>
-        <widget class="QProgressBar" name="progressBar">
+        <widget class="QProgressBar" name="progress_bar">
          <property name="value">
           <number>0</number>
          </property>
@@ -792,6 +792,9 @@
         <widget class="QLabel" name="training_label">
          <property name="text">
           <string/>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
