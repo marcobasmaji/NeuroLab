@@ -88,7 +88,7 @@ private:
     Ui::MainWindow *ui;
     ViewController* viewController;
     QList<QImage> imageList;
-    void displayPreview(const QIcon imageIcon, const QString imagePath);
+    bool displayPreview(const QIcon imageIcon, const QString imagePath);
     QList<QLabel> imagesPreviews;
     GUISettings guiSettings;
     int resultsCounter;
