@@ -94,7 +94,6 @@ void NeuroLabNet::initNeuroLabNet(){
     softmax->setPreviousOpenCLLayer(dense);
 }
 
-#include <QApplication>
 vector<Result> NeuroLabNet::classify(){
     vector<Result> results;
 
