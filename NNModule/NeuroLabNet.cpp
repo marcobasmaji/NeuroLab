@@ -227,7 +227,7 @@ bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
                 if(image%1000==0){
                     correct=0;wrong=0;
 
-                    //saveWeightsAndBiases(newWeightsDir,epoch,image);
+                    saveWeightsAndBiases(newWeightsDir,epoch,image);
                 }
             }
 
