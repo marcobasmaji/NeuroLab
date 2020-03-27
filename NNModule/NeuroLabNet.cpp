@@ -44,7 +44,7 @@ using namespace cv;
 
 #define DENSE_NEURONS 6
 
-#define EPOCHS 10
+#define EPOCHS 30
 
 //in total at least 60.000 images are recommended
 
@@ -163,7 +163,7 @@ bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
     vector<TrainingItem>trainingItems=getAllTrainingItems(dataSetDir);
 
     for(int epoch=0;epoch<EPOCHS;epoch++){
-        if(epoch!=0 && epoch%2==0){
+        if(epoch!=0 && epoch%5==0){
             conv1->setLearningRate(0.03/3);
             conv2->setLearningRate(0.03/3);
             dense->setLearningRate(0.03/3);
