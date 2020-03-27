@@ -26,7 +26,7 @@ using namespace cv;
 #define CONV_1_KERNEL_SIZE 7
 #define CONV_1_STRIDE_SIZE 3
 #define CONV_1_INPUT_SIZE 82
-#define CONV_1_OUTPUT_MAPS 15
+#define CONV_1_OUTPUT_MAPS 20
 #define CONV_1_OUTPUT_SIZE 26
 
 #define MAX_1_OUTPUT_SIZE 13
@@ -36,7 +36,7 @@ using namespace cv;
 #define CONV_2_KERNEL_SIZE 4
 #define CONV_2_STRIDE_SIZE 1
 #define CONV_2_OUTPUT_SIZE 10
-#define CONV_2_OUTPUT_MAPS 40
+#define CONV_2_OUTPUT_MAPS 50
 
 #define MAX_2_OUTPUT_SIZE 5
 #define MAX_2_POOL_SIZE 2
@@ -44,7 +44,7 @@ using namespace cv;
 
 #define DENSE_NEURONS 6
 
-#define EPOCHS 3
+#define EPOCHS 10
 
 //in total at least 60.000 images are recommended
 
@@ -122,10 +122,10 @@ vector<Result> NeuroLabNet::classify(){
         //calculate errors
         length=BATCH_SIZE*DENSE_NEURONS;
         float* outputs=softmax->getOutputs(env, BATCH_SIZE, DENSE_NEURONS, 1, 1, NULL);
-
+/*
         for(int i=0;i<6;i++){
             cout<<outputs[i]<<"    ";
-        }cout<<endl;
+        }cout<<endl;*/
 
         Result result;
         result.setPath(path);
@@ -153,9 +153,9 @@ bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
     if(!isDir(newWeightsDir))   return false;
     if(!isDir(dataSetDir))      return false;
 
-    conv1->setLearningRate(0.003);
-    conv2->setLearningRate(0.003);
-    dense->setLearningRate(0.003);
+    conv1->setLearningRate(0.03);
+    conv2->setLearningRate(0.03);
+    dense->setLearningRate(0.03);
 
     bool worked=loadWeightsAndBiases(weightsDir);
     if(!worked) return false;
@@ -163,11 +163,11 @@ bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
     vector<TrainingItem>trainingItems=getAllTrainingItems(dataSetDir);
 
     for(int epoch=0;epoch<EPOCHS;epoch++){
-        /*if(epoch!=0 && epoch%7==0){
-            conv1->setLearningRate(0.03);
-            conv2->setLearningRate(0.03);
-            dense->setLearningRate(0.03);
-        }*/
+        if(epoch!=0 && epoch%2==0){
+            conv1->setLearningRate(0.03/3);
+            conv2->setLearningRate(0.03/3);
+            dense->setLearningRate(0.03/3);
+        }
 
         trainingItems=shuffleDataset(trainingItems);
 
@@ -199,10 +199,10 @@ bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
             float* outputs=softmax->getOutputs(env, BATCH_SIZE, DENSE_NEURONS, 1, 1, NULL);
             calculateOutputErrors(label, errors, outputs);
             softmax->setOutputErrors(env, errors, DENSE_NEURONS*BATCH_SIZE);
-
+/*
             for(int i=0;i<6;i++){
                 cout<<outputs[i]<<"  ";
-            }cout<<endl;
+            }cout<<endl;*/
 
             softmax->computeErrorComp(env, BATCH_SIZE);
             dense->computeErrorComp(env, BATCH_SIZE);
@@ -220,11 +220,11 @@ bool NeuroLabNet::train(string weightsDir, string dataSetDir, string newWeightsD
 
             if(image%50==0){
                 float percentage=(float)image/(float)trainingItems.size()*100.0;
-                float percentageWrong=(float)wrong/(float)(image%1000)*100;
-                float percentageCorrect=(float)correct/(float)(image%1000)*100;
+                float percentageWrong=(float)wrong/(float)(image%10000)*100;
+                float percentageCorrect=(float)correct/(float)(image%10000)*100;
                 cout<<"Epoch: "<<epoch<<"\tImage: "<<image<<"\tProgress: "<<percentage<<"%\tCorrect: "<<percentageCorrect<<"%\tWrong: "<<percentageWrong<<"%"<<endl;
 
-                if(image%1000==0){
+                if(image%10000==0){
                     correct=0;wrong=0;
 
                     saveWeightsAndBiases(newWeightsDir,epoch,image);
@@ -263,7 +263,6 @@ int NeuroLabNet::predictedLabel(float*outputs){
 void NeuroLabNet::calculateOutputErrors(int label, float* errors, float* outputs){
     float expectedOutputs[6]={0,0,0,0,0,0};
     expectedOutputs[label]=1;
-
 
     for(int i=0;i<6;i++){
         errors[i]=outputs[i]-expectedOutputs[i];
