@@ -259,9 +259,9 @@ void MainWindow::on_GoogleNet_radio_button_clicked()
 bool MainWindow::displayPreview(const QIcon imageIcon, const QString imagePath) {
 
     if(ui->previewArea->count() > 150){
-        ui->LoadButton->setEnabled(false);
+        //ui->LoadButton->setEnabled(false);
         showErrorMessage("The maximum number of images was reached!");
-        return false;
+        //return false;
     }
     QListWidgetItem *newItem;
     newItem  = new QListWidgetItem(imageIcon, imagePath);
@@ -285,7 +285,8 @@ void MainWindow::on_LoadButton_clicked()
     for(int i = 0; i < lenght && !filesList.isEmpty(); i++){
         qDebug()<<"1 Image added to list: "<<filesList.at(i)<<endl;
         QIcon newIcon = QIcon(filesList.at(i));
-        if(!displayPreview(newIcon, filesList.at(i))){
+        bool res = displayPreview(newIcon, filesList.at(i));
+        if(!res){
             lenght = i;
          }
     }
