@@ -26,7 +26,7 @@ using namespace cv;
 #define CONV_1_KERNEL_SIZE 7
 #define CONV_1_STRIDE_SIZE 3
 #define CONV_1_INPUT_SIZE 82
-#define CONV_1_OUTPUT_MAPS 20
+#define CONV_1_OUTPUT_MAPS 15
 #define CONV_1_OUTPUT_SIZE 26
 
 #define MAX_1_OUTPUT_SIZE 13
@@ -36,7 +36,7 @@ using namespace cv;
 #define CONV_2_KERNEL_SIZE 4
 #define CONV_2_STRIDE_SIZE 1
 #define CONV_2_OUTPUT_SIZE 10
-#define CONV_2_OUTPUT_MAPS 50
+#define CONV_2_OUTPUT_MAPS 40
 
 #define MAX_2_OUTPUT_SIZE 5
 #define MAX_2_POOL_SIZE 2
